@@ -2,8 +2,11 @@ const colors = require('colors');
 const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
+const connectDB = require('./config/db');
 
 dotenv.config({ path: './config/config.env' });
+
+connectDB();
 
 const destinations = require('./routes/destinations');
 const users = require('./routes/users');
@@ -29,3 +32,8 @@ const server = app.listen(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
   )
 );
+
+process.on('unhandledRejection', (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
+  server.close(() => process.exit(1));
+});
