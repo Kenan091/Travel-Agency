@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const DestinationSchema = new mongoose.Schema({
   name: {
@@ -11,8 +12,8 @@ const DestinationSchema = new mongoose.Schema({
   slug: String,
   description: {
     type: String,
-    required: [true, 'Please add a description for destination'],
-    maxlength: [350, "Description can't have more than 350 characters"],
+    required: [true, 'Please add a description'],
+    maxlength: [500, "Description can't have more than 500 characters"],
   },
   imageURL: {
     type: String,
@@ -20,16 +21,27 @@ const DestinationSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: [true, 'Please add price for destination'],
+    required: [true, 'Please add a price'],
   },
   availability: {
     type: Boolean,
-    required: [true, 'Please add an availability of destination'],
+    required: [true, 'Please add an availability'],
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+});
+
+// Create destination slug from the name
+DestinationSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 module.exports = mongoose.model('Destination', DestinationSchema);

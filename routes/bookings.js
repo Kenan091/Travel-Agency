@@ -7,9 +7,27 @@ const {
   deleteBooking,
 } = require('../controllers/bookings');
 
-const router = express.Router();
+const Booking = require('../models/Booking');
+const advancedResults = require('../middleware/advancedResults');
 
-router.route('/').get(getBookings).post(createBooking);
-router.route('/:id').get(getBooking).put(updateBooking).delete(deleteBooking);
+const router = express.Router({ mergeParams: true });
+
+const { protect, authorize } = require('../middleware/auth');
+
+router
+  .route('/')
+  .get(
+    advancedResults(Booking, {
+      path: 'destination',
+      select: 'name description imageURL price availability',
+    }),
+    getBookings
+  )
+  .post(protect, authorize('registeredUser', 'admin'), createBooking);
+router
+  .route('/:id')
+  .get(getBooking)
+  .put(protect, authorize('registeredUser', 'admin'), updateBooking)
+  .delete(protect, authorize('registeredUser', 'admin'), deleteBooking);
 
 module.exports = router;

@@ -1,28 +1,38 @@
+const cookieParser = require('cookie-parser');
 const colors = require('colors');
+const connectDB = require('./config/db');
 const dotenv = require('dotenv');
+const errorHandler = require('./middleware/error');
 const express = require('express');
 const morgan = require('morgan');
-const connectDB = require('./config/db');
 
 dotenv.config({ path: './config/config.env' });
 
 connectDB();
 
-const destinations = require('./routes/destinations');
-const users = require('./routes/users');
+const auth = require('./routes/auth');
 const bookings = require('./routes/bookings');
+const destinations = require('./routes/destinations');
 const reviews = require('./routes/reviews');
+const users = require('./routes/users');
 
 const app = express();
+
+app.use(express.json());
+
+app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use('/destinations', destinations);
-app.use('/users', users);
+app.use('/auth', auth);
 app.use('/bookings', bookings);
+app.use('/destinations', destinations);
 app.use('/reviews', reviews);
+app.use('/users', users);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

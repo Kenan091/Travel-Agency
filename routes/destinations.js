@@ -7,13 +7,25 @@ const {
   deleteDestination,
 } = require('../controllers/destinations');
 
+const Destination = require('../models/Destination');
+const advancedResults = require('../middleware/advancedResults');
+
+const bookingRouter = require('./bookings');
+
 const router = express.Router();
 
-router.route('/').get(getDestinations).post(addDestination);
+const { protect, authorize } = require('../middleware/auth');
+
+router.use('/:destinationId/bookings', bookingRouter);
+
+router
+  .route('/')
+  .get(advancedResults(Destination), getDestinations)
+  .post(protect, authorize('admin'), addDestination);
 router
   .route('/:id')
   .get(getDestination)
-  .put(updateDestination)
-  .delete(deleteDestination);
+  .put(protect, authorize('admin'), updateDestination)
+  .delete(protect, authorize('admin'), deleteDestination);
 
 module.exports = router;
