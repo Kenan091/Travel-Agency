@@ -32,3 +32,37 @@ const ReviewSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+ReviewSchema.index({ destination: 1, user: 1 }, { unique: true });
+
+ReviewSchema.statics.getAverageRating = async function (destinationId) {
+  const obj = await this.aggregate([
+    {
+      $match: { destination: destinationId },
+    },
+    {
+      $group: {
+        _id: '$destination',
+        averageRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+
+  try {
+    await this.model('Destination').findByIdAndUpdate(destinationId, {
+      averageRating: obj[0].averageRating,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+ReviewSchema.post('save', async function () {
+  await this.constructor.getAverageRating(this.destination);
+});
+
+ReviewSchema.pre('deleteOne', async function () {
+  await this.constructor.getAverageRating(this.destination);
+});
+
+module.exports = mongoose.model('Review', ReviewSchema);

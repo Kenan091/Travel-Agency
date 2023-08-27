@@ -13,10 +13,7 @@ const BookingSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add a number of people'],
   },
-  totalPrice: {
-    type: Number,
-    required: [true, 'Please add a total price'],
-  },
+  totalPrice: Number,
   createdAt: {
     type: Date,
     default: Date.now,

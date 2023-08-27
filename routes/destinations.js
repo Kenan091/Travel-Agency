@@ -8,15 +8,17 @@ const {
 } = require('../controllers/destinations');
 
 const Destination = require('../models/Destination');
-const advancedResults = require('../middleware/advancedResults');
 
 const bookingRouter = require('./bookings');
+const reviewRouter = require('./reviews');
 
 const router = express.Router();
 
+const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
 router.use('/:destinationId/bookings', bookingRouter);
+router.use('/:destinationId/reviews', reviewRouter);
 
 router
   .route('/')

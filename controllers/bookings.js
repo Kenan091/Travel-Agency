@@ -57,7 +57,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
   if (!destination) {
     return next(
       new ErrorResponse(
-        `Destination with the id of ${req.params.destinationId}`
+        `Destination with the id of ${req.params.destinationId} not found`
       ),
       404
     );
@@ -118,7 +118,7 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
   if (booking.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User with the id of ${req.user.id} is not authorized to change booking with the id of ${booking._id}`
+        `User with the id of ${req.user.id} is not authorized to delete booking with the id of ${booking._id}`
       )
     );
   }
