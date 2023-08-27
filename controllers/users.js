@@ -1,38 +1,65 @@
+const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../utils/errorResponse');
+const User = require('../models/User');
+
 // @desc Get all users
 // @route GET /users
-// @access Public
+// @access Private/Admin
 
-exports.getUsers = (req, res, next) => {
-  res.status(200).json({ success: true, msg: 'Show all users' });
-};
+exports.getUsers = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
 
 // @desc Get single user
 // @route GET /users/:id
-// @access Public
+// @access Private/Admin
 
-exports.getUser = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Show user ${req.params.id}` });
-};
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
 
-// @desc Add new user
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+// @desc Create new user
 // @route POST /users
-// @access Private
+// @access Private/Admin
 
-exports.createUser = (req, res, next) => {
-  res.status(200).json({ success: true, msg: 'New user created' });
-};
+exports.createUser = asyncHandler(async (req, res, next) => {
+  const user = await User.create(req.body);
+
+  res.status(201).json({
+    success: true,
+    data: user,
+  });
+});
 
 // @desc Update user
 // @route PUT /users/:id
-// @access Private
+// @access Private/Admin
 
-exports.updateUser = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Update user ${req.params.id}` });
-};
+exports.updateUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
 // @desc Delete user
 // @route DELETE /users/:id
-// @access Private
+// @access Private/Admin
 
-exports.deleteUser = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Delete user ${req.params.id}` });
-};
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  await User.findByIdAndDelete(req.params.id);
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
