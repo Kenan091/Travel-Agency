@@ -115,14 +115,14 @@ exports.checkDestinationBooking = asyncHandler(async (req, res, next) => {
   });
 
   if (reservationsWithinRange.length >= 50) {
-    return res.status(400).json({
+    return res.status(200).json({
       message: "Reservation limit for this destination has been reached",
     });
+  } else {
+    return res.status(200).json({
+      message: `You have ${50 - reservationsWithinRange.length} seats left`,
+    });
   }
-
-  res.status(200).json({
-    message: `You have ${50 - reservationsWithinRange.length} seats left`,
-  });
 });
 
 // @desc Update booking
