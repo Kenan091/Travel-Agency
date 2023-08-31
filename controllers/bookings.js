@@ -63,37 +63,33 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const isAvailable = await checkAvailability(
-    destination,
-    req.body.arrivalDate,
-    req.body.departureDate
-  );
+  const reservationsWithinRange = await Booking.find({
+    destination: destination._id,
+    arrivalDate: { $lt: req.body.departureDate },
+    departureDate: { $gt: req.body.arrivalDate },
+  });
 
-  if (!isAvailable) {
-    return res
-      .status(400)
-      .json({ message: "Destination is not available for selected dates" });
+  if (reservationsWithinRange.length >= 50) {
+    return res.status(400).json({
+      message: "Reservation limit for this destination has been reached",
+    });
   }
 
-  const booking = new Booking({
+  const reservation = new Booking({
+    destination: destination._id,
     arrivalDate: req.body.arrivalDate,
     departureDate: req.body.departureDate,
     numberOfTravelers: req.body.numberOfTravelers,
-    destination: req.body.destination,
     user: req.body.user,
   });
 
-  await booking.save();
+  await reservation.save();
 
-  await updateDestinationAvailability(
-    req.body.destination,
-    req.body.arrivalDate,
-    req.body.departureDate
-  );
+  // Update destination's reservations
+  destination.reservations.push(reservation._id);
+  await destination.save();
 
-  // const booking = await Booking.create(req.body);
-
-  res.status(201).json({ success: true, data: booking });
+  res.status(201).json({ success: true, data: reservation });
 });
 // @desc Check if destination is available for selected dates
 // @route POST /bookings/check/:destinationId
@@ -112,21 +108,20 @@ exports.checkDestinationBooking = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const isAvailable = await checkAvailability(
-    destination,
-    req.body.arrivalDate,
-    req.body.departureDate
-  );
+  const reservationsWithinRange = await Booking.find({
+    destination: destination._id,
+    arrivalDate: { $lt: req.body.departureDate },
+    departureDate: { $gt: req.body.arrivalDate },
+  });
 
-  if (!isAvailable) {
-    return res
-      .status(400)
-      .json({ message: "Destination is not available for selected dates" });
+  if (reservationsWithinRange.length >= 50) {
+    return res.status(400).json({
+      message: "Reservation limit for this destination has been reached",
+    });
   }
 
   res.status(200).json({
-    success: true,
-    message: "Destination is available for selected dates",
+    message: `You have ${50 - reservationsWithinRange.length} seats left`,
   });
 });
 
@@ -190,26 +185,32 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 });
 
-// Function to check destination availability
-async function checkAvailability(destination, arrivalDate, departureDate) {
-  const bookedDates = await Booking.find({
-    destination: destination._id,
-    arrivalDate: { $lt: departureDate },
-    departureDate: { $gt: arrivalDate },
-  });
+// // Function to check destination availability
+// async function checkAvailability(destination, arrivalDate, departureDate) {
+//   // Check if any booked dates within the specified range
+//   const bookedDatesInRange = await Booking.find({
+//     destination: destination._id,
+//     arrivalDate: { $lt: departureDate },
+//     departureDate: { $gt: arrivalDate },
+//   });
 
-  return bookedDates.length === 0;
-}
+//   // Check if the number of reservations within the range exceeds the limit
+//   if (destination.totalReservations + bookedDatesInRange.length >= 50) {
+//     return false;
+//   }
 
-// Function to update destination availability
-async function updateDestinationAvailability(
-  destination,
-  arrivalDate,
-  departureDate
-) {
-  await Destination.findByIdAndUpdate(destination._id, {
-    $addToSet: {
-      unavailableDates: { $gte: arrivalDate, $lte: departureDate },
-    },
-  });
-}
+//   return true;
+// }
+
+// // Function to update destination availability
+// async function updateDestinationAvailability(
+//   destination,
+//   arrivalDate,
+//   departureDate
+// ) {
+//   await Destination.findByIdAndUpdate(destination._id, {
+//     $addToSet: {
+//       unavailableDates: { $gte: arrivalDate, $lte: departureDate },
+//     },
+//   });
+// }

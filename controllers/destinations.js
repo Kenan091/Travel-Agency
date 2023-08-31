@@ -1,6 +1,6 @@
-const asyncHandler = require('../middleware/async');
-const Destination = require('../models/Destination');
-const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require("../middleware/async");
+const Destination = require("../models/Destination");
+const ErrorResponse = require("../utils/errorResponse");
 
 // @desc Get all destinations
 // @route GET /destinations
@@ -64,6 +64,7 @@ exports.updateDestination = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: destination });
 });
+
 // @desc Delete destination
 // @route DELETE /destinations/:id
 // @access Private
