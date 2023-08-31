@@ -1,33 +1,41 @@
-const express = require('express');
+const express = require("express");
 const {
   getBookings,
   getBooking,
   createBooking,
   updateBooking,
   deleteBooking,
-} = require('../controllers/bookings');
+  checkDestinationBooking,
+} = require("../controllers/bookings");
 
-const Booking = require('../models/Booking');
+const Booking = require("../models/Booking");
 
 const router = express.Router({ mergeParams: true });
 
-const { protect, authorize } = require('../middleware/auth');
-const advancedResults = require('../middleware/advancedResults');
+const { protect, authorize } = require("../middleware/auth");
+const advancedResults = require("../middleware/advancedResults");
 
 router
-  .route('/')
+  .route("/")
   .get(
     advancedResults(Booking, {
-      path: 'destination',
-      select: 'name description imageURL price availability',
+      path: "destination",
+      select: "name description imageURL price availability",
     }),
     getBookings
   )
-  .post(protect, authorize('registeredUser', 'admin'), createBooking);
+  .post(protect, authorize("registeredUser", "admin"), createBooking);
+
 router
-  .route('/:id')
+  .route("/:destinationId")
+  .post(protect, authorize("registeredUser", "admin"), createBooking);
+
+router.route("/check/:destinationId").post(checkDestinationBooking);
+
+router
+  .route("/:id")
   .get(getBooking)
-  .put(protect, authorize('registeredUser', 'admin'), updateBooking)
-  .delete(protect, authorize('registeredUser', 'admin'), deleteBooking);
+  .put(protect, authorize("registeredUser", "admin"), updateBooking)
+  .delete(protect, authorize("registeredUser", "admin"), deleteBooking);
 
 module.exports = router;
