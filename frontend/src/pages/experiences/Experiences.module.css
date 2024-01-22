@@ -1,0 +1,201 @@
+:root {
+  --darker-blue: #061e25;
+  --dark-blue: #082831;
+  --light-blue: #11576f;
+  --light-green: #83ab55;
+  --light-gray: #d8e1ec;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--darker-blue);
+  /* justify-content: center; */
+  align-items: center;
+  min-height: 633px;
+}
+
+.heroSection {
+  background: url('../images/experiencesCover.jpg') center no-repeat;
+  background-size: cover;
+  width: 100%;
+  /* justify-content: center; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 633px;
+}
+
+.headerDiv {
+  width: 100%;
+  background-color: rgba(8, 40, 49, 0.7);
+  z-index: 1001;
+}
+
+.newReview {
+  background: rgba(17, 87, 111, 0.7);
+  width: 700px;
+  margin-top: 4rem;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mainTitle {
+  font-size: 40px;
+  text-transform: uppercase;
+  color: var(--light-green);
+  text-align: center;
+}
+
+.reviewForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.reviewForm select {
+  width: 21.5rem;
+}
+
+.reviewForm textarea {
+  font-family: inherit;
+  font-size: 1.05rem;
+  resize: vertical;
+}
+
+.reviewInput {
+  background-color: var(--light-gray);
+  color: var(--dark-blue);
+  width: 20rem;
+  padding: 11px 10px;
+  font-size: 1rem;
+  border: 2px solid var(--dark-blue);
+  border-radius: 5px;
+  outline: none;
+}
+
+.submitButton {
+  background-color: var(--light-green);
+  color: var(--dark-blue);
+  font-size: 1rem;
+  padding: 0.75rem 3rem;
+  border: 2px solid var(--light-green);
+  border-radius: 20px;
+}
+
+.dataParagraph {
+  /* background: rgba(17, 87, 111, 0.7); */
+  color: var(--light-gray);
+  font-size: 1.5rem;
+  text-align: center;
+  /* margin-top: 5rem; */
+  padding: 1rem;
+  border-radius: 9px;
+}
+
+.noBookedDestinationsDiv {
+  background: rgba(17, 87, 111, 0.7);
+  padding: 1rem;
+  margin-top: 3rem;
+  border-radius: 9px;
+}
+
+.carouselContainer {
+  width: 100%;
+}
+
+@media (max-width: 793px) {
+  .newReview {
+    width: 500px;
+  }
+}
+
+@media (max-width: 587px) {
+  .newReview {
+    width: 400px;
+  }
+
+  .mainTitle {
+    font-size: 30px;
+  }
+
+  .reviewForm select {
+    width: 16.5rem;
+  }
+
+  .reviewForm textarea {
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+  }
+
+  .reviewInput {
+    background-color: var(--light-gray);
+    color: var(--dark-blue);
+    width: 15rem;
+    padding: 11px 10px;
+    font-size: 0.93rem;
+    border: 2px solid var(--dark-blue);
+    border-radius: 5px;
+    outline: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .heroSection {
+    min-height: 130vh;
+  }
+
+  .headerDiv {
+    position: absolute;
+    top: 0;
+  }
+
+  .newReview {
+    width: 350px;
+    margin-top: 12rem;
+    margin-bottom: 2rem;
+  }
+
+  .mainTitle {
+    font-size: 30px;
+  }
+
+  .reviewForm select {
+    width: 16.5rem;
+  }
+
+  .reviewForm textarea {
+    font-size: 13.45px;
+  }
+
+  .reviewInput {
+    width: 15rem;
+    font-size: 13px;
+  }
+
+  .submitButton {
+    font-size: 13px;
+    padding: 0.5rem 2.25rem;
+  }
+
+  .noBookedDestinationsDiv {
+    width: 300px;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border-radius: 9px;
+  }
+
+  .dataParagraph {
+    font-size: 13px;
+  }
+
+  .carouselContainer {
+    width: 100%;
+    margin-bottom: 3rem;
+  }
+}

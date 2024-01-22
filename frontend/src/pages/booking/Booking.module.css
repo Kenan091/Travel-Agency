@@ -1,0 +1,254 @@
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --dark-blue: #082831;
+  --light-green: #83ab55;
+  --light-gray: #d8e1ec;
+  --light-blue: #11576f;
+}
+
+.container {
+  background: url('../images/bookingsCover2.jpg') no-repeat;
+  background-position: left bottom;
+  background-size: cover;
+  width: 100%;
+  height: 110vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.container::before {
+  content: '';
+  background-color: rgba(17, 87, 111, 0.3);
+  position: absolute;
+  width: 100%;
+  height: 110vh;
+  z-index: 1;
+}
+
+.headerDiv {
+  z-index: 1;
+}
+
+.booking {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+  z-index: 2;
+}
+
+.bookingForm {
+  background-color: var(--light-gray);
+  opacity: 0.7;
+  width: 600px;
+  margin-top: 45px;
+  padding: 30px 38px 15px 41px;
+  border-radius: 9px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.destinationName {
+  margin: 0;
+  font-size: 30px;
+  color: var(--dark-blue);
+}
+
+.destinationDescription {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--dark-blue);
+  text-align: justify;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3.5rem;
+  color: var(--dark-blue);
+}
+
+.priceDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  color: var(--dark-blue);
+  z-index: 100;
+}
+
+.datesDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.datesDiv input {
+  color: var(--dark-blue);
+  width: 125px;
+  padding: 5px 0;
+  text-align: center;
+  border: medium solid var(--dark-blue);
+  border-radius: 20px;
+}
+
+.datesDiv input::placeholder {
+  color: var(--light-blue);
+}
+
+.numberOfTravelersDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.numberOfTravelersDiv input {
+  color: var(--dark-blue);
+  width: 50px;
+  padding: 5px 0;
+  text-align: center;
+  border: medium solid var(--dark-blue);
+  border-radius: 20px;
+}
+
+.numberOfTravelersDiv input::placeholder {
+  color: var(--light-blue);
+}
+
+.separationLine {
+  border-bottom: 1px solid var(--light-blue);
+  margin-top: 1rem;
+}
+
+.totalPriceDiv {
+  text-align: right;
+}
+
+.totalPriceLabel {
+  font-size: 16px;
+  margin-bottom: -15px;
+  color: var(--dark-blue);
+}
+
+.totalPriceValue {
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--light-blue);
+  margin-bottom: 0;
+}
+
+.dataParagraph {
+  font-size: 1.5rem;
+  color: var(--light-gray);
+  text-align: center;
+}
+
+.payment {
+  background-color: rgba(17, 87, 111, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  height: 380px;
+  margin-top: 45px;
+  padding-bottom: 40px;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+  border-bottom-left-radius: 9px;
+  z-index: 2;
+}
+
+.payment h1 {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+  font-size: 20px;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 20px 165px 15px 165px;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
+}
+
+.paymentInputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.payment input {
+  background-color: var(--light-gray);
+  color: var(--dark-blue);
+  font-size: 14px;
+  width: 310px;
+  padding: 13px 0;
+  text-align: center;
+  border-radius: 9px;
+  border: 0;
+  outline: none;
+}
+
+.payment input::placeholder {
+  color: var(--light-blue);
+}
+
+.payment input:first-child {
+  margin-top: 2rem;
+}
+
+.separatedDetails {
+  display: flex;
+  gap: 1.3rem;
+}
+
+.separatedDetails input:first-child {
+  width: 125px;
+  margin: 0;
+  text-align: center;
+}
+
+.separatedDetails input:last-child {
+  width: 165px;
+  text-align: center;
+}
+
+.finishPaymentButton {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+  font-size: 18px;
+  margin-top: 1rem;
+  padding: 9px 0;
+  width: 175px;
+  border-radius: 15px;
+}
+
+@media (max-width: 1200px) {
+  .bookingForm {
+    width: 330px;
+    margin-left: 0px;
+  }
+
+  .details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .priceDiv {
+    gap: 1rem;
+  }
+
+  .datesDiv {
+    margin-left: -4px;
+    gap: 1rem;
+  }
+}

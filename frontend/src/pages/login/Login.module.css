@@ -1,0 +1,97 @@
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --dark-blue: #082831;
+  --light-green: #83ab55;
+  --light-gray: #d8e1ec;
+  --light-blue: #11576f;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--dark-blue);
+  outline: none;
+  z-index: 1000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.backButton {
+  position: absolute;
+  top: 5%;
+  left: 3%;
+  cursor: pointer;
+}
+
+.logo {
+  width: 200px;
+  height: auto;
+}
+
+.title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: var(--light-gray);
+}
+
+.text {
+  color: var(--light-gray);
+}
+
+.text span {
+  font-size: 1rem;
+  color: var(--light-green);
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.form input {
+  font-size: 1rem;
+  width: 300px;
+  background-color: var(--light-gray);
+  padding: 10px 40px;
+  border-radius: 4px;
+  outline: none;
+  text-align: center;
+}
+
+.forgotPassword {
+  color: var(--light-gray);
+  cursor: pointer;
+  margin: 0;
+  text-align: center;
+}
+
+.submitButton {
+  background-color: var(--light-green);
+  color: var(--dark-blue);
+  font-size: 1rem;
+  width: 200px;
+  padding: 0.75rem 0;
+  border: 2px solid var(--light-green);
+  border-radius: 20px;
+}
+
+.submitButton:disabled {
+  background-color: #ccc;
+  color: #000;
+  border-color: #ccc;
+}
+
+@media (max-width: 450px) {
+  .form input {
+    width: 200px;
+    font-size: 0.75rem;
+  }
+}

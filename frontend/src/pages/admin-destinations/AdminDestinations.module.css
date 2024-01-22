@@ -1,0 +1,215 @@
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --darker-blue: #061e25;
+  --dark-blue: #082831;
+  --light-green: #83ab55;
+  --light-gray: #d8e1ec;
+  --light-blue: #11576f;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.headerDiv {
+  background-color: var(--dark-blue);
+}
+
+.container {
+  background: var(--light-blue);
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding-top: 5rem;
+  /* min-height: 43.2vh; */
+  min-height: 1600px;
+}
+
+.mainTitle {
+  font-size: 40px;
+  text-transform: uppercase;
+  color: var(--light-gray);
+  margin-top: 0;
+  margin-bottom: 5rem;
+}
+
+.destinations {
+  background-color: rgba(17, 87, 111, 0.5);
+  box-shadow: 0px 3.0422677993774414px 3.0422677993774414px rgba(0, 0, 0, 0.25);
+  border-radius: 9px;
+}
+
+.tableTitle {
+  background-color: rgba(8, 40, 49, 0.85);
+  color: var(--light-gray);
+  font-size: 18px;
+  margin: 0;
+  padding: 1rem 4rem;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
+  text-align: center;
+}
+
+.tableHeadRow {
+  color: var(--light-gray);
+}
+
+.table {
+  padding: 0 2.5rem;
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+}
+
+.tableDataRow {
+  height: 160px;
+}
+
+.tableCell,
+.tableDataCell {
+  font-size: 14.5px;
+  text-transform: uppercase;
+  color: var(--light-gray);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.tableCell {
+  background-color: rgba(17, 87, 111, 0.5);
+}
+
+.tableDataCell {
+  background-color: rgba(8, 40, 49, 0.63);
+  font-size: 11.4px;
+  font-weight: bold;
+  padding: 2rem;
+}
+
+.tableDataCell:last-child div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 160px;
+}
+
+.addNewButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--light-green);
+  width: 70px;
+  padding: 0 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.addNewButton p {
+  font-size: 9px;
+  color: var(--light-gray);
+}
+
+.actionButton {
+  cursor: pointer;
+}
+
+.table tbody tr:not(:last-child) {
+  border-bottom: 2px solid var(--light-gray);
+}
+
+.table tbody tr td:nth-child(2) {
+  width: 230px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.table tbody tr td:nth-child(5) {
+  width: 230px;
+  text-align: justify;
+  font-size: 10px;
+}
+
+.modal {
+  display: none;
+  background-color: var(--light-gray);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 750px;
+  border-radius: 9px;
+}
+
+.modal.open {
+  display: inline-block;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.title {
+  color: var(--dark-blue);
+  text-transform: uppercase;
+  margin-top: 4rem;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  gap: 2rem;
+}
+
+.modalForm input,
+.modalForm textarea {
+  background-color: #bbb;
+  font-family: inherit;
+  text-align: center;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  width: 20rem;
+  padding: 11px 10px;
+}
+
+.modalForm textarea {
+  text-align: left;
+  font-size: 16px;
+  padding-left: 15px;
+  height: 230px;
+  resize: none;
+}
+
+.modalForm textarea::placeholder {
+  color: var(--dark-blue);
+}
+
+.modalForm input::placeholder {
+  color: var(--dark-blue);
+}
+
+.modalForm button {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+  font-weight: bold;
+  width: 160px;
+  padding: 10px;
+  border-radius: 20px;
+}
