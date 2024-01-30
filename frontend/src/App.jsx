@@ -50,7 +50,7 @@ function App() {
             element={<DestinationDetails />}
           />
           <Route
-            path='/experiences'
+            path='/experiences/:id'
             element={<Experiences />}
           />
           <Route

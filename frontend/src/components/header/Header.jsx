@@ -31,7 +31,9 @@ const Header = () => {
   return (
     <>
       <div className={styles.headerContainer}>
-        <Link to='/'>
+        <Link
+          to='/'
+          className={styles.logoContainer}>
           <img
             src='../images/logo.png'
             alt='Travelist logo'
@@ -96,13 +98,13 @@ const Header = () => {
                     Destinations
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink
                     to='/experiences'
                     className={styles.navLink}>
                     Experiences
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink
                     to='/contact-us'

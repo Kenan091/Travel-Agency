@@ -10,13 +10,13 @@
 }
 
 .container {
-  background-color: var(--light-green);
+  /* background-color: var(--light-green); */
   display: flex;
   justify-content: center;
 }
 
 .subcontainer {
-  background-color: var(--light-green);
+  background-color: var(--darker-blue);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,42 +26,49 @@
 }
 
 .mainContent {
-  background-color: var(--light-gray);
+  width: 100%;
+  /* background-color: var(--light-gray); */
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 30px;
-  border: 2px solid var(--dark-blue);
-  border-radius: 9px;
+  /* align-items: center; */
+  /* padding: 30px; */
+  /* border: 2px solid var(--dark-blue); */
+  /* border-radius: 9px; */
 }
 
 .mainContent img {
-  width: 400px;
-  height: 400px;
+  width: 700px;
+  height: 500px;
   border-radius: 20px;
 }
 
-.details {
+/* .details {
   padding: 0 0 5px 50px;
   width: 400px;
   height: 400px;
-}
+} */
 
-.detailsTopPart {
+/* .detailsTopPart {
   display: flex;
   justify-content: space-between;
   align-items: center;
+} */
+
+.topPart {
+  display: flex;
+  gap: 14rem;
 }
 
 .name {
-  color: var(--darker-blue);
+  color: var(--light-gray);
   padding-left: 20px;
   margin-top: 0;
   width: 240px;
 }
 
 .averageRating {
-  background-color: var(--dark-blue);
+  /* background-color: var(--dark-blue); */
   color: var(--light-gray);
   display: flex;
   align-items: center;
@@ -72,20 +79,24 @@
 }
 
 .description {
-  color: var(--darker-blue);
-  padding: 0 20px 20px 20px;
+  font-size: 20px;
+  width: 700px;
+  color: var(--light-gray);
+  padding: 0 20px 20px 0;
   text-align: justify;
 }
 
-.detailsBottomPart {
+.bottomPart {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
 .price {
-  background-color: var(--darker-blue);
-  color: var(--light-green);
+  /* background-color: var(--light-gray); */
+  color: var(--light-gray);
   font-size: 1rem;
+  font-weight: bold;
   display: flex;
   align-items: center;
   gap: 2px;

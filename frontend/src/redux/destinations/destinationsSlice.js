@@ -130,7 +130,7 @@ const destinationsSlice = createSlice({
       })
       .addCase(addDestination.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.destinations.push(action.payload.data);
+        state?.destinations.push(action.payload.data);
       })
       .addCase(addDestination.rejected, (state, action) => {
         state.isLoading = false;
@@ -143,7 +143,7 @@ const destinationsSlice = createSlice({
       .addCase(updateDestination.fulfilled, (state, action) => {
         state.isLoading = false;
         const updatedDestination = action.payload.data;
-        const index = state.destinations.findIndex(
+        const index = state?.destinations.findIndex(
           d => d._id === updatedDestination._id
         );
         if (index !== -1) {
@@ -161,7 +161,7 @@ const destinationsSlice = createSlice({
       .addCase(deleteDestination.fulfilled, (state, action) => {
         state.isLoading = false;
         const deletedDestinationId = action.payload.data._id;
-        state.destinations = state.destinations.filter(
+        state.destinations = state?.destinations.filter(
           d => d._id !== deletedDestinationId
         );
       })

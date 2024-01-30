@@ -15,11 +15,12 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
       destination: req.params.destinationId,
     });
 
-    return res.status(200).json({
-      success: true,
-      count: reviews.length,
-      data: reviews,
-    });
+    return res.status(200).json(res.advancedResults);
+    // return res.status(200).json({
+    //   success: true,
+    //   count: reviews.length,
+    //   data: reviews,
+    // });
   } else {
     res.status(200).json(res.advancedResults);
   }

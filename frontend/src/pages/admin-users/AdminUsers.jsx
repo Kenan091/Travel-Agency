@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import styles from './AdminUsers.module.css';
-import { getUsers } from '../../redux/users/usersSlice';
+import { deleteUser, getUsers } from '../../redux/users/usersSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
@@ -34,7 +34,8 @@ const AdminUsers = () => {
   const numberOfPages = Math.ceil(filteredUsers?.length / recordsPerPage);
 
   const onDelete = userId => {
-    console.log('Ready for deleting', userId);
+    dispatch(deleteUser(userId));
+    console.log('Deleted', userId);
   };
 
   useEffect(() => {

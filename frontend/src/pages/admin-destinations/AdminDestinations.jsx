@@ -41,6 +41,12 @@ const AdminDestinations = () => {
     state => state?.destination?.isLoading
   );
 
+  const isErrorDestinations = useSelector(state => state?.destination?.isError);
+
+  const destinationsErrorMessage = useSelector(
+    state => state?.destination?.message
+  );
+
   const destination = useSelector(
     state => state?.destination?.destination?.data
   );
@@ -128,6 +134,11 @@ const AdminDestinations = () => {
         toast.error('Each field must be entered!');
       } else {
         dispatch(addDestination(formData));
+        if (isErrorDestinations) {
+          toast.error(destinationsErrorMessage);
+        } else {
+          toast.success('Destination added');
+        }
         onCloseModal();
       }
     }

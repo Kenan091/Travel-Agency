@@ -9,7 +9,8 @@ import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
 import Carousel from '../../components/carousel/Carousel';
 import { RiCoinsFill } from 'react-icons/ri';
-import { IoStar } from 'react-icons/io5';
+import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
+import ReactStars from 'react-rating-stars-component';
 
 const DestinationDetails = () => {
   const navigate = useNavigate();
@@ -32,6 +33,10 @@ const DestinationDetails = () => {
   const reviews = useSelector(state => state?.review?.reviews?.data);
   const isLoadingReviews = useSelector(state => state?.review?.isLoading);
 
+  const destinationReviews = reviews?.filter(
+    review => review?.destination?._id === destination?._id
+  );
+
   const handleNavigateToBookings = id => {
     navigate(`/bookings/${id}`);
     window.scrollTo(0, 0);
@@ -47,45 +52,47 @@ const DestinationDetails = () => {
         <Header />
         <div className={styles.container}>
           <div className={styles.subcontainer}>
-            {isLoadingDestination ? (
-              // <div style={{ color: 'black', textAlign: 'center' }}>
-
-              // </div>
+            {isLoadingDestination || isLoadingReviews ? (
               <Spinner />
             ) : destination ? (
               <div className={styles.mainContent}>
+                <div className={styles.topPart}>
+                  <h1 className={styles.name}>{destination.name}</h1>
+                  {destinationReviews.length > 0 && (
+                    <div className={styles.averageRating}>
+                      <ReactStars
+                        count={5}
+                        value={destination?.averageRating.toFixed(2)}
+                        size={24}
+                        isHalf={true}
+                        emptyIcon={<IoStarOutline />}
+                        halfIcon={<IoStarHalf />}
+                        fullIcon={<IoStar />}
+                        activeColor='#FFD233'
+                        edit={false}
+                      />
+                      <span>{`(${destinationReviews.length} reviews)`}</span>
+                    </div>
+                  )}
+                </div>
                 <div>
                   <img src={destination.imageURL} />
                 </div>
-                <div className={styles.details}>
-                  <div className={styles.detailsTopPart}>
-                    <h1 className={styles.name}>{destination.name}</h1>
-                    <div className={styles.averageRating}>
-                      <IoStar
-                        color='#FFD233'
-                        size={20}
-                      />
-                      <span>
-                        {destination?.averageRating
-                          ? destination.averageRating.toFixed(2)
-                          : 'Not rated'}
-                      </span>
-                    </div>
+
+                <p className={styles.description}>{destination.description}</p>
+                <div className={styles.bottomPart}>
+                  <div className={styles.price}>
+                    <RiCoinsFill
+                      size={32}
+                      color='rgb(255, 210, 51'
+                    />
+                    <span>{destination.price} /per person</span>
                   </div>
-                  <p className={styles.description}>
-                    {destination.description}
-                  </p>
-                  <div className={styles.detailsBottomPart}>
-                    <div className={styles.price}>
-                      <RiCoinsFill size={32} />
-                      <span>{destination.price} /per person</span>
-                    </div>
-                    <button
-                      className={styles.bookNowButton}
-                      onClick={() => handleNavigateToBookings(destination._id)}>
-                      Book Now
-                    </button>
-                  </div>
+                  <button
+                    className={styles.bookNowButton}
+                    onClick={() => handleNavigateToBookings(destination._id)}>
+                    Book Now
+                  </button>
                 </div>
               </div>
             ) : (
@@ -93,10 +100,8 @@ const DestinationDetails = () => {
                 There is no destination with id: {id}
               </p>
             )}
-            {isLoadingReviews ? (
-              <Spinner />
-            ) : (
-              reviews && reviews.length > 0 && <Carousel items={reviews} />
+            {destinationReviews && destinationReviews.length > 0 && (
+              <Carousel items={destinationReviews} />
             )}
           </div>
         </div>

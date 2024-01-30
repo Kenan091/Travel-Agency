@@ -1,4 +1,5 @@
 :root {
+  --darker-blue: #061e25;
   --dark-blue: #082831;
   --light-green: #83ab55;
   --light-gray: #d8e1ec;
@@ -58,8 +59,9 @@ a {
 }
 
 .heroSection {
-  background: url('../images/mainCover.jpg') center no-repeat;
-  /* background-size: cover; */
+  background: url('../images/mainCover.jpg') no-repeat;
+  background-size: cover;
+  background-position: top;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -91,16 +93,13 @@ a {
   font-size: 22px;
   color: var(--light-gray);
   margin-top: -2rem;
-  position: relative;
-  z-index: 2;
 }
 
 .destinationsContainer .mainTitle {
   font-size: 40px;
   text-transform: uppercase;
   color: var(--light-gray);
-  position: relative;
-  z-index: 2;
+  margin-bottom: 0;
 }
 
 .browseDestinations {
@@ -117,18 +116,18 @@ a {
   z-index: 2;
 }
 
-.browseDestinations .searchInputs {
+/* .browseDestinations .searchInputs {
   display: flex;
   gap: 2rem;
-}
+} */
 
-.searchInputs > div input {
+/* .searchInputs > div input {
   height: 2.5rem;
   width: 8rem;
   padding-left: 6px;
   border-radius: 5px;
   border: none;
-}
+} */
 
 .searchInput {
   display: flex;
@@ -145,6 +144,10 @@ a {
 .searchInput input {
   background-color: transparent;
   color: var(--light-gray);
+  height: 2.5rem;
+  width: 8rem;
+  padding-left: 6px;
+  border: none;
   outline: none;
 }
 
@@ -251,6 +254,79 @@ a {
   border-radius: 20px;
 }
 
+.whySection .title {
+  font-size: 22px;
+  color: var(--light-gray);
+  margin-top: -2rem;
+}
+
+.whySection .mainTitle {
+  font-size: 40px;
+  text-transform: capitalize;
+  text-align: center;
+  color: var(--light-gray);
+  margin-bottom: 3rem;
+}
+
+.whySection .mainContent {
+  display: flex;
+  text-align: center;
+  justify-items: center;
+  gap: 3rem;
+}
+
+.whySection .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-gray);
+  width: 300px;
+  height: 350px;
+  border-radius: 9px;
+  box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.3);
+}
+
+.whySection .card .cardTopPart {
+  height: 65%;
+}
+
+.whySection .card .cardTopPart .cardImg {
+  width: 300px;
+  height: 100%;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+}
+
+.whySection .card .cardBottomPart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 35%;
+}
+
+.whySection .card .cardBottomPart p {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--dark-blue);
+}
+
+.whySection .cardIcon {
+  position: absolute;
+  top: 56.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-gray);
+  box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  z-index: 2;
+}
+
 .aboutUsContainer {
   color: var(--light-gray);
   height: 500px;
@@ -260,7 +336,7 @@ a {
   justify-content: center;
   align-items: center;
   position: relative;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .aboutUsContainer::before {
@@ -275,7 +351,7 @@ a {
 
 .aboutUsContainer .mainTitle {
   position: relative;
-  color: var(--dark-blue);
+  color: var(--light-gray);
   text-align: center;
   text-transform: uppercase;
   z-index: 2;
@@ -289,8 +365,33 @@ a {
   padding: 0 15rem;
 }
 
+.popularDestinationsContainer {
+  background-color: var(--darker-blue);
+  width: 100%;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.popularDestinations {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.popularDestinations .mainTitle {
+  font-size: 40px;
+  text-transform: capitalize;
+  text-align: center;
+  color: var(--light-gray);
+  margin-top: 0;
+  margin-bottom: 3rem;
+}
+
 .experiencesContainer {
-  background-color: var(--dark-blue);
+  background-color: var(--darker-blue);
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -199,7 +199,6 @@ const ContactUs = () => {
             />
             <button
               type='submit'
-              // onClick={handleSubmit}
               className={styles.contactSubmitButton}>
               Send
             </button>

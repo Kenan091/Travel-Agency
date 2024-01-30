@@ -8,9 +8,12 @@ import Footer from '../../components/footer/Footer';
 import getRegularDate from '../../helpers/useGetRegularDate';
 import Spinner from '../../components/spinner/Spinner';
 import Pagination from '../../components/pagination/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { user, isError } = useSelector(state => state?.auth);
   const message = useSelector(state => state?.auth?.message);
 
@@ -35,6 +38,11 @@ const AccountDetails = () => {
   console.log('Bookings:', bookings);
   console.log('User bookings: ', userBookings);
 
+  const handleNavigationToExperiencesPage = destinationId => {
+    navigate(`/experiences/${destinationId}`);
+    window.scrollTo(0, 0);
+  };
+
   useEffect(() => {
     dispatch(getBookings());
 
@@ -54,58 +62,69 @@ const AccountDetails = () => {
             <h2 className={styles.mainTitle}>Welcome {user.user.name}</h2>
             {isLoadingBookings ? (
               <Spinner />
-            ) : (
-              userBookings &&
-              userBookings?.length > 0 && (
-                <>
-                  <div className={styles.usersBookings}>
-                    <h3 className={styles.tableTitle}>Your travel history</h3>
+            ) : userBookings && userBookings?.length > 0 ? (
+              <>
+                <div className={styles.usersBookings}>
+                  <h3 className={styles.tableTitle}>Your travel history</h3>
 
-                    <table className={styles.table}>
-                      <thead>
-                        <tr>
-                          <th className={styles.tableCell}>Place</th>
-                          <th className={styles.tableCell}>Stay period</th>
-                          <th className={styles.tableCell}>Travelers</th>
-                          <th className={styles.tableCell}>Total price</th>
+                  <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        <th className={styles.tableCell}>Place</th>
+                        <th className={styles.tableCell}>Stay period</th>
+                        <th className={styles.tableCell}>Travelers</th>
+                        <th className={styles.tableCell}>Total price</th>
+                        <th className={styles.tableCell}>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentRecords?.map(item => (
+                        <tr
+                          key={item._id}
+                          className={styles.tableDataRow}>
+                          <td className={styles.tableDataCell}>
+                            {item.destination.name}
+                          </td>
+                          <td className={styles.tableDataCell}>
+                            {getRegularDate(item.arrivalDate)} -{' '}
+                            {getRegularDate(item.departureDate)}
+                          </td>
+                          <td className={styles.tableDataCell}>
+                            {item.numberOfTravelers}
+                          </td>
+                          <td className={styles.tableDataCell}>
+                            {item.totalPrice} BAM
+                          </td>
+                          <td className={styles.tableDataCell}>
+                            <button
+                              className={styles.addNewReview}
+                              onClick={() =>
+                                handleNavigationToExperiencesPage(
+                                  item.destination._id
+                                )
+                              }>
+                              Add review
+                            </button>
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {currentRecords?.map(item => (
-                          <tr
-                            key={item._id}
-                            className={styles.tableDataRow}>
-                            <td className={styles.tableDataCell}>
-                              {item.destination.name}
-                            </td>
-                            <td className={styles.tableDataCell}>
-                              {getRegularDate(item.arrivalDate)} -{' '}
-                              {getRegularDate(item.departureDate)}
-                            </td>
-                            <td className={styles.tableDataCell}>
-                              {item.numberOfTravelers}
-                            </td>
-                            <td className={styles.tableDataCell}>
-                              {item.totalPrice} BAM
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <Pagination
-                      numberOfPages={numberOfPages}
-                      currentPage={currentPage}
-                      setCurrentPage={setCurrentPage}
-                    />
-                  </div>
-                </>
-              )
+                      ))}
+                    </tbody>
+                  </table>
+                  <Pagination
+                    numberOfPages={numberOfPages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
+                </div>
+                <div>
+                  <button></button>
+                </div>
+              </>
+            ) : (
+              <div className={styles.noBookedDestinationsDiv}>
+                <p>You haven't booked any destinations.</p>
+              </div>
             )}
-            {/* ) : (
-               <div className={styles.noBookedDestinationsDiv}>
-                 <p>You haven't booked any destinations.</p>
-               </div>
-             )} */}
           </>
         )}
       </div>

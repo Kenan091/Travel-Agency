@@ -1,3 +1,4 @@
+import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
 import styles from '../pagination/Pagination.module.css';
 
 const Pagination = ({ numberOfPages, currentPage, setCurrentPage }) => {
@@ -8,11 +9,16 @@ const Pagination = ({ numberOfPages, currentPage, setCurrentPage }) => {
   );
 
   const goToNextPage = () => {
-    if (currentPage !== nPages) setCurrentPage(currentPage + 1);
+    if (currentPage !== numberOfPages) setCurrentPage(currentPage + 1);
   };
   const goToPrevPage = () => {
     if (currentPage !== 1) setCurrentPage(currentPage - 1);
   };
+
+  if (pageNumbers.length === 1) {
+    return;
+  }
+
   return (
     <nav>
       <ul className={styles.pagination}>
@@ -21,7 +27,7 @@ const Pagination = ({ numberOfPages, currentPage, setCurrentPage }) => {
             disabled={currentPage === 1 ? true : false}
             className={styles.pageLink}
             onClick={goToPrevPage}>
-            Previous
+            <IoArrowBack size={24} />
           </button>
         </li>
         {pageNumbers.map(pageNumber => (
@@ -42,7 +48,7 @@ const Pagination = ({ numberOfPages, currentPage, setCurrentPage }) => {
             disabled={currentPage === numberOfPages ? true : false}
             className={styles.pageLink}
             onClick={goToNextPage}>
-            Next
+            <IoArrowForward size={24} />
           </button>
         </li>
       </ul>

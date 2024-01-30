@@ -40,6 +40,7 @@ table {
 .usersBookings {
   box-shadow: 0px 3.0422677993774414px 3.0422677993774414px rgba(0, 0, 0, 0.25);
   border-radius: 9px;
+  margin-bottom: 6rem;
 }
 
 .tableTitle {
@@ -92,6 +93,10 @@ table {
   border-bottom: 2px solid var(--light-gray);
 }
 
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 9px;
+}
+
 .table tbody tr:last-child td:last-child {
   display: flex;
   flex-direction: column;
@@ -99,6 +104,7 @@ table {
   align-items: center;
   /* padding-top: 3rem; */
   gap: 3rem;
+  border-bottom-right-radius: 9px;
 }
 
 .noBookedDestinationsDiv {
@@ -111,4 +117,11 @@ table {
 
 .noBookedDestinationsDiv p {
   margin: 0;
+}
+
+.addNewReview {
+  background-color: var(--light-gray);
+  color: var(--darker-blue);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
 }

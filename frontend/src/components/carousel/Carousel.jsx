@@ -4,6 +4,7 @@ import styles from './Carousel.module.css';
 // import truncateDescription from '../../helpers/useTruncateDescription';
 import { IoArrowBack, IoArrowForward, IoStar } from 'react-icons/io5';
 import { RiCoinsFill } from 'react-icons/ri';
+import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa6';
 
 export const Carousel = ({ items }) => {
   const [currentItem, setCurrentItem] = useState(0);
@@ -100,12 +101,10 @@ export const Carousel = ({ items }) => {
                   <div
                     key={item._id}
                     className={styles.review}>
-                    <h2 className={styles.name}>
-                      {item?.destination?.name
-                        ? item?.destination?.name
-                        : item.name}
-                    </h2>
-                    <h3 className={styles.title}>{item?.user?.name}</h3>
+                    <h2 className={styles.name}>{item?.user?.name}</h2>
+                    <h3 className={styles.destinationName}>
+                      {item?.destination?.name}
+                    </h3>
                     {/* <h3 className={styles.title}>{item.title}</h3> */}
                     <div className={styles.rating}>
                       {Array.from({ length: item.rating }, (_, i) => (
@@ -117,7 +116,17 @@ export const Carousel = ({ items }) => {
                         </span>
                       ))}
                     </div>
-                    <p>{item.comment}</p>
+                    <div className={styles.commentParagraph}>
+                      <FaQuoteLeft
+                        color='#83ab55'
+                        className={styles.leftQuote}
+                      />
+                      <p>{item.comment}</p>
+                      <FaQuoteRight
+                        color='#83ab55'
+                        className={styles.rightQuote}
+                      />
+                    </div>
                   </div>
                 )}
               </div>

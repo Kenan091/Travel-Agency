@@ -13,7 +13,7 @@ const DestinationSchema = new mongoose.Schema({
   description: {
     type: String,
     required: [true, 'Please add a description'],
-    maxlength: [500, "Description can't have more than 500 characters"],
+    maxlength: [2000, "Description can't have more than 2000 characters"],
   },
   imageURL: {
     type: String,
@@ -23,10 +23,10 @@ const DestinationSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add a price'],
   },
-  availability: {
-    type: Boolean,
-    required: [true, 'Please add an availability'],
-  },
+  // availability: {
+  //   type: Boolean,
+  //   required: [true, 'Please add an availability'],
+  // },
   averageRating: {
     type: Number,
     min: [1, 'Rating must be at least 1'],

@@ -115,6 +115,11 @@ table {
   cursor: pointer;
 }
 
+.table thead th:last-child {
+  display: flex;
+  justify-content: center;
+}
+
 .table tbody tr:not(:last-child) {
   border-bottom: 2px solid var(--light-gray);
 }
@@ -125,10 +130,9 @@ table {
   padding-right: 0;
 }
 
-.table tbody tr td:nth-child(5) {
-  width: 230px;
+.table tbody tr td:nth-child(4) {
+  width: 300px;
   text-align: justify;
-  font-size: 10px;
 }
 
 .modal {

@@ -33,7 +33,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   position: relative;
 }
@@ -52,7 +52,7 @@
   font-size: 40px;
   text-transform: uppercase;
   color: var(--light-gray);
-  margin-top: 8rem;
+  margin-top: 4rem;
   z-index: 2;
 }
 
@@ -60,107 +60,23 @@
   position: relative;
   font-size: 22px;
   color: var(--light-gray);
-  margin-top: -4rem;
   z-index: 2;
 }
 
-.browseDestinations {
-  background-color: rgba(17, 87, 111, 0.8);
+.destinationsDiv {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  position: relative;
-  height: 7rem;
-  width: 350px;
-  margin-bottom: 3rem;
-  gap: 2rem;
-  border-radius: 5px;
-  z-index: 2;
+  width: 100%;
+  min-height: 1198px;
+  /* min-height: 47vh; */
+  margin: 3rem 0;
 }
 
-.browseDestinations .searchInputs {
-  display: flex;
-  gap: 2rem;
-}
-
-.searchInputs > div input {
-  height: 2.5rem;
-  width: 8rem;
-  padding-left: 6px;
-  border-radius: 5px;
-  border: none;
-}
-
-.searchInput {
-  display: flex;
-  width: 175px;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  padding-right: 1.5rem;
-  border-right: 2px solid var(--light-green);
-  z-index: 100;
-}
-
-.searchInput select {
-  background-color: rgba(17, 87, 111, 0.8);
-  color: var(--light-gray);
-  outline: none;
-  height: 2.5rem;
-  border: 0;
-}
-
-.searchInput:last-child {
-  border-right: none;
-  padding-right: 0;
-}
-
-.searchInput > div label {
-  font-weight: bold;
-}
-
-.searchInput > div input {
-  background-color: transparent;
-  color: var(--light-gray);
-  outline: none;
-}
-
-.browseDestinations .searchButton {
-  height: 4rem;
-  width: 5rem;
-  background-color: var(--dark-blue);
-  color: var(--light-gray);
-  border: 1px solid var(--light-green);
-  border-radius: 20px;
-}
-
-.modalOverlay {
-  position: absolute;
-  top: 480px;
-  background-color: var(--light-gray);
-  width: 720px;
-  box-shadow: 0px 3.0422677993774414px 3.0422677993774414px rgba(0, 0, 0, 0.25);
-  border-radius: 9px;
-  z-index: 100;
-}
-
-.modalContent {
-  padding: 20px 45px 40px 60px;
-}
-
-.modalTopPart {
+.topPart {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-
-.closeButton {
-  background-color: transparent;
-}
-
-.modalTitle {
-  color: var(--dark-blue);
-  margin: 0;
+  width: 84%;
 }
 
 .sortDiv {
@@ -169,74 +85,135 @@
 
 .sortSelect {
   text-align: center;
-  background-color: var(--dark-blue);
-  color: var(--light-gray);
+  background-color: var(--light-gray);
+  color: var(--dark-blue);
   padding: 10px;
   outline: 0;
   border: 0;
   border-radius: 9px;
 }
 
-.destinationItem {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 5rem;
-  margin: 30px 0 0 15px;
-  color: var(--dark-blue);
+.sortSelect option {
+  border-radius: 9px;
+  margin-top: 1rem;
 }
 
-.destinationImage {
-  width: 240px;
-  height: 120px;
-}
-
-.destinationInfo h3 {
-  font-size: 15px;
-}
-
-.stayingPeriod {
+.searchDiv {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
-.destinationInfo p {
-  font-size: 9px;
-  width: 270px;
-  word-wrap: break-word;
+.searchDiv input {
+  height: 3rem;
+  width: 8rem;
+  padding-left: 6px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: none;
+  outline: none;
 }
 
-.buttonContainer {
-  text-align: right;
+.searchButton {
+  background-color: var(--light-blue);
+  color: var(--light-gray);
+  display: flex;
+  align-items: center;
+  height: 3.12rem;
+  padding: 0 1rem;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
-.seeMoreButton {
-  background-color: var(--light-green);
-  color: var(--dark-blue);
-  padding: 4px 20px;
-  border-radius: 20px;
+.destinationsWithPagination {
+  margin-top: 2rem;
 }
 
-.destinationsDiv {
+.destinations {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.destinationCard {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: var(--light-gray);
+  width: 270px;
+  height: 480px;
+  padding: 0rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.1);
+}
+
+.destinationCard img {
+  width: 270px;
+  height: 180px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.1);
+  align-self: center;
+}
+
+.destinationInfo {
+  padding: 0 0.5rem;
+  color: var(--dark-blue);
+  height: 190px;
+}
+
+.destinationInfo > div {
+  display: flex;
+  justify-content: space-around;
+}
+
+.destinationInfo h3 {
+  font-size: 19.64px;
+  margin-top: 10px;
+  width: 195px;
+}
+
+.destinationInfo p {
+  font-size: 10px;
+  text-align: justify;
+}
+
+.destinationBottomPart {
+  color: var(--dark-blue);
+  display: flex;
   align-items: center;
-  width: 100%;
-  min-height: 47vh;
-  margin-bottom: 3rem;
+  justify-content: space-around;
+  margin-top: 1rem;
 }
 
-.carouselContainer {
-  width: 100%;
+.price {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
+.price p {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.destinationButton {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+}
+
+.destinationButton:hover {
+  background-color: var(--light-blue);
+  color: var(--light-gray);
+}
+/* 
 .title {
   font-size: 22px;
   color: var(--light-gray);
   margin: 3rem 0;
-}
+} */
 
 .dataParagraph {
   font-size: 1.5rem;
@@ -258,32 +235,11 @@
     font-size: 19px;
     margin-top: 0.25rem;
   }
-
-  .modalOverlay {
-    width: 600px;
-    top: 380px;
-  }
-
-  .modalContent {
-    padding: 20px 35px 30px 25px;
-  }
 }
 
 @media (max-width: 680px) {
   .destinationsContainer {
     height: 250px;
-  }
-
-  .browseDestinations {
-    display: none;
-  }
-
-  .modalOverlay {
-    display: none;
-  }
-
-  .carouselContainer {
-    width: 99%;
   }
 }
 
@@ -300,14 +256,6 @@
   .destinationsContainer .title {
     font-size: 14px;
     margin-top: -100px;
-  }
-
-  .browseDestinations {
-    display: none;
-  }
-
-  .modalOverlay {
-    display: none;
   }
 
   .destinationsDiv {
@@ -328,8 +276,5 @@
   .destinationsDiv .title {
     margin-top: 2rem;
     font-size: 17px;
-  }
-  .carouselContainer {
-    width: 100%;
   }
 }

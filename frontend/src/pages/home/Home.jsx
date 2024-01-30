@@ -9,6 +9,9 @@ import Footer from '../../components/footer/Footer';
 import Carousel from '../../components/carousel/Carousel';
 import Spinner from '../../components/spinner/Spinner';
 import { IoClose, IoLocationSharp, IoSearch } from 'react-icons/io5';
+import { FaHandshake } from 'react-icons/fa6';
+import { MdCardTravel } from 'react-icons/md';
+import { RiMapPinUserFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import truncateDescription from '../../helpers/useTruncateDescription';
 
@@ -20,24 +23,27 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  const handleNavigateToPage = page => {
-    navigate(page);
-    window.scrollTo(0, 0);
-  };
+  // const handleNavigateToPage = page => {
+  //   navigate(page);
+  //   window.scrollTo(0, 0);
+  // };
 
   const dispatch = useDispatch();
   const destinations = useSelector(
     state => state?.destination?.destinations?.data
   );
+
   const reviews = useSelector(state => state?.review?.reviews?.data);
   const isLoadingDestinations = useSelector(
     state => state?.destination?.isLoading
   );
   const isLoadingReviews = useSelector(state => state?.review?.isLoading);
 
+  const popularDestinations = destinations?.filter(
+    destination => destination?.averageRating > 4
+  );
+
   const { user } = useSelector(state => state?.auth);
-  const userRole = user?.user?.role;
-  const name = user?.user?.name.split(' ')[0];
 
   const handleSearchButtonClick = () => {
     if (!selectedDestination) {
@@ -72,15 +78,22 @@ const Home = () => {
   };
 
   const sortedDestinations = useMemo(() => {
-    if (sortingOption === 'alphabet') {
-      return [...filteredDestinations].sort((a, b) =>
-        a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-      );
-    } else if (sortingOption === 'price') {
-      return [...filteredDestinations].sort((a, b) => a.price - b.price);
+    switch (sortingOption) {
+      case 'alphabet':
+        return [...filteredDestinations].sort((a, b) =>
+          a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+        );
+      case 'alphabetDesc':
+        return [...filteredDestinations].sort((a, b) =>
+          b.name.toLowerCase() < a.name.toLowerCase() ? -1 : 1
+        );
+      case 'price':
+        return [...filteredDestinations].sort((a, b) => a.price - b.price);
+      case 'priceDesc':
+        return [...filteredDestinations].sort((a, b) => b.price - a.price);
+      default:
+        return filteredDestinations;
     }
-
-    return filteredDestinations;
   }, [sortingOption, filteredDestinations]);
 
   useEffect(() => {
@@ -96,34 +109,33 @@ const Home = () => {
             <Header />
           </div>
           <div className={styles.destinationsContainer}>
-            <h2 className={styles.mainTitle}>Find your dream destination!</h2>
+            <h2 className={styles.mainTitle}>Unleash Your Travel Dreams</h2>
             <h3 className={styles.title}>
-              We will take you wherever you want to go!
+              Discover new cultures and create unforgettable memories with our
+              agency
             </h3>
             <div className={styles.browseDestinations}>
-              <div className={styles.searchInputs}>
-                <div className={styles.searchInput}>
-                  <IoLocationSharp
-                    size={32}
-                    color='#83ab55'
+              <div className={styles.searchInput}>
+                <IoLocationSharp
+                  size={32}
+                  color='#83ab55'
+                />
+                <div style={{ width: 120, height: 70 }}>
+                  <label
+                    style={{
+                      color: '#d8e1ec',
+                      marginLeft: 6,
+                      fontSize: 14,
+                    }}>
+                    Location
+                  </label>
+                  <input
+                    type='text'
+                    name='destination'
+                    placeholder='Where are you going?'
+                    value={selectedDestination}
+                    onChange={e => setSelectedDestination(e.target.value)}
                   />
-                  <div style={{ width: 120, height: 70 }}>
-                    <label
-                      style={{
-                        color: '#d8e1ec',
-                        marginLeft: 6,
-                        fontSize: 14,
-                      }}>
-                      Location
-                    </label>
-                    <input
-                      type='text'
-                      name='destination'
-                      placeholder='Where are you going?'
-                      value={selectedDestination}
-                      onChange={e => setSelectedDestination(e.target.value)}
-                    />
-                  </div>
                 </div>
               </div>
               <button
@@ -162,7 +174,9 @@ const Home = () => {
                           className={styles.sortSelect}>
                           <option value=''>Sort by</option>
                           <option value='alphabet'>A - Z</option>
-                          <option value='price'>Price</option>
+                          <option value='alphabetDesc'>Z - A</option>
+                          <option value='price'>Price Asc</option>
+                          <option value='priceDesc'>Price Desc</option>
                         </select>
                       </div>
                     )}
@@ -195,32 +209,94 @@ const Home = () => {
               </>
             )}
           </div>
-          <h2 className={styles.title}>Swipe through our special offers:</h2>
-          {isLoadingDestinations ? (
-            <Spinner />
-          ) : destinations && destinations.length > 0 ? (
-            <Carousel items={destinations} />
-          ) : (
-            <p className={styles.dataParagraph}>No destinations available.</p>
-          )}
+          <section className={styles.whySection}>
+            <h2 className={styles.mainTitle}>Why Travelist?</h2>
+            <div className={styles.mainContent}>
+              <div className={styles.card}>
+                <div className={styles.cardTopPart}>
+                  <img
+                    src='https://images.unsplash.com/photo-1539635278303-d4002c07eae3?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    alt='Group of travelers'
+                    className={styles.cardImg}
+                  />
+                </div>
+                <div className={styles.cardBottomPart}>
+                  <div className={styles.cardIcon}>
+                    <FaHandshake
+                      size={40}
+                      color='#082831'
+                    />
+                  </div>
+                  <p>Trusted Travel Agency</p>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <div className={styles.cardTopPart}>
+                  <img
+                    src='https://images.unsplash.com/photo-1479888230021-c24f136d849f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D'
+                    alt='Travel luggage'
+                    className={styles.cardImg}
+                  />
+                </div>
+                <div className={styles.cardBottomPart}>
+                  <div className={styles.cardIcon}>
+                    <MdCardTravel
+                      size={40}
+                      color='#082831'
+                    />
+                  </div>
+                  <p>Years of Travel Experience</p>
+                </div>
+              </div>
+              <div className={styles.card}>
+                <div className={styles.cardTopPart}>
+                  <img
+                    src='https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    alt='Cappadocia'
+                    className={styles.cardImg}
+                  />
+                </div>
+                <div className={styles.cardBottomPart}>
+                  <div className={styles.cardIcon}>
+                    <RiMapPinUserFill
+                      size={40}
+                      color='#082831'
+                    />
+                  </div>
+                  <p>Journey as Unique as You Are</p>
+                </div>
+              </div>
+            </div>
+          </section>
 
-          {user ? (
+          {/* {user ? (
             <div style={{ padding: 25 }}></div>
-          ) : (
-            <div className={styles.aboutUsContainer}>
-              <h2 className={styles.mainTitle}>About us</h2>
-              <p className={styles.text}>
-                Our travel agency is dedicated to providing the best travel
-                experiences for our customers. We specialize in creating
-                personalized itineraries that cater to your unique interests and
-                preferences. Our team of experienced travel agents has extensive
-                knowledge of destinations around the world and can help you plan
-                the perfect trip. Whether you’re looking for a relaxing beach
-                vacation, an adventurous trek through the mountains, or a
-                cultural tour of a new city, we’ve got you covered. Let us take
-                care of all the details so you can sit back, relax, and enjoy
-                your travels.
-              </p>
+          ) : ( */}
+          <div className={styles.aboutUsContainer}>
+            <h2 className={styles.mainTitle}>About us</h2>
+            <p className={styles.text}>
+              Our travel agency is dedicated to providing the best travel
+              experiences for our customers. We specialize in creating
+              personalized itineraries that cater to your unique interests and
+              preferences. Our team of experienced travel agents has extensive
+              knowledge of destinations around the world and can help you plan
+              the perfect trip. Whether you’re looking for a relaxing beach
+              vacation, an adventurous trek through the mountains, or a cultural
+              tour of a new city, we’ve got you covered. Let us take care of all
+              the details so you can sit back, relax, and enjoy your travels.
+            </p>
+          </div>
+          {/* )} */}
+        </div>
+        <div className={styles.popularDestinationsContainer}>
+          {popularDestinations && (
+            <div className={styles.popularDestinations}>
+              <h2 className={styles.mainTitle}>Popular Destinations</h2>
+              {isLoadingDestinations ? (
+                <Spinner />
+              ) : (
+                <Carousel items={popularDestinations} />
+              )}
             </div>
           )}
         </div>
@@ -235,19 +311,7 @@ const Home = () => {
             <p className={styles.dataParagraph}>No reviews available.</p>
           )}
         </div>
-        <div className={styles.contactUsContainer}>
-          <h2 className={styles.mainTitle}>Contact us</h2>
-          <h3 className={styles.title}>
-            Having any questions, requests or impression?
-          </h3>
-          <button
-            className={styles.mainButton}
-            onClick={() => handleNavigateToPage('/contact-us')}>
-            Contact Us
-          </button>
-        </div>
       </div>
-      {/* )} */}
       <Footer />
     </>
   );

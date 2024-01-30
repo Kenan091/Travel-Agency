@@ -6,17 +6,20 @@ import styles from './Destinations.module.css';
 import { getDestinations } from '../../redux/destinations/destinationsSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
-import Carousel from '../../components/carousel/Carousel';
+import Pagination from '../../components/pagination/Pagination';
+import { IoSearch } from 'react-icons/io5';
+import { RiCoinsFill } from 'react-icons/ri';
 import Spinner from '../../components/spinner/Spinner';
-import truncateDescription from '../../helpers/useTruncateDescription';
-import { IoLocationSharp, IoSearch, IoClose } from 'react-icons/io5';
 
 const Destinations = () => {
-  const [activeInputType, setActiveInputType] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [filteredDestinations, setFilteredDestinations] = useState([]);
   const [sortingOption, setSortingOption] = useState('alphabet');
   const [selectedDestination, setSelectedDestination] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(8);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,14 +29,6 @@ const Destinations = () => {
   const isLoadingDestinations = useSelector(
     state => state?.destination?.isLoading
   );
-
-  const handleInputClick = inputType => {
-    if (activeInputType === inputType) {
-      setActiveInputType(null);
-    } else {
-      setActiveInputType(inputType);
-    }
-  };
 
   const handleSearchButtonClick = () => {
     if (!selectedDestination) {
@@ -47,39 +42,113 @@ const Destinations = () => {
 
     if (matchingDestinations.length > 0) {
       setFilteredDestinations(matchingDestinations);
-      setShowModal(true);
     } else {
       toast.warn('No matching destinations found. Please try again.');
     }
   };
 
-  const handleSeeMore = destinationId => {
-    navigate(`/destinations/${destinationId}`);
-    setShowModal(false);
+  const handleInputKeyDown = e => {
+    if (e.key === 'Backspace' && !selectedDestination) {
+      // If Backspace is pressed and input is empty, show all destinations
+      setFilteredDestinations([]);
+    }
+
+    if (e.key === 'Enter') {
+      const matchingDestinations = destinations.filter(destination =>
+        destination.name
+          .toLowerCase()
+          .includes(selectedDestination.toLowerCase())
+      );
+
+      if (matchingDestinations.length > 0) {
+        setFilteredDestinations(matchingDestinations);
+      } else {
+        toast.warn('No matching destinations found. Please try again.');
+      }
+    }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedDestination('');
+  const handleNavigateToDestinationDetails = destinationId => {
+    navigate(`/destinations/${destinationId}`);
   };
 
   const handleSortingChange = e => {
     setSortingOption(e.target.value);
   };
 
-  const sortedDestinations = useMemo(() => {
-    if (sortingOption === 'alphabet') {
-      return [...filteredDestinations].sort((a, b) =>
-        a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-      );
-    } else if (sortingOption === 'price') {
-      return [...filteredDestinations].sort((a, b) => a.price - b.price);
-    }
+  // const sortedDestinations = useMemo(() => {
+  //   const copyOfDestinations = destinations ? [...destinations] : [];
 
-    return filteredDestinations;
-  }, [sortingOption, filteredDestinations]);
+  //   switch (sortingOption) {
+  //     case 'alphabet':
+  //       return copyOfDestinations.sort((a, b) =>
+  //         a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+  //       );
+  //     case 'alphabetDesc':
+  //       return copyOfDestinations.sort((a, b) =>
+  //         b.name.toLowerCase() < a.name.toLowerCase() ? -1 : 1
+  //       );
+  //     case 'price':
+  //       return copyOfDestinations.sort((a, b) => a.price - b.price);
+  //     case 'priceDesc':
+  //       return copyOfDestinations.sort((a, b) => b.price - a.price);
+  //     default:
+  //       return copyOfDestinations;
+  //   }
+  // }, [sortingOption, destinations]);
+  const sortedDestinations = useMemo(() => {
+    const copyOfDestinations = destinations ? [...destinations] : [];
+
+    // Apply sorting to the original destinations
+    const sortedOriginalDestinations = copyOfDestinations.sort((a, b) => {
+      switch (sortingOption) {
+        case 'alphabet':
+          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        case 'alphabetDesc':
+          return b.name.toLowerCase() < a.name.toLowerCase() ? -1 : 1;
+        case 'price':
+          return a.price - b.price;
+        case 'priceDesc':
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+
+    // Apply sorting to the filtered destinations if there are any
+    const sortedFilteredDestinations = filteredDestinations.sort((a, b) => {
+      switch (sortingOption) {
+        case 'alphabet':
+          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        case 'alphabetDesc':
+          return b.name.toLowerCase() < a.name.toLowerCase() ? -1 : 1;
+        case 'price':
+          return a.price - b.price;
+        case 'priceDesc':
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+
+    // Return the sorted list based on whether there are filtered destinations
+    return filteredDestinations.length > 0
+      ? sortedFilteredDestinations
+      : sortedOriginalDestinations;
+  }, [sortingOption, destinations, filteredDestinations]);
+
+  const currentRecords =
+    filteredDestinations.length > 0
+      ? filteredDestinations?.slice(indexOfFirstRecord, indexOfLastRecord)
+      : sortedDestinations?.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  const numberOfPages =
+    filteredDestinations?.length > 0
+      ? Math.ceil(filteredDestinations?.length / recordsPerPage)
+      : Math.ceil(sortedDestinations?.length / recordsPerPage);
 
   console.log(filteredDestinations);
+
   useEffect(() => {
     dispatch(getDestinations());
   }, [dispatch]);
@@ -96,112 +165,78 @@ const Destinations = () => {
             <h2 className={styles.title}>
               We will take you wherever you want to go!
             </h2>
-            <div className={styles.browseDestinations}>
-              <div className={styles.searchInputs}>
-                <div className={styles.searchInput}>
-                  <IoLocationSharp
-                    size={32}
-                    color='#83ab55'
-                  />
-                  <div style={{ width: 120, height: 70 }}>
-                    <label
-                      style={{
-                        color: '#d8e1ec',
-                        marginLeft: 6,
-                        fontSize: 14,
-                      }}>
-                      Location
-                    </label>
-                    <input
-                      type='text'
-                      name='destination'
-                      placeholder='Where are you going?'
-                      value={selectedDestination}
-                      onChange={e => setSelectedDestination(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={handleSearchButtonClick}
-                className={styles.searchButton}>
-                <IoSearch
-                  size={32}
-                  color='#83ab55'
-                />
-              </button>
-            </div>
-            {showModal && sortedDestinations.length > 0 && (
-              <>
-                <div className={styles.modalOverlay}>
-                  <div className={styles.modalContent}>
-                    <div className={styles.modalTopPart}>
-                      <h2 className={styles.modalTitle}>
-                        Search results for:
-                        <strong> {selectedDestination}</strong>
-                      </h2>
-                      <button
-                        onClick={handleCloseModal}
-                        className={styles.closeButton}>
-                        <IoClose
-                          size={24}
-                          color='red'
-                        />
-                      </button>
-                    </div>
-                    {sortedDestinations.length > 1 && (
-                      <div className={styles.sortDiv}>
-                        <select
-                          value={sortingOption}
-                          onChange={handleSortingChange}
-                          className={styles.sortSelect}>
-                          <option value=''>Sort by</option>
-                          <option value='alphabet'>A - Z</option>
-                          <option value='price'>Price</option>
-                        </select>
-                      </div>
-                    )}
-                    {sortedDestinations.map(destination => (
-                      <div
-                        key={destination._id}
-                        className={styles.destinationItem}>
-                        <img
-                          src={destination.imageURL}
-                          alt={destination.name}
-                          className={styles.destinationImage}
-                        />
-                        <div className={styles.destinationInfo}>
-                          <h3>{destination.name}</h3>
-                          <p>
-                            {truncateDescription(destination.description, 150)}
-                          </p>
-                          <div className={styles.buttonContainer}>
-                            <button
-                              onClick={() => handleSeeMore(destination._id)}
-                              className={styles.seeMoreButton}>
-                              See More
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
         <div className={styles.destinationsDiv}>
-          <h2 className={styles.title}>Swipe through our special offers:</h2>
-          {isLoadingDestinations ? (
-            <Spinner />
-          ) : destinations && destinations.length > 0 ? (
-            <div className={styles.carouselContainer}>
-              <Carousel items={destinations} />
+          <div className={styles.topPart}>
+            <div className={styles.sortDiv}>
+              <select
+                value={sortingOption}
+                onChange={handleSortingChange}
+                className={styles.sortSelect}>
+                <option value=''>Sort by</option>
+                <option value='alphabet'>A - Z</option>
+                <option value='alphabetDesc'>Z - A</option>
+                <option value='price'>Price ASC</option>
+                <option value='priceDesc'>Price DESC</option>
+              </select>
             </div>
-          ) : (
-            <p className={styles.dataParagraph}>No destinations available.</p>
-          )}
+            <div className={styles.searchDiv}>
+              <input
+                type='text'
+                name='destination'
+                placeholder='Search...'
+                value={selectedDestination}
+                onChange={e => setSelectedDestination(e.target.value)}
+                onKeyDown={handleInputKeyDown}
+              />
+              <button
+                className={styles.searchButton}
+                onClick={handleSearchButtonClick}>
+                <IoSearch size={24} />
+              </button>
+            </div>
+          </div>
+          <div className={styles.destinationsWithPagination}>
+            {isLoadingDestinations ? (
+              <Spinner />
+            ) : (
+              <div className={styles.destinations}>
+                {currentRecords?.map(destination => (
+                  <div
+                    key={destination._id}
+                    className={styles.destinationCard}>
+                    <img
+                      src={destination.imageURL}
+                      alt={destination.name}
+                    />
+                    <div className={styles.destinationInfo}>
+                      <h3>{destination.name}</h3>
+                      <p>{destination.description}</p>
+                    </div>
+                    <div className={styles.destinationBottomPart}>
+                      <div className={styles.price}>
+                        <RiCoinsFill size={24} />
+                        <p>{destination.price.toFixed(2)} BAM</p>
+                      </div>
+                      <button
+                        className={styles.destinationButton}
+                        onClick={() =>
+                          handleNavigateToDestinationDetails(destination._id)
+                        }>
+                        See more
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <Pagination
+              numberOfPages={numberOfPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
         </div>
       </div>
       <Footer />

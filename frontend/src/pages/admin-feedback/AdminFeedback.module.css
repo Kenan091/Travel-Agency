@@ -87,12 +87,16 @@ table {
   padding: 2rem;
 }
 
+.tableDataCell:nth-child(4) {
+  width: 300px;
+  text-align: justify;
+}
+
 .tableDataCell:last-child div {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  height: 160px;
 }
 
 .actionButton {
@@ -101,16 +105,4 @@ table {
 
 .table tbody tr:not(:last-child) {
   border-bottom: 2px solid var(--light-gray);
-}
-
-.table tbody tr td:nth-child(2) {
-  width: 230px;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.table tbody tr td:nth-child(5) {
-  width: 230px;
-  text-align: justify;
-  font-size: 10px;
 }
