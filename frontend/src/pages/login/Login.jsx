@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import styles from './Login.module.css';
-import { loginUser, reset } from '../../redux/auth/authSlice';
-import { IoArrowBack } from 'react-icons/io5';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import styles from "./Login.module.css";
+import { loginUser, reset } from "../../redux/auth/authSlice";
+import { IoArrowBack } from "react-icons/io5";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const { email, password } = formData;
@@ -17,8 +17,8 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isError } = useSelector(state => state?.auth);
-  const message = useSelector(state => state?.auth?.message);
+  const { user, isError } = useSelector((state) => state?.auth);
+  const message = useSelector((state) => state?.auth?.message);
 
   // const userRole = user?.responseData?.user?.role;
   const userRole = user?.user?.role;
@@ -29,20 +29,20 @@ const Login = () => {
     }
 
     if (user) {
-      navigate('/');
+      navigate("/");
     }
 
     dispatch(reset());
   }, [user, isError, message, navigate, dispatch]);
 
-  const handleInputChange = e => {
-    setFormData(prevState => ({
+  const handleInputChange = (e) => {
+    setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const handleLogin = e => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
     const credentials = {
@@ -54,65 +54,57 @@ const Login = () => {
   };
 
   const handleNavigateToForgotPasswordPage = () => {
-    navigate('/auth/forgotpassword');
+    navigate("/auth/forgotpassword");
   };
 
   useEffect(() => {
-    if (userRole === 'admin') {
-      navigate('/admin/destinations');
+    if (userRole === "admin") {
+      navigate("/admin/destinations");
     }
   });
-
-  console.log(email, password);
 
   return (
     <div className={styles.container}>
       <div className={styles.backButton}>
-        <Link to='/'>
-          {' '}
-          <IoArrowBack
-            size={32}
-            color='#d8e1ec'
-          />
+        <Link to="/">
+          {" "}
+          <IoArrowBack size={32} color="#d8e1ec" />
         </Link>
       </div>
       <img
-        src='../images/logo.png'
-        alt='Travelist logo'
+        src="../images/logo.png"
+        alt="Travelist logo"
         className={styles.logo}
       />
       <h2 className={styles.title}>Log In</h2>
       <p className={styles.text}>
-        New user?{' '}
+        New user?{" "}
         <span>
-          {' '}
-          <Link to='/auth/register'>Register</Link>
+          {" "}
+          <Link to="/auth/register">Register</Link>
         </span>
       </p>
 
-      <form
-        onSubmit={handleLogin}
-        className={styles.form}>
+      <form onSubmit={handleLogin} className={styles.form}>
         <input
-          type='email'
-          name='email'
-          placeholder='Email address'
+          type="email"
+          name="email"
+          placeholder="Email address"
           onChange={handleInputChange}
         />
         <input
-          type='password'
-          name='password'
-          placeholder='Password'
+          type="password"
+          name="password"
+          placeholder="Password"
           onChange={handleInputChange}
         />
         <p
           className={styles.forgotPassword}
-          onClick={handleNavigateToForgotPasswordPage}>
+          onClick={handleNavigateToForgotPasswordPage}
+        >
           Forgot your password?
         </p>
-        <button
-          type='submit'
-          className={styles.submitButton}>
+        <button type="submit" className={styles.submitButton}>
           Log in
         </button>
       </form>

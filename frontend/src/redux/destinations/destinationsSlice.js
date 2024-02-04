@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import destinationsService from './destinationsService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import destinationsService from "./destinationsService";
 
 export const getDestinations = createAsyncThunk(
-  'destinations/getDestinations',
-  async thunkAPI => {
+  "destinations/getDestinations",
+  async (_, thunkAPI) => {
     try {
       return await destinationsService.getDestinationsFromAPI();
     } catch (error) {
@@ -17,7 +17,7 @@ export const getDestinations = createAsyncThunk(
 );
 
 export const getDestination = createAsyncThunk(
-  'destinations/getDestination',
+  "destinations/getDestination",
   async (destinationId, thunkAPI) => {
     try {
       return await destinationsService.getDestinationFromAPI(destinationId);
@@ -32,7 +32,7 @@ export const getDestination = createAsyncThunk(
 );
 
 export const addDestination = createAsyncThunk(
-  'destinations/addDestination',
+  "destinations/addDestination",
   async (destinationData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -51,7 +51,7 @@ export const addDestination = createAsyncThunk(
 );
 
 export const updateDestination = createAsyncThunk(
-  'destinations/updateDestination',
+  "destinations/updateDestination",
   async ({ destinationId, updatedData }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -71,7 +71,7 @@ export const updateDestination = createAsyncThunk(
 );
 
 export const deleteDestination = createAsyncThunk(
-  'destinations/deleteDestination',
+  "destinations/deleteDestination",
   async (destinationId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -90,18 +90,18 @@ export const deleteDestination = createAsyncThunk(
 );
 
 const destinationsSlice = createSlice({
-  name: 'destination',
+  name: "destination",
   initialState: {
     destinations: [],
     destination: null,
     isLoading: false,
     isError: false,
-    message: '',
+    message: "",
   },
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getDestinations.pending, state => {
+      .addCase(getDestinations.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getDestinations.fulfilled, (state, action) => {
@@ -113,7 +113,7 @@ const destinationsSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getDestination.pending, state => {
+      .addCase(getDestination.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getDestination.fulfilled, (state, action) => {
@@ -125,26 +125,26 @@ const destinationsSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(addDestination.pending, state => {
+      .addCase(addDestination.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(addDestination.fulfilled, (state, action) => {
         state.isLoading = false;
-        state?.destinations.push(action.payload.data);
+        state.destinations = [...state.destinations, action.payload];
       })
       .addCase(addDestination.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(updateDestination.pending, state => {
+      .addCase(updateDestination.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(updateDestination.fulfilled, (state, action) => {
         state.isLoading = false;
-        const updatedDestination = action.payload.data;
+        const updatedDestination = action.payload;
         const index = state?.destinations?.findIndex(
-          d => d._id === updatedDestination._id
+          (d) => d._id === updatedDestination._id
         );
         if (index !== -1) {
           state.destinations[index] = updatedDestination;
@@ -155,14 +155,14 @@ const destinationsSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deleteDestination.pending, state => {
+      .addCase(deleteDestination.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(deleteDestination.fulfilled, (state, action) => {
         state.isLoading = false;
-        const deletedDestinationId = action.payload.data._id;
+        const deletedDestinationId = action.payload;
         state.destinations = state?.destinations?.filter(
-          d => d._id !== deletedDestinationId
+          (d) => d._id !== deletedDestinationId
         );
       })
       .addCase(deleteDestination.rejected, (state, action) => {

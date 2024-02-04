@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styles from './AdminDestinations.module.css';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./AdminDestinations.module.css";
 import {
   addDestination,
   deleteDestination,
   getDestination,
   getDestinations,
   updateDestination,
-} from '../../redux/destinations/destinationsSlice';
-import Header from '../../components/header/Header';
-import Spinner from '../../components/spinner/Spinner';
-import Pagination from '../../components/pagination/Pagination';
-import Footer from '../../components/footer/Footer';
-import getRegularDate from '../../helpers/useGetRegularDate';
+} from "../../redux/destinations/destinationsSlice";
+import Header from "../../components/header/Header";
+import Spinner from "../../components/spinner/Spinner";
+import Pagination from "../../components/pagination/Pagination";
+import Footer from "../../components/footer/Footer";
+import getRegularDate from "../../helpers/useGetRegularDate";
 // import truncateDescription from '../../helpers/useTruncateDescription';
-import { IoAdd, IoClose, IoPencil, IoTrash } from 'react-icons/io5';
-import { toast } from 'react-toastify';
+import { IoAdd, IoClose, IoPencil, IoTrash } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 const AdminDestinations = () => {
   const dispatch = useDispatch();
@@ -23,34 +23,32 @@ const AdminDestinations = () => {
   const [recordsPerPage] = useState(5);
   const [modalOpen, setModalOpen] = useState(false);
   const [editDestinationId, setEditDestinationId] = useState(null);
-  const [modalTitle, setModalTitle] = useState('');
+  const [modalTitle, setModalTitle] = useState("");
   const [formData, setFormData] = useState({
-    name: '',
-    briefDescription: '',
-    detailedDescription: '',
-    imageURL: '',
-    price: '',
+    name: "",
+    briefDescription: "",
+    detailedDescription: "",
+    imageURL: "",
+    price: "",
   });
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 
-  const destinations = useSelector(
-    state => state?.destination?.destinations?.data
-  );
+  const destinations = useSelector((state) => state?.destination?.destinations);
   const isLoadingDestinations = useSelector(
-    state => state?.destination?.isLoading
+    (state) => state?.destination?.isLoading
   );
 
-  const isErrorDestinations = useSelector(state => state?.destination?.isError);
+  const isErrorDestinations = useSelector(
+    (state) => state?.destination?.isError
+  );
 
   const destinationsErrorMessage = useSelector(
-    state => state?.destination?.message
+    (state) => state?.destination?.message
   );
 
-  const destination = useSelector(
-    state => state?.destination?.destination?.data
-  );
+  const destination = useSelector((state) => state?.destination?.destination);
 
   const currentRecords = destinations?.slice(
     indexOfFirstRecord,
@@ -59,7 +57,20 @@ const AdminDestinations = () => {
 
   const numberOfPages = Math.ceil(destinations?.length / recordsPerPage);
 
+  useEffect(() => {
+    if (destination) {
+      setFormData({
+        name: destination?.name || "",
+        briefDescription: destination?.briefDescription || "",
+        detailedDescription: destination?.detailedDescription || "",
+        imageURL: destination?.imageURL || "",
+        price: destination?.price || "",
+      });
+    }
+  }, [destination]);
+
   const onOpenModal = (title, id = null) => {
+    console.log(id);
     setModalTitle(title);
     setModalOpen(true);
     setEditDestinationId(id);
@@ -86,36 +97,36 @@ const AdminDestinations = () => {
 
   const onAdd = () => {
     setFormData({
-      name: '',
-      description: '',
-      imageURL: '',
-      price: '',
+      name: "",
+      description: "",
+      imageURL: "",
+      price: "",
     });
-    onOpenModal('Add New Destination');
+    onOpenModal("Add New Destination");
   };
 
-  const onEdit = destinationId => {
+  const onEdit = (destinationId) => {
+    onOpenModal("Edit Destination", destinationId);
     setFormData({
-      name: destination?.name || '',
-      briefDescription: destination?.briefDescription || '',
-      detailedDescription: destination?.detailedDescription || '',
-      imageURL: destination?.imageURL || '',
-      price: destination?.price || '',
+      name: destination?.name || "",
+      briefDescription: destination?.briefDescription || "",
+      detailedDescription: destination?.detailedDescription || "",
+      imageURL: destination?.imageURL || "",
+      price: destination?.price || "",
     });
-    onOpenModal('Edit Destination', destinationId);
   };
 
-  const onDelete = destinationId => {
-    console.log('Ready for deleting');
+  const onDelete = (destinationId) => {
+    console.log("Ready for deleting");
     dispatch(deleteDestination(destinationId));
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const saveDestination = e => {
+  const saveDestination = (e) => {
     e.preventDefault();
 
     if (editDestinationId) {
@@ -128,19 +139,19 @@ const AdminDestinations = () => {
       onCloseModal();
     } else {
       if (
-        formData.name === '' ||
-        formData.imageURL === '' ||
-        formData.briefDescription === '' ||
-        formData.detailedDescription === '' ||
-        formData.price === ''
+        formData.name === "" ||
+        formData.imageURL === "" ||
+        formData.briefDescription === "" ||
+        formData.detailedDescription === "" ||
+        formData.price === ""
       ) {
-        toast.error('Each field must be entered!');
+        toast.error("Each field must be entered!");
       } else {
         dispatch(addDestination(formData));
         if (isErrorDestinations) {
           toast.error(destinationsErrorMessage);
         } else {
-          toast.success('Destination added');
+          toast.success("Destination added");
         }
         onCloseModal();
       }
@@ -179,8 +190,6 @@ const AdminDestinations = () => {
   //   }
   // }, [dispatch, editModalOpen, editDestinationId]);
 
-  console.log(destinations);
-
   useEffect(() => {
     dispatch(getDestinations());
   }, [dispatch]);
@@ -203,13 +212,8 @@ const AdminDestinations = () => {
                 <th className={styles.tableCell}>Average rating</th>
                 <th className={styles.tableCell}>Description</th>
                 <th className={styles.tableCell}>
-                  <div
-                    className={styles.addNewButton}
-                    onClick={() => onAdd()}>
-                    <IoAdd
-                      size={16}
-                      color='#d8e1ec'
-                    />
+                  <div className={styles.addNewButton} onClick={() => onAdd()}>
+                    <IoAdd size={16} color="#d8e1ec" />
                     <p>Add New</p>
                   </div>
                 </th>
@@ -219,16 +223,14 @@ const AdminDestinations = () => {
               <>
                 {isLoadingDestinations ? (
                   <tr>
-                    <td colSpan='5'>
+                    <td colSpan="5">
                       <Spinner />
                     </td>
                   </tr>
                 ) : (
                   <>
-                    {currentRecords?.map(destination => (
-                      <tr
-                        key={destination._id}
-                        className={styles.tableDataRow}>
+                    {currentRecords?.map((destination) => (
+                      <tr key={destination._id} className={styles.tableDataRow}>
                         <td className={styles.tableDataCell}>
                           <img
                             style={{ width: 100, height: 100 }}
@@ -244,7 +246,7 @@ const AdminDestinations = () => {
                         <td className={styles.tableDataCell}>
                           {destination?.averageRating
                             ? destination.averageRating.toFixed(2)
-                            : 'Not rated'}
+                            : "Not rated"}
                         </td>
                         <td className={styles.tableDataCell}>
                           {destination.briefDescription}
@@ -256,19 +258,15 @@ const AdminDestinations = () => {
                           <div>
                             <div
                               className={styles.actionButton}
-                              onClick={() => onEdit(destination._id)}>
-                              <IoPencil
-                                size={28}
-                                color='#83ab55'
-                              />
+                              onClick={() => onEdit(destination._id)}
+                            >
+                              <IoPencil size={28} color="#83ab55" />
                             </div>
                             <div
                               className={styles.actionButton}
-                              onClick={() => onDelete(destination._id)}>
-                              <IoTrash
-                                size={28}
-                                color='#ff1e1e'
-                              />
+                              onClick={() => onDelete(destination._id)}
+                            >
+                              <IoTrash size={28} color="#ff1e1e" />
                             </div>
                           </div>
                         </td>
@@ -308,56 +306,49 @@ const AdminDestinations = () => {
             />
           )} */}
           {modalOpen && (
-            <div className={`${styles.modal} ${modalOpen ? styles.open : ''}`}>
+            <div className={`${styles.modal} ${modalOpen ? styles.open : ""}`}>
               <div className={styles.modalContent}>
-                <span
-                  className={styles.close}
-                  onClick={onCloseModal}>
-                  <IoClose
-                    size={24}
-                    color='#f00'
-                  />
+                <span className={styles.close} onClick={onCloseModal}>
+                  <IoClose size={24} color="#f00" />
                 </span>
                 <h2 className={styles.title}>{modalTitle}</h2>
-                <form
-                  className={styles.modalForm}
-                  onSubmit={saveDestination}>
+                <form className={styles.modalForm} onSubmit={saveDestination}>
                   <input
-                    type='text'
-                    name='name'
+                    type="text"
+                    name="name"
                     onChange={handleInputChange}
-                    placeholder='City, Country'
+                    placeholder="City, Country"
                     value={formData.name}
                   />
                   <input
-                    type='text'
-                    name='imageURL'
+                    type="text"
+                    name="imageURL"
                     onChange={handleInputChange}
-                    placeholder='Image URL '
+                    placeholder="Image URL "
                     value={formData.imageURL}
                   />
                   <input
-                    type='text'
-                    name='price'
+                    type="text"
+                    name="price"
                     onChange={handleInputChange}
-                    placeholder='Price'
+                    placeholder="Price"
                     value={formData.price}
                   />
                   <textarea
-                    name='briefDescription'
+                    name="briefDescription"
                     onChange={handleInputChange}
-                    placeholder='Brief description'
+                    placeholder="Brief description"
                     value={formData.briefDescription}
                     className={styles.briefDescription}
                   />
                   <textarea
-                    name='detailedDescription'
+                    name="detailedDescription"
                     onChange={handleInputChange}
-                    placeholder='Detailed description'
+                    placeholder="Detailed description"
                     value={formData.detailedDescription}
                     className={styles.detailedDescription}
                   />
-                  <button type='submit'>Save</button>
+                  <button type="submit">Save</button>
                 </form>
               </div>
             </div>

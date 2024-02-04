@@ -1,8 +1,8 @@
-const asyncHandler = require('../middleware/async');
-const Destination = require('../models/Destination');
-const Booking = require('../models/Booking');
-const Review = require('../models/Review');
-const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require("../middleware/async");
+const Destination = require("../models/Destination");
+const Booking = require("../models/Booking");
+const Review = require("../models/Review");
+const ErrorResponse = require("../utils/errorResponse");
 
 // @desc Get all destinations
 // @route GET /destinations
@@ -87,5 +87,5 @@ exports.deleteDestination = asyncHandler(async (req, res, next) => {
   await Booking.deleteMany({ destination: req.params.id });
   await Review.deleteMany({ destination: req.params.id });
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: { id: destination.id } });
 });
