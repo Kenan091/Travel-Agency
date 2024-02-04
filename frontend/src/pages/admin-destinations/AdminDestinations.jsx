@@ -13,7 +13,7 @@ import Spinner from '../../components/spinner/Spinner';
 import Pagination from '../../components/pagination/Pagination';
 import Footer from '../../components/footer/Footer';
 import getRegularDate from '../../helpers/useGetRegularDate';
-import truncateDescription from '../../helpers/useTruncateDescription';
+// import truncateDescription from '../../helpers/useTruncateDescription';
 import { IoAdd, IoClose, IoPencil, IoTrash } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
@@ -26,7 +26,8 @@ const AdminDestinations = () => {
   const [modalTitle, setModalTitle] = useState('');
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
+    briefDescription: '',
+    detailedDescription: '',
     imageURL: '',
     price: '',
   });
@@ -96,7 +97,8 @@ const AdminDestinations = () => {
   const onEdit = destinationId => {
     setFormData({
       name: destination?.name || '',
-      description: destination?.description || '',
+      briefDescription: destination?.briefDescription || '',
+      detailedDescription: destination?.detailedDescription || '',
       imageURL: destination?.imageURL || '',
       price: destination?.price || '',
     });
@@ -128,7 +130,8 @@ const AdminDestinations = () => {
       if (
         formData.name === '' ||
         formData.imageURL === '' ||
-        formData.description === '' ||
+        formData.briefDescription === '' ||
+        formData.detailedDescription === '' ||
         formData.price === ''
       ) {
         toast.error('Each field must be entered!');
@@ -244,7 +247,7 @@ const AdminDestinations = () => {
                             : 'Not rated'}
                         </td>
                         <td className={styles.tableDataCell}>
-                          {destination.description}
+                          {destination.briefDescription}
                         </td>
                         {/* <td className={styles.tableDataCell}>
                           {truncateDescription(destination.description)}
@@ -341,10 +344,18 @@ const AdminDestinations = () => {
                     value={formData.price}
                   />
                   <textarea
-                    name='description'
+                    name='briefDescription'
                     onChange={handleInputChange}
-                    placeholder='Destination description'
-                    value={formData.description}
+                    placeholder='Brief description'
+                    value={formData.briefDescription}
+                    className={styles.briefDescription}
+                  />
+                  <textarea
+                    name='detailedDescription'
+                    onChange={handleInputChange}
+                    placeholder='Detailed description'
+                    value={formData.detailedDescription}
+                    className={styles.detailedDescription}
                   />
                   <button type='submit'>Save</button>
                 </form>

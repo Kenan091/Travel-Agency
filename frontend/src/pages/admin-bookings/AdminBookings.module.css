@@ -21,11 +21,10 @@ table {
   background: var(--light-blue);
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
   padding-top: 5rem;
-  /* min-height: 43.2vh; */
-  min-height: 1600px;
+  min-height: 100vh;
 }
 
 .mainTitle {
@@ -39,6 +38,7 @@ table {
 .bookings {
   background-color: rgba(17, 87, 111, 0.5);
   box-shadow: 0px 3.0422677993774414px 3.0422677993774414px rgba(0, 0, 0, 0.25);
+  margin-bottom: 4rem;
   border-radius: 9px;
 }
 

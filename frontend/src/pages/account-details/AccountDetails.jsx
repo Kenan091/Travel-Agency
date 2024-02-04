@@ -116,9 +116,6 @@ const AccountDetails = () => {
                     setCurrentPage={setCurrentPage}
                   />
                 </div>
-                <div>
-                  <button></button>
-                </div>
               </>
             ) : (
               <div className={styles.noBookedDestinationsDiv}>

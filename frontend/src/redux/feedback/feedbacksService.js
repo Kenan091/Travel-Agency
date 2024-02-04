@@ -12,9 +12,25 @@ export const addFeedbackToAPI = async feedbackData => {
   return response.data;
 };
 
+export const deleteFeedbackFromAPI = async (feedbackId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.delete(
+    `${API_URL}/feedbacks/${feedbackId}`,
+    config
+  );
+
+  return response.data;
+};
+
 const feedbacksService = {
   getFeedbacksFromAPI,
   addFeedbackToAPI,
+  deleteFeedbackFromAPI,
 };
 
 export default feedbacksService;

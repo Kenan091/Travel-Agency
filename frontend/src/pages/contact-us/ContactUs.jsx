@@ -104,10 +104,10 @@ const ContactUs = () => {
 
   return (
     <>
+      <div className={styles.headerDiv}>
+        <Header />
+      </div>
       <div className={styles.container}>
-        <div className={styles.headerDiv}>
-          <Header />
-        </div>
         <h2 className={styles.contactUsTitle}>Contact us</h2>
         <h3 className={styles.text}>
           Having questions, impressions or request? Feel free to send them!

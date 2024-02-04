@@ -10,10 +10,18 @@ const DestinationSchema = new mongoose.Schema({
     maxlength: [100, "Name can't have more than 100 characters"],
   },
   slug: String,
-  description: {
+  briefDescription: {
     type: String,
-    required: [true, 'Please add a description'],
-    maxlength: [2000, "Description can't have more than 2000 characters"],
+    required: [true, 'Please add a brief description'],
+    maxlength: [350, "Brief description can't have more than 350 characters"],
+  },
+  detailedDescription: {
+    type: String,
+    required: [true, 'Please add a detailed description'],
+    maxlength: [
+      2000,
+      "Detailed description can't have more than 2000 characters",
+    ],
   },
   imageURL: {
     type: String,

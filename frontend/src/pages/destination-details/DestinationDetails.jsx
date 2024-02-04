@@ -56,43 +56,59 @@ const DestinationDetails = () => {
               <Spinner />
             ) : destination ? (
               <div className={styles.mainContent}>
-                <div className={styles.topPart}>
-                  <h1 className={styles.name}>{destination.name}</h1>
-                  {destinationReviews.length > 0 && (
-                    <div className={styles.averageRating}>
-                      <ReactStars
-                        count={5}
-                        value={destination?.averageRating.toFixed(2)}
-                        size={24}
-                        isHalf={true}
-                        emptyIcon={<IoStarOutline />}
-                        halfIcon={<IoStarHalf />}
-                        fullIcon={<IoStar />}
-                        activeColor='#FFD233'
-                        edit={false}
-                      />
-                      <span>{`(${destinationReviews.length} reviews)`}</span>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <img src={destination.imageURL} />
-                </div>
-
-                <p className={styles.description}>{destination.description}</p>
-                <div className={styles.bottomPart}>
-                  <div className={styles.price}>
-                    <RiCoinsFill
-                      size={32}
-                      color='rgb(255, 210, 51'
-                    />
-                    <span>{destination.price} /per person</span>
+                <div className={styles.content}>
+                  <div className={styles.topPart}>
+                    <h1 className={styles.name}>{destination.name}</h1>
+                    {destinationReviews.length > 0 && (
+                      <div className={styles.averageRating}>
+                        <ReactStars
+                          count={5}
+                          value={destination?.averageRating.toFixed(2)}
+                          size={24}
+                          isHalf={true}
+                          emptyIcon={<IoStarOutline />}
+                          halfIcon={<IoStarHalf />}
+                          fullIcon={<IoStar />}
+                          activeColor='#FFD233'
+                          edit={false}
+                        />
+                        <span>{`(${destinationReviews.length} reviews)`}</span>
+                      </div>
+                    )}
                   </div>
-                  <button
-                    className={styles.bookNowButton}
-                    onClick={() => handleNavigateToBookings(destination._id)}>
-                    Book Now
-                  </button>
+                  <div className={styles.mainPart}>
+                    <div className={styles.leftSide}>
+                      <div className={styles.imageContainer}>
+                        <img src={destination.imageURL} />
+                      </div>
+                    </div>
+                    <div className={styles.rightSide}>
+                      <div className={styles.descriptionContainer}>
+                        <p className={styles.description}>
+                          {destination.briefDescription}
+                        </p>
+                        <p className={styles.description}>
+                          {destination.detailedDescription}
+                        </p>
+                      </div>
+                      <div className={styles.bottomPart}>
+                        <div className={styles.price}>
+                          <RiCoinsFill
+                            size={32}
+                            color='rgb(255, 210, 51'
+                          />
+                          <span>{destination.price} /per person</span>
+                        </div>
+                        <button
+                          className={styles.bookNowButton}
+                          onClick={() =>
+                            handleNavigateToBookings(destination._id)
+                          }>
+                          Book Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (

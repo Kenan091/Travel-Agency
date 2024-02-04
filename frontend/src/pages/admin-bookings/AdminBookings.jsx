@@ -84,11 +84,8 @@ const AdminBookings = () => {
                         {getRegularDate(booking?.createdAt)}
                       </td>
                       <td className={styles.tableDataCell}>
-                        {booking?.destination?.description}
+                        {booking?.destination?.briefDescription}
                       </td>
-                      {/* <td className={styles.tableDataCell}>
-                        {truncateDescription(booking.destination.description)}
-                      </td> */}
                       <td className={styles.tableDataCell}>
                         {booking?.totalPrice}
                       </td>

@@ -9,12 +9,16 @@ a {
   z-index: 1001;
 }
 
+.wrapper {
+  min-height: 100vh;
+}
+
 .mainContainer {
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .title {
@@ -24,24 +28,10 @@ a {
 
 .headerDiv {
   width: 100%;
+  position: absolute;
+  top: 0;
   z-index: 1001;
 }
-
-/* .destinationsContainer {
-  height: 450px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-} */
-
-/* .headerDiv {
-  width: 100%;
-  background-color: rgba(8, 40, 49, 0.7);
-  z-index: 1001;
-  position: relative;
-} */
 
 .mainButton {
   background-color: transparent;
@@ -62,11 +52,12 @@ a {
   background: url('../images/mainCover.jpg') no-repeat;
   background-size: cover;
   background-position: top;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  min-height: 1710px;
   z-index: 1;
 }
 
@@ -77,17 +68,8 @@ a {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  position: relative;
+  margin-top: 6rem;
 }
-
-/* .destinationsContainer::before {
-  content: '';
-  background-color: rgba(8, 40, 49, 0.7);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-} */
 
 .destinationsContainer .title {
   font-size: 22px;
@@ -115,19 +97,6 @@ a {
   border-radius: 5px;
   z-index: 2;
 }
-
-/* .browseDestinations .searchInputs {
-  display: flex;
-  gap: 2rem;
-} */
-
-/* .searchInputs > div input {
-  height: 2.5rem;
-  width: 8rem;
-  padding-left: 6px;
-  border-radius: 5px;
-  border: none;
-} */
 
 .searchInput {
   display: flex;
@@ -330,13 +299,12 @@ a {
 .aboutUsContainer {
   color: var(--light-gray);
   height: 500px;
-  width: 85%;
+  max-width: 1060px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  /* margin-bottom: 2rem; */
 }
 
 .aboutUsContainer::before {
@@ -361,14 +329,14 @@ a {
 
 .aboutUsContainer .text {
   position: relative;
-  z-index: 2;
   padding: 0 15rem;
+  text-align: justify;
+  z-index: 2;
 }
 
 .popularDestinationsContainer {
   background-color: var(--darker-blue);
   width: 100%;
-  border-bottom: 1px solid var(--light-gray);
 }
 
 .popularDestinations {
@@ -391,7 +359,10 @@ a {
 }
 
 .experiencesContainer {
-  background-color: var(--darker-blue);
+  background: url('https://images.unsplash.com/photo-1557573336-1951d6863287?q=80&w=1633&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+    no-repeat;
+  background-position: center;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: center;

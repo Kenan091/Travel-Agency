@@ -20,7 +20,7 @@ router
     advancedResults(Review, [
       {
         path: 'destination',
-        select: 'name description imageURL price availability',
+        select: 'name briefDescription imageURL price availability',
       },
       { path: 'user', select: 'name email' },
     ]),

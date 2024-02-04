@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './AdminFeedback.module.css';
-import { getFeedbacks } from '../../redux/feedback/feedbacksSlice';
+import {
+  deleteFeedback,
+  getFeedbacks,
+} from '../../redux/feedback/feedbacksSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
@@ -31,6 +34,7 @@ const AdminFeedback = () => {
 
   const onDelete = feedbackId => {
     console.log('Ready for deleting', feedbackId);
+    dispatch(deleteFeedback(feedbackId));
   };
 
   useEffect(() => {

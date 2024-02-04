@@ -18,11 +18,8 @@ table {
   padding-top: 75px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* min-height: 41.2vh; */
-  /* min-height: 1107.25px; */
-  min-height: 408px;
+  min-height: 413px;
 }
 
 .headerDiv {
@@ -122,6 +119,14 @@ table {
 .addNewReview {
   background-color: var(--light-gray);
   color: var(--darker-blue);
+  font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 20px;
+}
+
+@media (min-width: 1601px) {
+  .container {
+    justify-content: center;
+    min-height: 100vh;
+  }
 }

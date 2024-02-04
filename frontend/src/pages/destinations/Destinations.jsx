@@ -76,26 +76,6 @@ const Destinations = () => {
     setSortingOption(e.target.value);
   };
 
-  // const sortedDestinations = useMemo(() => {
-  //   const copyOfDestinations = destinations ? [...destinations] : [];
-
-  //   switch (sortingOption) {
-  //     case 'alphabet':
-  //       return copyOfDestinations.sort((a, b) =>
-  //         a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-  //       );
-  //     case 'alphabetDesc':
-  //       return copyOfDestinations.sort((a, b) =>
-  //         b.name.toLowerCase() < a.name.toLowerCase() ? -1 : 1
-  //       );
-  //     case 'price':
-  //       return copyOfDestinations.sort((a, b) => a.price - b.price);
-  //     case 'priceDesc':
-  //       return copyOfDestinations.sort((a, b) => b.price - a.price);
-  //     default:
-  //       return copyOfDestinations;
-  //   }
-  // }, [sortingOption, destinations]);
   const sortedDestinations = useMemo(() => {
     const copyOfDestinations = destinations ? [...destinations] : [];
 
@@ -212,7 +192,7 @@ const Destinations = () => {
                     />
                     <div className={styles.destinationInfo}>
                       <h3>{destination.name}</h3>
-                      <p>{destination.description}</p>
+                      <p>{destination.briefDescription}</p>
                     </div>
                     <div className={styles.destinationBottomPart}>
                       <div className={styles.price}>

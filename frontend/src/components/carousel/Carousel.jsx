@@ -80,7 +80,7 @@ export const Carousel = ({ items }) => {
                     />
                     <div className={styles.destinationInfo}>
                       <h3>{item.name}</h3>
-                      <p>{item.description}</p>
+                      <p>{item.briefDescription}</p>
                       {/* <p>{truncateDescription(item.description, 270)}</p> */}
                     </div>
                     <div className={styles.destinationBottomPart}>

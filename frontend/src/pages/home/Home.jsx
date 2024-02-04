@@ -102,7 +102,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <div className={styles.mainContainer}>
         <div className={styles.heroSection}>
           <div className={styles.headerDiv}>
@@ -288,18 +288,20 @@ const Home = () => {
           </div>
           {/* )} */}
         </div>
-        <div className={styles.popularDestinationsContainer}>
-          {popularDestinations && (
-            <div className={styles.popularDestinations}>
-              <h2 className={styles.mainTitle}>Popular Destinations</h2>
-              {isLoadingDestinations ? (
-                <Spinner />
-              ) : (
-                <Carousel items={popularDestinations} />
-              )}
-            </div>
-          )}
-        </div>
+        {popularDestinations && popularDestinations.length > 0 && (
+          <div className={styles.popularDestinationsContainer}>
+            {popularDestinations && (
+              <div className={styles.popularDestinations}>
+                <h2 className={styles.mainTitle}>Popular Destinations</h2>
+                {isLoadingDestinations ? (
+                  <Spinner />
+                ) : (
+                  <Carousel items={popularDestinations} />
+                )}
+              </div>
+            )}
+          </div>
+        )}
         <div className={styles.experiencesContainer}>
           <h2 className={styles.mainTitle}>Experiences</h2>
           <h3 className={styles.title}>Hear from fellow travellers! </h3>
@@ -313,7 +315,7 @@ const Home = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -23,6 +23,8 @@ const Experiences = () => {
     rating: '',
   });
 
+  const isErrorReviews = useSelector(state => state?.review?.isError);
+
   const reviewsErrorMessage = useSelector(state => state?.review?.message);
 
   const handleInputChange = e => {
@@ -40,6 +42,14 @@ const Experiences = () => {
     }
 
     dispatch(addReview(formData));
+
+    if (isErrorReviews) {
+      const message =
+        reviewsErrorMessage === 'Duplicate field value entered'
+          ? 'You can only write one review per destination!'
+          : '';
+      toast.error(message);
+    }
 
     setFormData({
       destinationId: id,
@@ -63,10 +73,11 @@ const Experiences = () => {
   const isLoadingBookings = useSelector(state => state?.booking?.isLoading);
   const isLoadingReviews = useSelector(state => state?.review?.isLoading);
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
     dispatch(getBookings());
     dispatch(getDestination(id));
-    // dispatch(getReviews());
   }, [dispatch]);
 
   return (

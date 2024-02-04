@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <>
+    <div className={styles.header}>
       <div className={styles.headerContainer}>
         <Link
           to='/'
@@ -151,7 +151,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

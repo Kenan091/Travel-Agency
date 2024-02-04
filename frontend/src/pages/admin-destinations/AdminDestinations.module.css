@@ -21,11 +21,10 @@ table {
   background: var(--light-blue);
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
   padding-top: 5rem;
-  /* min-height: 43.2vh; */
-  min-height: 1600px;
+  min-height: 100vh;
 }
 
 .mainTitle {
@@ -39,6 +38,7 @@ table {
 .destinations {
   background-color: rgba(17, 87, 111, 0.5);
   box-shadow: 0px 3.0422677993774414px 3.0422677993774414px rgba(0, 0, 0, 0.25);
+  margin-bottom: 4rem;
   border-radius: 9px;
 }
 
@@ -143,7 +143,7 @@ table {
   left: 50%;
   transform: translateX(-50%);
   width: 600px;
-  height: 750px;
+  height: 970px;
   border-radius: 9px;
 }
 
@@ -193,11 +193,19 @@ table {
   padding: 11px 10px;
 }
 
-.modalForm textarea {
+.modalForm .detailedDescription {
   text-align: left;
   font-size: 16px;
   padding-left: 15px;
   height: 230px;
+  resize: none;
+}
+
+.modalForm .briefDescription {
+  text-align: left;
+  font-size: 16px;
+  padding-left: 15px;
+  height: 150px;
   resize: none;
 }
 

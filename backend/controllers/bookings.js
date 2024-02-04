@@ -29,7 +29,7 @@ exports.getBookings = asyncHandler(async (req, res, next) => {
 exports.getBooking = asyncHandler(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id).populate({
     path: 'destination',
-    select: 'name description imageURL price availability',
+    select: 'name briefDescription imageURL price',
   });
 
   if (!booking) {

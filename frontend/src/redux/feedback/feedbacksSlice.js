@@ -31,6 +31,22 @@ export const addFeedback = createAsyncThunk(
   }
 );
 
+export const deleteFeedback = createAsyncThunk(
+  'feedbacks/deleteFeedback',
+  async (feedbackId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      return await feedbacksService.deleteFeedbackFromAPI(feedbackId, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.error) ||
+        error.error ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const feedbackSlice = createSlice({
   name: 'feedback',
   initialState: {

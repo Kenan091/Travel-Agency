@@ -16,6 +16,7 @@
   height: 110vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   z-index: 2;
 }
 
@@ -29,6 +30,9 @@
 }
 
 .headerDiv {
+  position: absolute;
+  top: 0;
+  width: 100%;
   z-index: 1;
 }
 
@@ -44,6 +48,7 @@
   background-color: var(--light-gray);
   opacity: 0.7;
   width: 600px;
+  height: fit-content;
   margin-top: 45px;
   padding: 30px 38px 15px 41px;
   border-radius: 9px;
