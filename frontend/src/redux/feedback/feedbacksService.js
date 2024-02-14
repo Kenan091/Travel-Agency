@@ -4,12 +4,12 @@ const API_URL = 'http://localhost:5000';
 
 export const getFeedbacksFromAPI = async () => {
   const response = await axios.get(`${API_URL}/feedbacks`);
-  return response.data;
+  return response.data.data;
 };
 
 export const addFeedbackToAPI = async feedbackData => {
   const response = await axios.post(`${API_URL}/feedbacks`, feedbackData);
-  return response.data;
+  return response.data.data;
 };
 
 export const deleteFeedbackFromAPI = async (feedbackId, token) => {
@@ -24,7 +24,7 @@ export const deleteFeedbackFromAPI = async (feedbackId, token) => {
     config
   );
 
-  return response.data;
+  return response.data.data.id;
 };
 
 const feedbacksService = {

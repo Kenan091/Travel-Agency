@@ -5,12 +5,20 @@ const API_URL = 'http://localhost:5000/auth';
 export const register = async userData => {
   const response = await axios.post(`${API_URL}/register`, userData);
 
+  if (response) {
+    localStorage.setItem('user', JSON.stringify(response.data));
+  }
+
   return response.data;
 };
 
 // Async function for user login
 export const login = async credentials => {
   const response = await axios.post(`${API_URL}/login`, credentials);
+
+  if (response) {
+    localStorage.setItem('user', JSON.stringify(response.data));
+  }
 
   return response.data;
 };

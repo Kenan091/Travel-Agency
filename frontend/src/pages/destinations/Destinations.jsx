@@ -16,16 +16,14 @@ const Destinations = () => {
   const [sortingOption, setSortingOption] = useState('alphabet');
   const [selectedDestination, setSelectedDestination] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(8);
+  const [recordsPerPage, setRecordsPerPage] = useState(4);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const destinations = useSelector(
-    state => state?.destination?.destinations?.data
-  );
+  const destinations = useSelector(state => state?.destination?.destinations);
   const isLoadingDestinations = useSelector(
     state => state?.destination?.isLoading
   );
@@ -130,6 +128,24 @@ const Destinations = () => {
   console.log(filteredDestinations);
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 780) {
+        setRecordsPerPage(4);
+      } else {
+        setRecordsPerPage(8);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     dispatch(getDestinations());
   }, [dispatch]);
 
@@ -179,7 +195,10 @@ const Destinations = () => {
           </div>
           <div className={styles.destinationsWithPagination}>
             {isLoadingDestinations ? (
-              <Spinner />
+              <Spinner
+                width={64}
+                height={64}
+              />
             ) : (
               <div className={styles.destinations}>
                 {currentRecords?.map(destination => (

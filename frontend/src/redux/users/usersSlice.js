@@ -6,9 +6,7 @@ export const getUsers = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      const response = await usersService.getUsersFromAPI(token);
-
-      return response;
+      return await usersService.getUsersFromAPI(token);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -130,7 +128,7 @@ const usersSlice = createSlice({
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.users.push(action.payload);
+        state?.users?.push(action.payload);
       })
       .addCase(createUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -143,7 +141,7 @@ const usersSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false;
         const updatedUser = action.payload;
-        const index = state.users.findIndex(u => u._id === updatedUser._id);
+        const index = state?.users?.findIndex(u => u._id === updatedUser._id);
         if (index !== -1) {
           state.users[index] = updatedUser;
         }
@@ -158,8 +156,7 @@ const usersSlice = createSlice({
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        const deletedUserId = action.payload._id;
-        console.log(deletedUserId, state.users);
+        const deletedUserId = action.payload;
         state.users = state?.users?.filter(u => u._id !== deletedUserId);
       })
       .addCase(deleteUser.rejected, (state, action) => {

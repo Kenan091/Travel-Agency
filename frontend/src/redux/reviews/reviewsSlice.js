@@ -127,7 +127,7 @@ const reviewsSlice = createSlice({
       })
       .addCase(addReview.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.reviews.data.push(action.payload);
+        state?.reviews?.push(action.payload);
       })
       .addCase(addReview.rejected, (state, action) => {
         state.isLoading = false;
@@ -140,7 +140,9 @@ const reviewsSlice = createSlice({
       .addCase(updateReview.fulfilled, (state, action) => {
         state.isLoading = false;
         const updatedReview = action.payload.data;
-        const index = state.reviews.findIndex(r => r._id === updatedReview._id);
+        const index = state?.reviews?.findIndex(
+          r => r._id === updatedReview._id
+        );
         if (index !== -1) {
           state.reviews[index] = updatedReview;
         }
@@ -156,7 +158,7 @@ const reviewsSlice = createSlice({
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.isLoading = false;
         const deletedReviewId = action.payload.data._id;
-        state.reviews = state.reviews.filter(r => r._id !== deletedReviewId);
+        state.reviews = state?.reviews?.filter(r => r._id !== deletedReviewId);
       })
       .addCase(deleteReview.rejected, (state, action) => {
         state.isLoading = false;

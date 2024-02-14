@@ -2,35 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Experiences.module.css';
 import { getBookings } from '../../redux/bookings/bookingsSlice';
-import { getReviews, addReview } from '../../redux/reviews/reviewsSlice';
+import { addReview, getReviews } from '../../redux/reviews/reviewsSlice';
 import { toast } from 'react-toastify';
 import Header from '../../components/header/Header';
-import Carousel from '../../components/carousel/Carousel';
 import Spinner from '../../components/spinner/Spinner';
 import Footer from '../../components/footer/Footer';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getDestination } from '../../redux/destinations/destinationsSlice';
 import ReactStars from 'react-rating-stars-component';
 import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
 
 const Experiences = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    destinationId: id,
-    title: '',
-    comment: '',
-    rating: '',
+  const [formData, setFormData] = useState(() => {
+    const storedFormData = localStorage.getItem('formData');
+    return storedFormData
+      ? JSON.parse(storedFormData)
+      : {
+          destinationId: id,
+          title: '',
+          comment: '',
+          rating: '',
+        };
   });
 
-  const isErrorReviews = useSelector(state => state?.review?.isError);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const reviews = useSelector(state => state?.review?.reviews);
+  const isErrorReviews = useSelector(state => state?.review?.isError);
   const reviewsErrorMessage = useSelector(state => state?.review?.message);
 
   const handleInputChange = e => {
+    const value =
+      e.target.name === 'rating' ? parseFloat(e.target.value) : e.target.value;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
@@ -38,8 +47,11 @@ const Experiences = () => {
     e.preventDefault();
 
     if (!formData.title || !formData.comment || !formData.rating) {
-      toast.error(reviewsErrorMessage);
+      toast.warn('Each field needs to be entered!');
+      return;
     }
+
+    setIsSubmitting(true);
 
     dispatch(addReview(formData));
 
@@ -47,38 +59,48 @@ const Experiences = () => {
       const message =
         reviewsErrorMessage === 'Duplicate field value entered'
           ? 'You can only write one review per destination!'
-          : '';
-      toast.error(message);
-    }
+          : reviewsErrorMessage;
+      toast.warn(message);
+      setTimeout(() => {
+        navigate('/auth/me');
+      }, 6000);
+    } else {
+      toast.success('You successfully added review!');
 
-    setFormData({
-      destinationId: id,
-      title: '',
-      comment: '',
-      rating: '',
-    });
+      setFormData({
+        destinationId: id,
+        title: '',
+        comment: '',
+        rating: '',
+      });
+
+      setIsSubmitting(false);
+    }
   };
 
   const dispatch = useDispatch();
   const { user } = useSelector(state => state?.auth);
-  const userId = user?.user?._id;
-  const destination = useSelector(
-    state => state?.destination?.destination?.data
-  );
-  // const bookings = useSelector(state => state?.booking?.bookings?.data);
-  // const userBookings =
-  //   bookings?.filter(booking => booking.user === userId) || [];
-  // const uniqueDestinationIds = [];
-  // const reviews = useSelector(state => state?.review?.reviews?.data);
-  const isLoadingBookings = useSelector(state => state?.booking?.isLoading);
-  const isLoadingReviews = useSelector(state => state?.review?.isLoading);
+  const isLoadingUser = useSelector(state => state?.auth?.isLoading);
 
-  useEffect(() => {}, []);
+  const destination = useSelector(state => state?.destination?.destination);
+
+  const isLoadingDestination = useSelector(
+    state => state?.destination?.isLoading
+  );
+
+  const isLoadingReview = useSelector(state => state?.review?.isLoading);
 
   useEffect(() => {
     dispatch(getBookings());
+    dispatch(getReviews());
     dispatch(getDestination(id));
   }, [dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem('reviews', JSON.stringify(reviews));
+    localStorage.setItem('formData', JSON.stringify(formData));
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [formData, user]);
 
   return (
     <>
@@ -89,11 +111,13 @@ const Experiences = () => {
           </div>
           {user ? (
             <>
-              {isLoadingBookings || isLoadingReviews ? (
-                <Spinner />
+              {isLoadingDestination || isLoadingUser ? (
+                <Spinner
+                  width={64}
+                  height={64}
+                />
               ) : (
                 <>
-                  {/* {userBookings && userBookings.length > 0 ? ( */}
                   <div className={styles.newReview}>
                     <h2 className={styles.mainTitle}>Add your review</h2>
                     <form
@@ -112,45 +136,15 @@ const Experiences = () => {
                         onChange={handleInputChange}
                         placeholder='Enter your title here'
                         className={styles.reviewInput}
+                        value={formData.title}
                       />
-                      {/* <input
-                      //   type='text'
-                      //   name='rating'
-                      //   value={formData.rating}
-                      //   onChange={e => {
-                      //     let value = e.target.value;
-                      //     // Remove non-numeric characters
-                      //     value = value.replace(/[^1-5]/g, '');
-                      //     // Ensure the value is a positive integer between 1 and 5
-                      //     const intValue = parseInt(value, 10);
-
-                      //     if (
-                      //       !isNaN(intValue) &&
-                      //       intValue >= 1 &&
-                      //       intValue <= 5
-                      //     ) {
-                      //       // If it's a valid input, update the state
-                      //       setFormData({
-                      //         ...formData,
-                      //         rating: intValue.toString(), // Convert back to string for controlled input
-                      //       });
-                      //     } else {
-                      //       // If it's not a valid input, set the state to an empty string
-                      //       setFormData({
-                      //         ...formData,
-                      //         rating: '', // You might want to consider leaving the rating unchanged in case of an invalid input
-                      //       });
-                      //     }
-                      //   }}
-                      //   placeholder='Enter rating for this destination here'
-                      //   className={styles.reviewInput}
-                      // /> */}
                       <textarea
                         type='text'
                         name='comment'
                         onChange={handleInputChange}
                         placeholder='Enter your comment here'
                         className={styles.reviewInput}
+                        value={formData.comment}
                       />
                       <div className={styles.ratingInput}>
                         <p>Enter your rating: </p>
@@ -173,34 +167,25 @@ const Experiences = () => {
                       </div>
                       <button
                         type='submit'
+                        disabled={isSubmitting}
                         className={styles.submitButton}>
-                        Submit
+                        {isSubmitting ? (
+                          <Spinner
+                            width={24}
+                            height={24}
+                          />
+                        ) : (
+                          'Submit'
+                        )}
                       </button>
                     </form>
                   </div>
-                  {/* ) : (
-                    <div className={styles.noBookedDestinationsDiv}>
-                      <p className={styles.dataParagraph}>
-                        You haven't booked any destinations. Please book a
-                        destination to write a review.
-                      </p>
-                    </div>
-                  )} */}
                 </>
               )}
             </>
           ) : (
             <div style={{ display: 'none' }}></div>
           )}
-          {/* {reviews && reviews.length > 0 ? (
-            <div className={styles.carouselContainer}>
-              <Carousel items={reviews} />
-            </div>
-          ) : (
-            <p className={styles.dataParagraph}>
-              Currently there are no reviews.
-            </p>
-          )} */}
         </div>
       </div>
       {/* <div className={styles.footerDiv}> */}

@@ -88,7 +88,7 @@ table {
 }
 
 .tableDataCell:nth-child(4) {
-  width: 300px;
+  max-width: 300px;
   text-align: justify;
 }
 
@@ -105,4 +105,52 @@ table {
 
 .table tbody tr:not(:last-child) {
   border-bottom: 2px solid var(--light-gray);
+}
+
+.noFeedback {
+  font-size: 1.5rem;
+  background-color: var(--light-gray);
+  color: var(--darker-blue);
+  padding: 2rem;
+  border-radius: 9px;
+}
+
+@media (max-width: 1024px) {
+  .mainTitle {
+    font-size: 35px;
+  }
+
+  .feedbacks {
+    width: 600px;
+  }
+
+  .noFeedback {
+    width: 600px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 740px) {
+  .mainTitle {
+    font-size: 30px;
+  }
+
+  .noFeedback {
+    width: 350px;
+    font-size: 18px;
+    text-align: justify;
+  }
+}
+
+@media (max-width: 430px) {
+  .mainTitle {
+    font-size: 25px;
+  }
+
+  .noFeedback {
+    width: 300px;
+    font-size: 15px;
+    padding: 1rem;
+    margin-top: 0;
+  }
 }

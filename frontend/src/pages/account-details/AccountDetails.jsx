@@ -17,7 +17,7 @@ const AccountDetails = () => {
   const { user, isError } = useSelector(state => state?.auth);
   const message = useSelector(state => state?.auth?.message);
 
-  const bookings = useSelector(state => state?.booking?.bookings?.data);
+  const bookings = useSelector(state => state?.booking?.bookings);
 
   const isLoadingBookings = useSelector(state => state?.booking?.isLoading);
   const userBookings =
@@ -61,7 +61,10 @@ const AccountDetails = () => {
           <>
             <h2 className={styles.mainTitle}>Welcome {user.user.name}</h2>
             {isLoadingBookings ? (
-              <Spinner />
+              <Spinner
+                width={64}
+                height={64}
+              />
             ) : userBookings && userBookings?.length > 0 ? (
               <>
                 <div className={styles.usersBookings}>
@@ -78,29 +81,29 @@ const AccountDetails = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {currentRecords?.map(item => (
+                      {currentRecords?.map(booking => (
                         <tr
-                          key={item._id}
+                          key={booking._id}
                           className={styles.tableDataRow}>
                           <td className={styles.tableDataCell}>
-                            {item.destination.name}
+                            {booking.destination.name}
                           </td>
                           <td className={styles.tableDataCell}>
-                            {getRegularDate(item.arrivalDate)} -{' '}
-                            {getRegularDate(item.departureDate)}
+                            {getRegularDate(booking.departureDate)} -{' '}
+                            {getRegularDate(booking.returnDate)}
                           </td>
                           <td className={styles.tableDataCell}>
-                            {item.numberOfTravelers}
+                            {booking.numberOfTravelers}
                           </td>
                           <td className={styles.tableDataCell}>
-                            {item.totalPrice} BAM
+                            {booking.totalPrice} BAM
                           </td>
                           <td className={styles.tableDataCell}>
                             <button
                               className={styles.addNewReview}
                               onClick={() =>
                                 handleNavigationToExperiencesPage(
-                                  item.destination._id
+                                  booking.destination._id
                                 )
                               }>
                               Add review
@@ -110,6 +113,56 @@ const AccountDetails = () => {
                       ))}
                     </tbody>
                   </table>
+                  <div className={styles.accordionContainer}>
+                    {isLoadingBookings ? (
+                      <Spinner
+                        width={64}
+                        height={64}
+                      />
+                    ) : (
+                      <>
+                        {currentRecords?.map(booking => (
+                          <div
+                            key={booking._id}
+                            className={styles.accordionItem}>
+                            <div className={styles.accordionContent}>
+                              <div className={styles.accordionText}>
+                                <strong>Name: </strong>
+                                {booking?.destination?.name}
+                              </div>
+                              <div className={styles.accordionText}>
+                                <strong>Date created: </strong>
+                                {getRegularDate(booking?.createdAt)}
+                              </div>
+                              <div className={styles.accordionText}>
+                                <strong>Description: </strong>
+                                {booking?.destination?.briefDescription}
+                              </div>
+                              <div className={styles.accordionText}>
+                                <strong>Total price: </strong>
+                                {booking?.totalPrice} BAM
+                              </div>
+                              <div className={styles.accordionText}>
+                                <strong>User: </strong>
+                                {booking?.user?.name}
+                              </div>
+                              <div className={styles.actionButtons}>
+                                <button
+                                  className={styles.addNewReview}
+                                  onClick={() =>
+                                    handleNavigationToExperiencesPage(
+                                      booking?.destination?._id
+                                    )
+                                  }>
+                                  Add Review
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </div>
                   <Pagination
                     numberOfPages={numberOfPages}
                     currentPage={currentPage}

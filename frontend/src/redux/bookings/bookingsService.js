@@ -12,12 +12,12 @@ export const getBookingsFromAPI = async destinationId => {
   } else {
     response = await axios.get(`${API_URL}/bookings`);
   }
-  return response.data;
+  return response.data.data;
 };
 
 export const getBookingFromAPI = async bookingId => {
   const response = await axios.get(`${API_URL}/bookings/${bookingId}`);
-  return response.data;
+  return response.data.data;
 };
 
 export const createBookingInAPI = async (bookingData, token) => {
@@ -32,7 +32,7 @@ export const createBookingInAPI = async (bookingData, token) => {
     bookingData,
     config
   );
-  return response.data;
+  return response.data.data;
 };
 
 export const checkDestinationBookingFromAPI = async (checkData, token) => {
@@ -47,20 +47,31 @@ export const checkDestinationBookingFromAPI = async (checkData, token) => {
     checkData,
     config
   );
-  return response.data;
+  return response.data.data;
 };
 
-export const updateBookingFromAPI = async (bookingId, updatedData) => {
+export const updateBookingFromAPI = async (bookingId, updatedData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const response = await axios.put(
     `${API_URL}/bookings/${bookingId}`,
-    updatedData
+    updatedData, config
   );
-  return response.data;
+  return response.data.data;
 };
 
-export const deleteBookingFromAPI = async bookingId => {
-  const response = await axios.delete(`${API_URL}/bookings/${bookingId}`);
-  return response.data;
+export const deleteBookingFromAPI = async (bookingId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(`${API_URL}/bookings/${bookingId}`, config);
+  return response.data.data.id;
 };
 
 const bookingsService = {

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../auth/authService';
 
 // let user;
@@ -18,6 +18,7 @@ import authService from '../auth/authService';
 // }
 
 const user = JSON.parse(localStorage.getItem('user'));
+// const user = JSON.parse(localStorage.getItem('user'));
 console.log(user);
 
 // Async action for user registration
@@ -25,9 +26,7 @@ export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, thunkAPI) => {
     try {
-      const response = await authService.register(userData);
-
-      return response;
+      return await authService.register(userData);
     } catch (error) {
       const message =
         (error.response.data && error.response.data.error) ||
@@ -43,9 +42,7 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials, thunkAPI) => {
     try {
-      const response = await authService.login(credentials);
-
-      return response;
+      return await authService.login(credentials);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -66,10 +63,7 @@ export const getMe = createAsyncThunk('auth/getMe', async thunkAPI => {
   try {
     const token = thunkAPI.getState().auth.user.token;
 
-    console.log(token);
-    const response = await authService.getMeFromAPI(token);
-    console.log(response);
-    return response.data;
+    return await authService.getMeFromAPI(token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.error) ||
@@ -85,12 +79,7 @@ export const updateDetails = createAsyncThunk(
   async (updatedDetails, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      const response = await authService.updateDetailsFromAPI(
-        updatedDetails,
-        token
-      );
-
-      return response;
+      return await authService.updateDetailsFromAPI(updatedDetails, token);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||

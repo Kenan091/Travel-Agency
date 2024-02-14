@@ -13,7 +13,6 @@ import { FaHandshake } from 'react-icons/fa6';
 import { MdCardTravel } from 'react-icons/md';
 import { RiMapPinUserFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
-import truncateDescription from '../../helpers/useTruncateDescription';
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
@@ -23,17 +22,10 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  // const handleNavigateToPage = page => {
-  //   navigate(page);
-  //   window.scrollTo(0, 0);
-  // };
-
   const dispatch = useDispatch();
-  const destinations = useSelector(
-    state => state?.destination?.destinations?.data
-  );
+  const destinations = useSelector(state => state?.destination?.destinations);
 
-  const reviews = useSelector(state => state?.review?.reviews?.data);
+  const reviews = useSelector(state => state?.review?.reviews);
   const isLoadingDestinations = useSelector(
     state => state?.destination?.isLoading
   );
@@ -60,6 +52,12 @@ const Home = () => {
       setShowModal(true);
     } else {
       toast.warn('No matching destinations found. Please try again.');
+    }
+  };
+
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      handleSearchButtonClick();
     }
   };
 
@@ -101,6 +99,12 @@ const Home = () => {
     dispatch(getReviews());
   }, [dispatch]);
 
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
+
+  console.log(user);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.mainContainer}>
@@ -135,6 +139,7 @@ const Home = () => {
                     placeholder='Where are you going?'
                     value={selectedDestination}
                     onChange={e => setSelectedDestination(e.target.value)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </div>
@@ -191,9 +196,7 @@ const Home = () => {
                         />
                         <div className={styles.destinationInfo}>
                           <h3>{destination.name}</h3>
-                          <p>
-                            {truncateDescription(destination.description, 150)}
-                          </p>
+                          <p>{destination.briefDescription}</p>
                           <div className={styles.buttonContainer}>
                             <button
                               onClick={() => handleSeeMore(destination._id)}
@@ -294,7 +297,10 @@ const Home = () => {
               <div className={styles.popularDestinations}>
                 <h2 className={styles.mainTitle}>Popular Destinations</h2>
                 {isLoadingDestinations ? (
-                  <Spinner />
+                  <Spinner
+                    width={64}
+                    height={64}
+                  />
                 ) : (
                   <Carousel items={popularDestinations} />
                 )}
@@ -306,7 +312,10 @@ const Home = () => {
           <h2 className={styles.mainTitle}>Experiences</h2>
           <h3 className={styles.title}>Hear from fellow travellers! </h3>
           {isLoadingReviews ? (
-            <Spinner />
+            <Spinner
+              width={64}
+              height={64}
+            />
           ) : reviews && reviews.length > 0 ? (
             <Carousel items={reviews} />
           ) : (

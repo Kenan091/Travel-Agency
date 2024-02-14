@@ -1,8 +1,8 @@
-const asyncHandler = require("../middleware/async");
-const Destination = require("../models/Destination");
-const Booking = require("../models/Booking");
-const Review = require("../models/Review");
-const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require('../middleware/async');
+const Destination = require('../models/Destination');
+const Booking = require('../models/Booking');
+const Review = require('../models/Review');
+const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Get all destinations
 // @route GET /destinations

@@ -23,14 +23,12 @@ const DestinationDetails = () => {
     dispatch(getReviews(id));
   }, [dispatch, id]);
 
-  const destination = useSelector(
-    state => state?.destination?.destination?.data
-  );
+  const destination = useSelector(state => state?.destination?.destination);
   const isLoadingDestination = useSelector(
     state => state?.destination?.isLoading
   );
 
-  const reviews = useSelector(state => state?.review?.reviews?.data);
+  const reviews = useSelector(state => state?.review?.reviews);
   const isLoadingReviews = useSelector(state => state?.review?.isLoading);
 
   const destinationReviews = reviews?.filter(
@@ -41,6 +39,10 @@ const DestinationDetails = () => {
     navigate(`/bookings/${id}`);
     window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    localStorage.setItem('destination', JSON.stringify(destination));
+  }, [destination]);
 
   console.log(reviews);
 
@@ -53,7 +55,10 @@ const DestinationDetails = () => {
         <div className={styles.container}>
           <div className={styles.subcontainer}>
             {isLoadingDestination || isLoadingReviews ? (
-              <Spinner />
+              <Spinner
+                width={64}
+                height={64}
+              />
             ) : destination ? (
               <div className={styles.mainContent}>
                 <div className={styles.content}>
@@ -72,7 +77,11 @@ const DestinationDetails = () => {
                           activeColor='#FFD233'
                           edit={false}
                         />
-                        <span>{`(${destinationReviews.length} reviews)`}</span>
+                        {destinationReviews.length === 1 ? (
+                          <span>{`(${destinationReviews.length} review)`}</span>
+                        ) : (
+                          <span>{`(${destinationReviews.length} reviews)`}</span>
+                        )}
                       </div>
                     )}
                   </div>

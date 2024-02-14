@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './AdminBookings.module.css';
-import { getBookings } from '../../redux/bookings/bookingsSlice';
+import { deleteBooking, getBookings } from '../../redux/bookings/bookingsSlice';
 import { getUsers } from '../../redux/users/usersSlice';
 import Header from '../../components/header/Header';
 import Spinner from '../../components/spinner/Spinner';
+import Pagination from '../../components/pagination/Pagination';
 import Footer from '../../components/footer/Footer';
 import getRegularDate from '../../helpers/useGetRegularDate';
-import truncateDescription from '../../helpers/useTruncateDescription';
-import { IoCheckmark, IoClose } from 'react-icons/io5';
-import Pagination from '../../components/pagination/Pagination';
+import { IoCheckmark, IoClose, IoTrash } from 'react-icons/io5';
 
 const AdminBookings = () => {
   const dispatch = useDispatch();
@@ -19,22 +18,24 @@ const AdminBookings = () => {
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 
-  const bookings = useSelector(state => state?.booking?.bookings?.data);
+  const bookings = useSelector(state => state?.booking?.bookings);
   const isLoadingBookings = useSelector(state => state?.booking?.isLoading);
-
-  // const users = useSelector(state => state?.user?.users?.data);
-  // const isLoadingUsers = useSelector(state => state?.user?.isLoading);
 
   const currentRecords = bookings?.slice(indexOfFirstRecord, indexOfLastRecord);
 
   const numberOfPages = Math.ceil(bookings?.length / recordsPerPage);
 
-  const onApprove = () => {
-    console.log('Approving booking');
-  };
+  // const onApprove = () => {
+  //   console.log('Approving booking');
+  // };
 
-  const onDisapprove = () => {
-    console.log('Disapproving booking');
+  // const onDisapprove = () => {
+  //   console.log('Disapproving booking');
+  // };
+
+  const onDelete = bookingId => {
+    console.log('Ready for deleting');
+    dispatch(deleteBooking(bookingId));
   };
 
   useEffect(() => {
@@ -67,8 +68,13 @@ const AdminBookings = () => {
             <tbody>
               {isLoadingBookings ? (
                 <tr>
-                  <td>
-                    <Spinner />
+                  <td
+                    colSpan='6'
+                    style={{ padding: 16 }}>
+                    <Spinner
+                      width={64}
+                      height={64}
+                    />
                   </td>
                 </tr>
               ) : (
@@ -93,25 +99,24 @@ const AdminBookings = () => {
                         {booking?.user?.name}
                       </td>
                       <td className={styles.tableDataCell}>
-                        <div>
-                          {' '}
-                          <div
+                        {/* <div> */}
+                        {/* <div
                             className={styles.actionButton}
                             onClick={() => onApprove(booking?._id)}>
                             <IoCheckmark
                               size={28}
                               color='#83ab55'
                             />
-                          </div>
-                          <div
-                            className={styles.actionButton}
-                            onClick={() => onDisapprove(booking?._id)}>
-                            <IoClose
-                              size={28}
-                              color='#ff1e1e'
-                            />
-                          </div>
+                          </div> */}
+                        <div
+                          className={styles.actionButton}
+                          onClick={() => onDelete(booking?._id)}>
+                          <IoTrash
+                            size={28}
+                            color='#ff1e1e'
+                          />
                         </div>
+                        {/* </div> */}
                       </td>
                     </tr>
                   ))}
@@ -119,6 +124,55 @@ const AdminBookings = () => {
               )}
             </tbody>
           </table>
+          <div className={styles.accordionContainer}>
+            {isLoadingBookings ? (
+              <Spinner
+                width={64}
+                height={64}
+              />
+            ) : (
+              <>
+                {currentRecords?.map(booking => (
+                  <div
+                    key={booking._id}
+                    className={styles.accordionItem}>
+                    <div className={styles.accordionContent}>
+                      <div className={styles.accordionText}>
+                        <strong>Name: </strong>
+                        {booking?.destination?.name}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Date created: </strong>
+                        {getRegularDate(booking?.createdAt)}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Description: </strong>
+                        {booking?.destination?.briefDescription}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Total price: </strong>
+                        {booking?.totalPrice} BAM
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>User: </strong>
+                        {booking?.user?.name}
+                      </div>
+                      <div className={styles.actionButtons}>
+                        <div
+                          className={styles.actionButton}
+                          onClick={() => onDelete(booking?._id)}>
+                          <IoTrash
+                            size={28}
+                            color='#ff1e1e'
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
           <Pagination
             numberOfPages={numberOfPages}
             currentPage={currentPage}

@@ -81,6 +81,21 @@ const feedbackSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(deleteFeedback.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(deleteFeedback.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const deletedFeedbackId = action.payload;
+        state.feedbacks = state?.feedbacks?.filter(
+          d => d._id !== deletedFeedbackId
+        );
+      })
+      .addCase(deleteFeedback.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

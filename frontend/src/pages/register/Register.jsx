@@ -16,6 +16,8 @@ const Register = () => {
 
   const { name, email, password, confirmPassword } = formData;
 
+  console.log(password, confirmPassword);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isError, message } = useSelector(state => state?.auth);

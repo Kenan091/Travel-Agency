@@ -17,12 +17,6 @@
   min-height: 100vh;
 }
 
-/* .heroSection {
-  background: url('../images/contactUsCover.jpg') center no-repeat;
-  background-size: cover;
-  width: 100%;
-} */
-
 .headerDiv {
   width: 100%;
   background-color: rgba(8, 40, 49, 1);
@@ -169,4 +163,132 @@
   margin-top: 5rem;
   border-radius: 20px;
   z-index: 2;
+}
+
+@media (max-width: 950px) {
+  .customerSupport {
+    flex-direction: column-reverse;
+    width: 530px;
+    height: fit-content;
+  }
+
+  .details .followUsDiv {
+    margin-bottom: 2rem;
+  }
+
+  .inputs {
+    width: 530px;
+    height: 660px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    border-bottom-right-radius: 0;
+  }
+
+  .inputs::before {
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    border-bottom-right-radius: 0;
+  }
+
+  .inputs input:first-child {
+    margin-top: 3rem;
+  }
+
+  .inputs .contactSubmitButton {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .contactUsTitle {
+    font-size: 30px;
+  }
+
+  .text {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contactUsTitle {
+    font-size: 27px;
+  }
+
+  .text {
+    font-size: 15px;
+  }
+
+  .customerSupport {
+    width: 400px;
+  }
+
+  .details .mainTitle {
+    margin-bottom: 3rem;
+  }
+
+  .inputs {
+    width: 400px;
+  }
+
+  .inputs input {
+    height: 2.5rem;
+    width: 250px;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    border-radius: 9px;
+    z-index: 2;
+  }
+
+  .inputs textarea {
+    width: 240px;
+  }
+}
+
+@media (max-width: 490px) {
+  .contactUsTitle {
+    font-size: 20px;
+  }
+
+  .text {
+    font-size: 10px;
+  }
+
+  .customerSupport {
+    width: 280px;
+  }
+
+  .details .mainTitle {
+    font-size: 19px;
+  }
+
+  .details p {
+    font-size: 14px;
+  }
+
+  .details .followUsDiv .title {
+    font-size: 14px;
+  }
+
+  .inputs {
+    width: 280px;
+  }
+
+  .inputs input {
+    width: 180px;
+    font-size: 14px;
+  }
+
+  .inputs textarea {
+    width: 170px;
+    font-size: 15px;
+  }
+
+  .inputs .contactSubmitButton {
+    position: relative;
+    background-color: var(--dark-blue);
+    color: var(--light-gray);
+    font-weight: bold;
+    padding: 15px 40px;
+  }
 }

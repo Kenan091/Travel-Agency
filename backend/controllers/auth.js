@@ -18,9 +18,14 @@ exports.register = asyncHandler(async (req, res, next) => {
     role,
   });
 
-  user.validate(function (err) {
+  // user.validate(function (err) {
+  //   console.log(err.errors['password'].message);
+  // });
+  try {
+    await user.validate();
+  } catch (err) {
     console.log(err.errors['password'].message);
-  });
+  }
 
   sendTokenResponse(user, 200, res);
 });

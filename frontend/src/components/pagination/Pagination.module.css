@@ -35,3 +35,9 @@
   color: var(--dark-blue);
   cursor: default;
 }
+
+@media (max-width: 430px) {
+  .pageLink {
+    padding: 10px;
+  }
+}

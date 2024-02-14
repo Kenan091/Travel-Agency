@@ -13,12 +13,12 @@ export const getReviewsFromAPI = async destinationId => {
     response = await axios.get(`${API_URL}/reviews`);
   }
 
-  return response.data;
+  return response.data.data;
 };
 
 export const getReviewFromAPI = async reviewId => {
   const response = await axios.get(`${API_URL}/reviews/${reviewId}`);
-  return response.data;
+  return response.data.data;
 };
 
 export const addReviewToAPI = async (reviewData, token) => {
@@ -33,7 +33,7 @@ export const addReviewToAPI = async (reviewData, token) => {
     reviewData,
     config
   );
-  return response.data;
+  return response.data.data;
 };
 
 export const updateReviewFromAPI = async ({ reviewId, updatedData }) => {
@@ -41,12 +41,12 @@ export const updateReviewFromAPI = async ({ reviewId, updatedData }) => {
     `${API_URL}/reviews/${reviewId}`,
     updatedData
   );
-  return response.data;
+  return response.data.data;
 };
 
 export const deleteReviewFromAPI = async reviewId => {
   const response = await axios.delete(`${API_URL}/reviews/${reviewId}`);
-  return response.data;
+  return response.data.data;
 };
 
 const reviewsService = {

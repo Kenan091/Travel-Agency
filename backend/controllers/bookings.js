@@ -65,8 +65,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
 
   const reservationsWithinRange = await Booking.find({
     destination: destination._id,
-    arrivalDate: { $lt: req.body.departureDate },
-    departureDate: { $gt: req.body.arrivalDate },
+    departureDate: { $lt: req.body.returnDate },
+    returnDate: { $gt: req.body.departureDate },
   });
 
   if (reservationsWithinRange.length >= 50) {
@@ -77,8 +77,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
 
   const reservation = new Booking({
     destination: destination._id,
-    arrivalDate: req.body.arrivalDate,
     departureDate: req.body.departureDate,
+    returnDate: req.body.returnDate,
     numberOfTravelers: req.body.numberOfTravelers,
     totalPrice: req.body.totalPrice,
     user: req.body.user,
@@ -113,8 +113,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
 
 //   const reservationsWithinRange = await Booking.find({
 //     destination: destination._id,
-//     arrivalDate: { $lt: req.body.departureDate },
-//     departureDate: { $gt: req.body.arrivalDate },
+//     returnDate: { $lt: req.body.departureDate },
+//     departureDate: { $gt: req.body.returnDate },
 //     numberOfTravelers: req.body.numberOfTravelers,
 //   });
 
@@ -145,8 +145,8 @@ exports.checkDestinationBooking = asyncHandler(async (req, res, next) => {
 
   const reservationsWithinRange = await Booking.find({
     destination: destination._id,
-    arrivalDate: req.body.arrivalDate,
     departureDate: req.body.departureDate,
+    returnDate: req.body.returnDate,
   });
 
   let totalSeatsTaken = 0;
@@ -225,7 +225,7 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
 
   await booking.deleteOne();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: { id: booking._id } });
 });
 
 // // Function to check destination availability

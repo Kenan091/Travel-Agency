@@ -125,14 +125,18 @@ table {
 }
 
 .table tbody tr td:nth-child(2) {
-  width: 230px;
+  max-width: 230px;
   padding-left: 0;
   padding-right: 0;
 }
 
 .table tbody tr td:nth-child(4) {
-  width: 300px;
+  max-width: 300px;
   text-align: justify;
+}
+
+.accordionContainer {
+  display: none;
 }
 
 .modal {
@@ -145,6 +149,7 @@ table {
   width: 600px;
   height: 970px;
   border-radius: 9px;
+  z-index: 101;
 }
 
 .modal.open {
@@ -172,6 +177,7 @@ table {
 }
 
 .modalForm {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -224,4 +230,280 @@ table {
   width: 160px;
   padding: 10px;
   border-radius: 20px;
+}
+
+@media (max-width: 1069px) {
+  .headerDiv {
+    position: relative;
+    z-index: 1002;
+  }
+
+  .table {
+    display: none;
+  }
+
+  .destinations {
+    width: 600px;
+  }
+
+  .tableDataCell {
+    background-color: transparent;
+  }
+
+  .addNewButton {
+    width: 100px;
+    padding: 0 10px;
+    margin: 2rem;
+  }
+
+  .addNewButton p {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--light-gray);
+  }
+
+  .accordionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .accordionItem {
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    height: 400px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    z-index: 100;
+  }
+
+  .accordionItem:last-child {
+    border-bottom: none;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .destinationName {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 8px;
+    color: var(--light-gray);
+  }
+
+  .accordionContent {
+    opacity: 0;
+  }
+
+  .showDetails .accordionContent {
+    position: relative;
+    color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100%;
+    padding: 1rem 2rem;
+    opacity: 1;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .showDetails .destinationName {
+    display: none;
+  }
+
+  .accordionContent .accordionText:first-child {
+    font-size: 30px;
+  }
+
+  .accordionContent .accordionText:nth-child(3) {
+    text-align: justify;
+  }
+
+  .actionButtons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    z-index: 100;
+  }
+
+  .actionButton {
+    cursor: pointer;
+  }
+
+  .actionButton:hover svg {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 659px) {
+  .destinations {
+    width: 300px;
+  }
+
+  .accordionContent {
+    align-items: normal;
+    padding: 1rem;
+    gap: 2rem;
+  }
+
+  .accordionContent .accordionText {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 430px) {
+  .mainTitle {
+    font-size: 25px;
+  }
+
+  .destinations {
+    width: 250px;
+  }
+
+  .accordionItem {
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    z-index: 100;
+  }
+
+  .accordionItem:last-child {
+    border-bottom: none;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .destinationName {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 8px;
+    color: var(--light-gray);
+  }
+
+  .accordionContent {
+    opacity: 0;
+  }
+
+  .showDetails .accordionContent {
+    position: relative;
+    color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    padding: 0.5rem 1rem;
+    opacity: 1;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .showDetails .destinationName {
+    display: none;
+  }
+
+  .accordionText {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .accordionContent .accordionText:first-child {
+    font-size: 17px;
+  }
+
+  .accordionContent .accordionText:nth-child(3) {
+    text-align: justify;
+  }
+
+  .actionButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 100;
+  }
+
+  .actionButton {
+    cursor: pointer;
+  }
+
+  .actionButton:hover svg {
+    transform: scale(1.1);
+  }
+
+  .addNewButton {
+    width: 80px;
+    padding: 0 10px;
+    margin: 2rem;
+  }
+
+  .addNewButton p {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--light-gray);
+  }
+
+  .modal {
+    width: 300px;
+    height: 920px;
+  }
+
+  .title {
+    color: var(--dark-blue);
+    text-transform: uppercase;
+    margin-top: 4rem;
+  }
+
+  .modalForm {
+    margin-top: 1rem;
+  }
+
+  .modalForm input {
+    font-size: 12px;
+    width: 16rem;
+  }
+
+  .modalForm textarea {
+    font-size: 12px;
+    width: 15.7rem;
+  }
+
+  .modalForm .detailedDescription {
+    font-size: 13px;
+  }
+
+  .modalForm .briefDescription {
+    font-size: 13px;
+  }
 }

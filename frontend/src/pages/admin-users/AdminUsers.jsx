@@ -18,7 +18,7 @@ const AdminUsers = () => {
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 
-  const users = useSelector(state => state?.user?.users?.data);
+  const users = useSelector(state => state?.user?.users);
   const { isError } = useSelector(state => state?.user?.isError);
   const message = useSelector(state => state?.user?.message);
   const isLoadingUsers = useSelector(state => state?.user?.isLoading);
@@ -40,13 +40,11 @@ const AdminUsers = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-  }, [dispatch]);
 
-  useEffect(() => {
     if (isError) {
       toast.error(message);
     }
-  }, [isError, message]);
+  }, [dispatch, isError, message]);
 
   return (
     <>
@@ -71,7 +69,10 @@ const AdminUsers = () => {
               {isLoadingUsers ? (
                 <tr>
                   <td colSpan='5'>
-                    <Spinner />
+                    <Spinner
+                      width={64}
+                      height={64}
+                    />
                   </td>
                 </tr>
               ) : (
@@ -102,6 +103,51 @@ const AdminUsers = () => {
               )}
             </tbody>
           </table>
+          <div className={styles.accordionContainer}>
+            {isLoadingUsers ? (
+              <Spinner
+                width={64}
+                height={64}
+              />
+            ) : (
+              <>
+                {currentRecords?.map(user => (
+                  <div
+                    key={user._id}
+                    className={styles.accordionItem}>
+                    <div className={styles.accordionContent}>
+                      <div className={styles.accordionText}>
+                        <strong>User ID: </strong>
+                        {user?._id}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Full name: </strong>
+                        {user?.name}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Registration date: </strong>
+                        {getRegularDate(user?.createdAt)}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Email address: </strong>
+                        {user?.email}
+                      </div>
+                      <div className={styles.actionButtons}>
+                        <div
+                          className={styles.actionButton}
+                          onClick={() => onDelete(user?._id)}>
+                          <IoTrash
+                            size={28}
+                            color='#ff1e1e'
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
           <Pagination
             numberOfPages={numberOfPages}
             currentPage={currentPage}

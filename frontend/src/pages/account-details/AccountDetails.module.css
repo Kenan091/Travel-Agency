@@ -18,8 +18,9 @@ table {
   padding-top: 75px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  min-height: 413px;
+  min-height: 100vh;
 }
 
 .headerDiv {
@@ -65,7 +66,6 @@ table {
   font-size: 14.5px;
   text-transform: uppercase;
   color: var(--light-gray);
-  /* padding: 30px 40px 30px 40px; */
   padding: 1.5rem;
   text-align: center;
 }
@@ -82,7 +82,6 @@ table {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* padding-top: 3rem; */
   gap: 3rem;
 }
 
@@ -99,9 +98,12 @@ table {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* padding-top: 3rem; */
   gap: 3rem;
   border-bottom-right-radius: 9px;
+}
+
+.accordionContainer {
+  display: none;
 }
 
 .noBookedDestinationsDiv {
@@ -124,9 +126,105 @@ table {
   border-radius: 20px;
 }
 
-@media (min-width: 1601px) {
-  .container {
+@media (max-width: 840px) {
+  .table {
+    display: none;
+  }
+
+  .accordionContainer {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    min-height: 100vh;
+    align-items: center;
+    width: 500px;
+  }
+
+  .accordionItem {
+    background-color: rgba(8, 40, 49, 0.63);
+    padding: 2rem 1rem;
+    border-bottom: 2px solid #ccc;
+  }
+
+  .accordionItem:last-child {
+    border-bottom: none;
+  }
+
+  .accordionContent {
+    position: relative;
+    color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    padding: 10px;
+  }
+
+  .accordionContent .accordionText:nth-child(3) {
+    text-align: justify;
+  }
+
+  .accordionContent .accordionText {
+    color: var(--light-gray);
+    padding: 1rem 0;
+  }
+
+  .actionButtons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .actionButton {
+    cursor: pointer;
+  }
+
+  .actionButton:hover svg {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    min-height: 76vh;
+  }
+
+  .mainTitle {
+    font-size: 30px;
+    text-wrap: wrap;
+    text-align: center;
+  }
+
+  .tableTitle {
+    text-align: center;
+  }
+
+  .accordionContainer {
+    width: 350px;
+  }
+
+  .noBookedDestinationsDiv {
+    font-size: 1rem;
+    background-color: var(--light-gray);
+    color: var(--darker-blue);
+    padding: 2rem;
+    border-radius: 9px;
+  }
+}
+
+@media (max-width: 440px) {
+  .tableTitle {
+    padding: 1rem 40px;
+  }
+
+  .accordionContainer {
+    width: 300px;
+  }
+
+  .accordionContent .accordionText {
+    padding: 0.5rem;
+  }
+
+  .addNewReview {
+    margin-top: 1rem;
   }
 }

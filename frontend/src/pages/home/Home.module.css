@@ -418,16 +418,337 @@ a {
   text-align: center;
 }
 
-@media (max-width: 450px) {
-  .mainTitle {
+/* @media (max-width: 1095px) {
+  .aboutUsContainer {
+    width: 200px;
+  }
+} */
+
+@media (max-width: 1100px) {
+  .whySection .card {
+    width: 250px;
+    height: 300px;
+  }
+
+  .whySection .card .cardTopPart .cardImg {
+    width: 250px;
+  }
+
+  .whySection .card .cardBottomPart p {
+    font-size: 15px;
+  }
+
+  .aboutUsContainer {
+    max-width: 870px;
+  }
+
+  .aboutUsContainer .text {
+    padding: 0 10rem;
+  }
+}
+
+@media (max-width: 950px) {
+  .whySection .card {
+    width: 200px;
+    height: 250px;
+  }
+
+  .whySection .card .cardTopPart {
+    height: 60%;
+  }
+
+  .whySection .card .cardTopPart .cardImg {
+    width: 200px;
+  }
+
+  .whySection .cardIcon {
+    top: 50%;
+    width: 50px;
+    height: 50px;
+  }
+
+  .whySection .card .cardBottomPart {
+    height: 40%;
+  }
+  .whySection .card .cardBottomPart p {
+    font-size: 12px;
+  }
+
+  .aboutUsContainer {
+    max-width: 720px;
+  }
+
+  .aboutUsContainer .text {
+    padding: 0 6rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .destinationsContainer .title {
+    font-size: 17px;
+  }
+
+  .destinationsContainer .mainTitle {
     font-size: 30px;
+  }
+
+  .whySection .mainTitle {
+    font-size: 30px;
+    text-transform: capitalize;
+    text-align: center;
+    color: var(--light-gray);
+    margin-bottom: 3rem;
+  }
+
+  .whySection .mainContent {
+    flex-direction: column;
+  }
+
+  .whySection .card {
+    width: 300px;
+    height: 350px;
+  }
+
+  .whySection .card .cardTopPart {
+    height: 65%;
+  }
+
+  .whySection .card .cardTopPart .cardImg {
+    width: 300px;
+  }
+
+  .whySection .card .cardBottomPart {
+    height: 35%;
+  }
+
+  .whySection .card .cardBottomPart p {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--dark-blue);
+  }
+
+  .whySection .cardIcon {
+    top: 56.5%;
+    width: 60px;
+    height: 60px;
+  }
+
+  .aboutUsContainer {
+    max-width: 600px;
+  }
+
+  .aboutUsContainer .mainTitle {
+    font-size: 30px;
+  }
+
+  .aboutUsContainer .text {
+    font-size: 14px;
+    padding: 0 6rem;
+  }
+
+  .popularDestinations .mainTitle {
+    font-size: 30px;
+  }
+
+  .experiencesContainer .mainTitle {
+    font-size: 30px;
+  }
+
+  .experiencesContainer .title {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal {
+    top: 510px;
+    width: 480px;
+  }
+
+  .modalContent {
+    height: fit-content;
+    padding: 10px 20px 20px 30px;
+  }
+
+  .destinationItem {
+    margin: 0;
+    gap: 1rem;
+  }
+
+  .destinationImage {
+    width: 120px;
+    height: 120px;
+  }
+
+  .seeMoreButton {
+    font-size: 10px;
+    padding: 4px 15px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 636px) {
+  .destinationsContainer .title {
+    font-size: 15px;
+  }
+
+  .destinationsContainer .mainTitle {
+    font-size: 27px;
+  }
+
+  .whySection .mainTitle {
+    font-size: 27px;
+  }
+
+  .aboutUsContainer {
+    max-width: 370px;
+    height: 400px;
+  }
+
+  .aboutUsContainer .mainTitle {
+    font-size: 27px;
+  }
+
+  .aboutUsContainer .text {
+    font-size: 10px;
+    padding: 0 3rem;
+  }
+
+  .popularDestinations .mainTitle {
+    font-size: 27px;
+  }
+
+  .experiencesContainer .mainTitle {
+    font-size: 27px;
+  }
+
+  .experiencesContainer .title {
+    font-size: 1px;
+  }
+}
+
+@media (max-width: 540px) {
+  .destinationsContainer .mainTitle {
+    font-size: 24px;
+  }
+
+  .destinationsContainer .title {
+    font-size: 13px;
+  }
+
+  .modal {
+    top: 510px;
+    width: 320px;
+  }
+
+  .modalTitle {
+    font-size: 18px;
+  }
+
+  .modalContent {
+    height: fit-content;
+    padding: 10px 20px 20px 20px;
+  }
+
+  .destinationItem {
+    margin: 0;
+    gap: 1rem;
+  }
+
+  .destinationItem p {
+    width: 180px;
+    margin-bottom: 0;
+    text-align: justify;
+  }
+
+  .destinationImage {
+    width: 90px;
+    height: 120px;
+  }
+
+  .buttonContainer {
+    width: 150px;
+  }
+
+  .seeMoreButton {
+    font-size: 10px;
+    padding: 4px 15px;
+    border-radius: 20px;
+  }
+
+  .whySection .card {
+    width: 232px;
+    height: 280px;
+  }
+
+  .whySection .card .cardTopPart .cardImg {
+    width: 232px;
+  }
+
+  .whySection .card .cardBottomPart p {
+    font-size: 14px;
+  }
+
+  .whySection .cardIcon {
+    top: 56.5%;
+    width: 50px;
+    height: 50px;
+  }
+
+  .aboutUsContainer .mainTitle {
+    font-size: 24px;
+  }
+
+  .popularDestinations .mainTitle {
+    font-size: 24px;
+  }
+
+  .experiencesContainer .mainTitle {
+    font-size: 24px;
+  }
+
+  .experiencesContainer .title {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .destinationsContainer .mainTitle {
+    font-size: 20px;
     margin-top: 4rem;
     margin-bottom: 0;
   }
 
-  .title {
-    font-size: 17px;
-    margin-top: 2rem;
+  .destinationsContainer .title {
+    font-size: 13px;
+    width: 300px;
+    text-align: center;
+    margin-top: 0;
+  }
+
+  .browseDestinations {
+    height: 6rem;
+    width: 300px;
+    margin-bottom: 3rem;
+    gap: 2rem;
+  }
+
+  .searchInput {
+    display: flex;
+    width: 150px;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .searchInput input {
+    height: 2.5rem;
+    width: 8rem;
+  }
+
+  .browseDestinations .searchButton {
+    height: 3.5rem;
+    width: 4rem;
   }
 
   .mainButton {

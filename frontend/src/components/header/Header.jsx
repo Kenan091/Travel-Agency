@@ -98,13 +98,6 @@ const Header = () => {
                     Destinations
                   </NavLink>
                 </li>
-                {/* <li>
-                  <NavLink
-                    to='/experiences'
-                    className={styles.navLink}>
-                    Experiences
-                  </NavLink>
-                </li> */}
                 <li>
                   <NavLink
                     to='/contact-us'

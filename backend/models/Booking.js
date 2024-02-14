@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
-  arrivalDate: {
-    type: Date,
-    required: [true, 'Please add arrival date'],
-  },
   departureDate: {
     type: Date,
     required: [true, 'Please add departure date'],
+  },
+  returnDate: {
+    type: Date,
+    required: [true, 'Please add return date'],
   },
   numberOfTravelers: {
     type: Number,

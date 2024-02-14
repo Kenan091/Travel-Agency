@@ -1,9 +1,11 @@
 import styles from './Spinner.module.css';
 
-const Spinner = () => {
+const Spinner = ({ width, height }) => {
   return (
     <div className={styles.loadingSpinnerContainer}>
-    <div className={styles.loadingSpinner}></div>
+      <div
+        className={styles.loadingSpinner}
+        style={{ width: width, height: height }}></div>
     </div>
   );
 };

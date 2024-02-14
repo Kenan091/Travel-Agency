@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_URL = "http://localhost:5000";
+const API_URL = 'http://localhost:5000';
 
 export const getDestinationsFromAPI = async () => {
   const response = await axios.get(`${API_URL}/destinations`);
   return response.data.data;
 };
 
-export const getDestinationFromAPI = async (destinationId) => {
+export const getDestinationFromAPI = async destinationId => {
   const response = await axios.get(`${API_URL}/destinations/${destinationId}`);
   return response.data.data;
 };

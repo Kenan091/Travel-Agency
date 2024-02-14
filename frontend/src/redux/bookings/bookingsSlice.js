@@ -75,7 +75,12 @@ export const updateBooking = createAsyncThunk(
   'bookings/updateBooking',
   async ({ bookingId, updatedData }, thunkAPI) => {
     try {
-      return await bookingsService.updateBookingFromAPI(bookingId, updatedData);
+      const token = thunkAPI.getState().auth.user.token;
+      return await bookingsService.updateBookingFromAPI(
+        bookingId,
+        updatedData,
+        token
+      );
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -90,7 +95,8 @@ export const deleteBooking = createAsyncThunk(
   'bookings/deleteBooking',
   async (bookingId, thunkAPI) => {
     try {
-      return await bookingsService.deleteBookingFromAPI(bookingId);
+      const token = thunkAPI.getState().auth.user.token;
+      return await bookingsService.deleteBookingFromAPI(bookingId, token);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||

@@ -132,7 +132,7 @@ button {
 .destinationButton {
   background-color: var(--dark-blue);
   color: var(--light-gray);
-  padding: 0.75rem 1.5rem;
+  padding: 0.65rem 1.25rem;
   border-radius: 20px;
 }
 
@@ -217,7 +217,7 @@ button {
     justify-content: center;
     background-color: var(--light-gray);
     width: 210px;
-    height: 400px;
+    height: 390px;
     padding: 0rem 1.5rem;
     border-radius: 8px;
     box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.1);
@@ -254,11 +254,12 @@ button {
     margin: 0;
   }
 
+  .price p {
+    font-size: 11px;
+  }
+
   .destinationButton {
-    background-color: var(--dark-blue);
-    color: var(--light-gray);
-    padding: 10px 15px;
-    border-radius: 20px;
+    font-size: 10px;
   }
 
   .review {
@@ -296,6 +297,16 @@ button {
     padding: 1rem 0;
     margin: 0 2rem;
   }
+
+  .review .leftQuote {
+    top: 5%;
+    left: 12%;
+  }
+
+  .review .rightQuote {
+    bottom: 5%;
+    right: 12%;
+  }
 }
 
 @media (max-width: 430px) {
@@ -308,11 +319,15 @@ button {
     width: 180px;
   }
 
+  .destinationBottomPart {
+    justify-content: space-between;
+  }
+
   .price p {
-    font-size: 10px;
+    font-size: 9.5px;
   }
 
   .destinationButton {
-    font-size: 10px;
+    font-size: 9px;
   }
 }

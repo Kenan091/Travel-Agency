@@ -11,7 +11,7 @@ export const getUsersFromAPI = async token => {
 
   const response = await axios.get(`${API_URL}/users`, config);
 
-  return response.data;
+  return response.data.data;
 };
 
 export const getUserFromAPI = async (userId, token) => {
@@ -22,7 +22,7 @@ export const getUserFromAPI = async (userId, token) => {
   };
 
   const response = await axios.get(`${API_URL}/users/${userId}`, config);
-  return response.data;
+  return response.data.data;
 };
 
 export const createUserInAPI = async (userData, token) => {
@@ -33,7 +33,7 @@ export const createUserInAPI = async (userData, token) => {
   };
 
   const response = await axios.post(`${API_URL}/users`, userData, config);
-  return response.data;
+  return response.data.data;
 };
 
 export const updateUserFromAPI = async (userId, updatedData, token) => {
@@ -48,7 +48,7 @@ export const updateUserFromAPI = async (userId, updatedData, token) => {
     updatedData,
     config
   );
-  return response.data;
+  return response.data.data;
 };
 
 export const deleteUserFromAPI = async (userId, token) => {
@@ -59,7 +59,7 @@ export const deleteUserFromAPI = async (userId, token) => {
   };
 
   const response = await axios.delete(`${API_URL}/users/${userId}`, config);
-  return response.data;
+  return response.data.data.id;
 };
 
 const usersService = {
