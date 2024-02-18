@@ -162,9 +162,16 @@ exports.checkDestinationBooking = asyncHandler(async (req, res, next) => {
       message: 'Reservation limit for this destination has been reached',
     });
   } else {
-    return res.status(200).json({
-      message: `You have ${availableSeats} seats left`,
-    });
+    let message;
+    if (availableSeats > 1) {
+      message = `You have ${availableSeats} seats left`;
+    } else if (availableSeats === 1) {
+      message = 'You have only one seat left';
+    } else {
+      message = 'No seats available';
+    }
+
+    return res.status(200).json({ message });
   }
 });
 
@@ -222,6 +229,23 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  const destination = await Destination.findById(booking.destination._id);
+
+  if (!destination) {
+    return next(
+      new ErrorResponse(
+        `Destination with the id of ${booking.destination._id} not found`,
+        404
+      )
+    );
+  }
+
+  destination.reservations = destination.reservations.filter(
+    reservationId => reservationId.toString() !== booking._id.toString()
+  );
+
+  await destination.save();
 
   await booking.deleteOne();
 

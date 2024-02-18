@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './AdminBookings.module.css';
 import { deleteBooking, getBookings } from '../../redux/bookings/bookingsSlice';
-import { getUsers } from '../../redux/users/usersSlice';
 import Header from '../../components/header/Header';
 import Spinner from '../../components/spinner/Spinner';
 import Pagination from '../../components/pagination/Pagination';
 import Footer from '../../components/footer/Footer';
 import getRegularDate from '../../helpers/useGetRegularDate';
-import { IoCheckmark, IoClose, IoTrash } from 'react-icons/io5';
+import { IoTrash } from 'react-icons/io5';
 
 const AdminBookings = () => {
   const dispatch = useDispatch();
@@ -25,14 +24,6 @@ const AdminBookings = () => {
 
   const numberOfPages = Math.ceil(bookings?.length / recordsPerPage);
 
-  // const onApprove = () => {
-  //   console.log('Approving booking');
-  // };
-
-  // const onDisapprove = () => {
-  //   console.log('Disapproving booking');
-  // };
-
   const onDelete = bookingId => {
     console.log('Ready for deleting');
     dispatch(deleteBooking(bookingId));
@@ -40,7 +31,6 @@ const AdminBookings = () => {
 
   useEffect(() => {
     dispatch(getBookings());
-    dispatch(getUsers());
   }, [dispatch]);
 
   console.log(bookings);
@@ -81,42 +71,32 @@ const AdminBookings = () => {
                 <>
                   {currentRecords?.map(booking => (
                     <tr
-                      key={booking?._id}
+                      key={booking._id}
                       className={styles.tableDataRow}>
                       <td className={styles.tableDataCell}>
-                        {booking?.destination?.name}
+                        {booking.destination.name}
                       </td>
                       <td className={styles.tableDataCell}>
-                        {getRegularDate(booking?.createdAt)}
+                        {getRegularDate(booking.createdAt)}
                       </td>
                       <td className={styles.tableDataCell}>
-                        {booking?.destination?.briefDescription}
+                        {booking.destination.briefDescription}
                       </td>
                       <td className={styles.tableDataCell}>
-                        {booking?.totalPrice}
+                        {booking.totalPrice}
                       </td>
                       <td className={styles.tableDataCell}>
-                        {booking?.user?.name}
+                        {booking.user.name}
                       </td>
                       <td className={styles.tableDataCell}>
-                        {/* <div> */}
-                        {/* <div
-                            className={styles.actionButton}
-                            onClick={() => onApprove(booking?._id)}>
-                            <IoCheckmark
-                              size={28}
-                              color='#83ab55'
-                            />
-                          </div> */}
                         <div
                           className={styles.actionButton}
-                          onClick={() => onDelete(booking?._id)}>
+                          onClick={() => onDelete(booking._id)}>
                           <IoTrash
                             size={28}
                             color='#ff1e1e'
                           />
                         </div>
-                        {/* </div> */}
                       </td>
                     </tr>
                   ))}
@@ -139,28 +119,28 @@ const AdminBookings = () => {
                     <div className={styles.accordionContent}>
                       <div className={styles.accordionText}>
                         <strong>Name: </strong>
-                        {booking?.destination?.name}
+                        {booking.destination.name}
                       </div>
                       <div className={styles.accordionText}>
                         <strong>Date created: </strong>
-                        {getRegularDate(booking?.createdAt)}
+                        {getRegularDate(booking.createdAt)}
                       </div>
                       <div className={styles.accordionText}>
                         <strong>Description: </strong>
-                        {booking?.destination?.briefDescription}
+                        {booking.destination.briefDescription}
                       </div>
                       <div className={styles.accordionText}>
                         <strong>Total price: </strong>
-                        {booking?.totalPrice} BAM
+                        {booking.totalPrice} BAM
                       </div>
                       <div className={styles.accordionText}>
                         <strong>User: </strong>
-                        {booking?.user?.name}
+                        {booking.user.name}
                       </div>
                       <div className={styles.actionButtons}>
                         <div
                           className={styles.actionButton}
-                          onClick={() => onDelete(booking?._id)}>
+                          onClick={() => onDelete(booking._id)}>
                           <IoTrash
                             size={28}
                             color='#ff1e1e'

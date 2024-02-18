@@ -127,11 +127,12 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetUrl = `${req.protocol}://${req.get(
-    'host'
-  )}/auth/resetpassword/${resetToken}`;
+  const resetUrl = `${req.protocol}://localhost:5173/auth/resetpassword/${resetToken}`;
+  // const resetUrl = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/auth/resetpassword/${resetToken}`;
 
-  const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to \n\n ${resetUrl}`;
+  const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please click on link: \n\n ${resetUrl}`;
 
   try {
     await sendEmail({
@@ -142,7 +143,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: 'Email sent',
+      data: 'Email sent! Check your inbox for reset password link!',
     });
   } catch (error) {
     user.resetPasswordToken = undefined;
@@ -150,7 +151,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    return next(new ErrorResponse('Email could not be sent', 500));
+    return next(new ErrorResponse('Email could not be sent!', 500));
   }
 
   res.status(200).json({

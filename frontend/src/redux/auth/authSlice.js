@@ -1,25 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../auth/authService';
 
-// let user;
-
-// Get user from localStorage
-// const storedUser = localStorage.getItem('user');
-
-// console.log('Stored User:', storedUser);
-
-// if (storedUser !== undefined && storedUser !== '' && storedUser !== null) {
-//   try {
-//     user = JSON.parse(storedUser);
-//     console.log('Parsed User:', user);
-//   } catch (error) {
-//     console.error('Error parsing user:', error);
-//   }
-// }
-
 const user = JSON.parse(localStorage.getItem('user'));
-// const user = JSON.parse(localStorage.getItem('user'));
-console.log(user);
 
 // Async action for user registration
 export const registerUser = createAsyncThunk(

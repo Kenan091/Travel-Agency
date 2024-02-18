@@ -131,7 +131,8 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await review.deleteOne();
+  // await review.deleteOne();
+  await Review.findByIdAndDelete(req.params.id);
 
   res.status(200).json({
     success: true,

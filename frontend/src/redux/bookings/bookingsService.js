@@ -47,7 +47,8 @@ export const checkDestinationBookingFromAPI = async (checkData, token) => {
     checkData,
     config
   );
-  return response.data.data;
+
+  return response.data.message;
 };
 
 export const updateBookingFromAPI = async (bookingId, updatedData, token) => {
@@ -59,7 +60,8 @@ export const updateBookingFromAPI = async (bookingId, updatedData, token) => {
 
   const response = await axios.put(
     `${API_URL}/bookings/${bookingId}`,
-    updatedData, config
+    updatedData,
+    config
   );
   return response.data.data;
 };
@@ -70,7 +72,10 @@ export const deleteBookingFromAPI = async (bookingId, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.delete(`${API_URL}/bookings/${bookingId}`, config);
+  const response = await axios.delete(
+    `${API_URL}/bookings/${bookingId}`,
+    config
+  );
   return response.data.data.id;
 };
 
@@ -78,6 +83,7 @@ const bookingsService = {
   getBookingsFromAPI,
   getBookingFromAPI,
   createBookingInAPI,
+  checkDestinationBookingFromAPI,
   updateBookingFromAPI,
   deleteBookingFromAPI,
 };

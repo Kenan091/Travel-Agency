@@ -8,11 +8,31 @@ import Footer from '../../components/footer/Footer';
 import getRegularDate from '../../helpers/useGetRegularDate';
 import Spinner from '../../components/spinner/Spinner';
 import Pagination from '../../components/pagination/Pagination';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  deleteReview,
+  getReview,
+  getReviews,
+  updateReview,
+} from '../../redux/reviews/reviewsSlice';
+
+import ReactStars from 'react-rating-stars-component';
+
+import {
+  IoAdd,
+  IoClose,
+  IoPencil,
+  IoStar,
+  IoStarHalf,
+  IoStarOutline,
+  IoTrash,
+} from 'react-icons/io5';
 
 const AccountDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editReviewId, setEditReviewId] = useState(null);
 
   const { user, isError } = useSelector(state => state?.auth);
   const message = useSelector(state => state?.auth?.message);
@@ -22,6 +42,17 @@ const AccountDetails = () => {
   const isLoadingBookings = useSelector(state => state?.booking?.isLoading);
   const userBookings =
     bookings?.filter(booking => booking.user._id === user?.user?._id) || [];
+
+  const reviews = useSelector(state => state?.review?.reviews);
+  const review = useSelector(state => state?.review?.review);
+  const isLoadingReviews = useSelector(state => state?.review?.isLoading);
+
+  const [formData, setFormData] = useState({
+    name: '',
+    title: '',
+    comment: '',
+    rating: '',
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(5);
@@ -37,14 +68,74 @@ const AccountDetails = () => {
   const numberOfPages = Math.ceil(userBookings.length / recordsPerPage);
   console.log('Bookings:', bookings);
   console.log('User bookings: ', userBookings);
+  console.log('Reviews:', reviews);
+  console.log('Review for editing: ', review);
 
   const handleNavigationToExperiencesPage = destinationId => {
     navigate(`/experiences/${destinationId}`);
     window.scrollTo(0, 0);
   };
 
+  const hasReviewForDestination = (destinationId, userId) => {
+    return reviews.some(
+      review =>
+        review.destination._id === destinationId && review.user._id === userId
+    );
+  };
+
+  const onOpenModal = (id = null) => {
+    console.log(id);
+    setModalOpen(true);
+    setEditReviewId(id);
+    if (id) {
+      dispatch(getReview(id));
+    }
+  };
+
+  const onCloseModal = () => {
+    setModalOpen(false);
+    setEditReviewId(null);
+  };
+
+  const handleEditReview = reviewId => {
+    // dispatch(updateReview(reviewId));
+    console.log(`Ready for editing ${reviewId}`);
+    onOpenModal(reviewId);
+    setFormData({
+      name: review?.destination?.name,
+      title: review?.title,
+      comment: review?.comment,
+      rating: review?.rating,
+    });
+  };
+
+  const handleDeleteReview = reviewId => {
+    // dispatch(deleteReview(reviewId));
+    console.log(`Deleted ${reviewId}`);
+  };
+
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({ ...prevData, [name]: value }));
+  };
+
+  const saveReview = e => {
+    e.preventDefault();
+
+    if (editReviewId) {
+      dispatch(
+        updateReview({
+          reviewId: editReviewId,
+          updatedData: formData,
+        })
+      );
+      onCloseModal();
+    }
+  };
+
   useEffect(() => {
     dispatch(getBookings());
+    dispatch(getReviews());
 
     if (isError) {
       toast.error(message);
@@ -77,7 +168,7 @@ const AccountDetails = () => {
                         <th className={styles.tableCell}>Stay period</th>
                         <th className={styles.tableCell}>Travelers</th>
                         <th className={styles.tableCell}>Total price</th>
-                        <th className={styles.tableCell}>Actions</th>
+                        {/* <th className={styles.tableCell}>Actions</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -98,17 +189,57 @@ const AccountDetails = () => {
                           <td className={styles.tableDataCell}>
                             {booking.totalPrice} BAM
                           </td>
-                          <td className={styles.tableDataCell}>
-                            <button
-                              className={styles.addNewReview}
-                              onClick={() =>
-                                handleNavigationToExperiencesPage(
-                                  booking.destination._id
-                                )
-                              }>
-                              Add review
-                            </button>
-                          </td>
+                          {/* <td className={styles.tableDataCell}>
+                            {hasReviewForDestination(
+                              booking.destination._id,
+                              user.user._id
+                            ) ? (
+                              <>
+                                {isLoadingReviews ? (
+                                  <Spinner />
+                                ) : (
+                                  <>
+                                    <button
+                                      className={styles.reviewAction}
+                                      onClick={() =>
+                                        handleEditReview(review._id)
+                                      }>
+                                      <IoPencil
+                                        size={20}
+                                        color='#83ab55'
+                                      />
+                                      <p>Edit review</p>
+                                    </button>
+                                    <button
+                                      className={styles.reviewAction}
+                                      onClick={() =>
+                                        handleDeleteReview(review._id)
+                                      }>
+                                      <IoTrash
+                                        size={20}
+                                        color='#ff1e1e'
+                                      />
+                                      <p>Delete review</p>
+                                    </button>
+                                  </>
+                                )}
+                              </>
+                            ) : (
+                              <button
+                                className={styles.reviewAction}
+                                onClick={() =>
+                                  handleNavigationToExperiencesPage(
+                                    booking.destination._id
+                                  )
+                                }>
+                                <IoAdd
+                                  size={20}
+                                  color='#061e25'
+                                />
+                                <p>Add review</p>
+                              </button>
+                            )}
+                          </td> */}
                         </tr>
                       ))}
                     </tbody>
@@ -146,17 +277,6 @@ const AccountDetails = () => {
                                 <strong>User: </strong>
                                 {booking?.user?.name}
                               </div>
-                              <div className={styles.actionButtons}>
-                                <button
-                                  className={styles.addNewReview}
-                                  onClick={() =>
-                                    handleNavigationToExperiencesPage(
-                                      booking?.destination?._id
-                                    )
-                                  }>
-                                  Add Review
-                                </button>
-                              </div>
                             </div>
                           </div>
                         ))}
@@ -175,6 +295,16 @@ const AccountDetails = () => {
                 <p>You haven't booked any destinations.</p>
               </div>
             )}
+
+            <div className={styles.writeReviewDiv}>
+              <p>
+                If you want to write review for one of your booked destinations
+                go to:
+              </p>
+              <button>
+                <Link to='/experiences'>Experiences</Link>
+              </button>
+            </div>
           </>
         )}
       </div>

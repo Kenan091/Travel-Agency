@@ -33,7 +33,9 @@ router
   .route('/:destinationId')
   .post(protect, authorize('registeredUser', 'admin'), createBooking);
 
-router.route('/check/:destinationId').post(protect, checkDestinationBooking);
+router
+  .route('/check/:destinationId')
+  .post(protect, authorize('registeredUser'), checkDestinationBooking);
 
 router
   .route('/:id')

@@ -63,26 +63,32 @@ const DestinationDetails = () => {
               <div className={styles.mainContent}>
                 <div className={styles.content}>
                   <div className={styles.topPart}>
-                    <h1 className={styles.name}>{destination.name}</h1>
+                    <h1 className={styles.name}>{destination?.name}</h1>
                     {destinationReviews.length > 0 && (
-                      <div className={styles.averageRating}>
-                        <ReactStars
-                          count={5}
-                          value={destination?.averageRating.toFixed(2)}
-                          size={24}
-                          isHalf={true}
-                          emptyIcon={<IoStarOutline />}
-                          halfIcon={<IoStarHalf />}
-                          fullIcon={<IoStar />}
-                          activeColor='#FFD233'
-                          edit={false}
-                        />
-                        {destinationReviews.length === 1 ? (
-                          <span>{`(${destinationReviews.length} review)`}</span>
+                      <>
+                        {destination?.averageRating ? (
+                          <div className={styles.averageRating}>
+                            <ReactStars
+                              count={5}
+                              value={destination?.averageRating?.toFixed(2)}
+                              size={24}
+                              isHalf={true}
+                              emptyIcon={<IoStarOutline />}
+                              halfIcon={<IoStarHalf />}
+                              fullIcon={<IoStar />}
+                              activeColor='#FFD233'
+                              edit={false}
+                            />
+                            {destinationReviews.length === 1 ? (
+                              <span>{`(${destinationReviews.length} review)`}</span>
+                            ) : (
+                              <span>{`(${destinationReviews.length} reviews)`}</span>
+                            )}
+                          </div>
                         ) : (
-                          <span>{`(${destinationReviews.length} reviews)`}</span>
+                          'Not rated'
                         )}
-                      </div>
+                      </>
                     )}
                   </div>
                   <div className={styles.mainPart}>

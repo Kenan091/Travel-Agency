@@ -163,10 +163,6 @@ const AdminDestinations = () => {
   const openDestinationDetails = destinationId => {
     setDetailsVisible(prevState => !prevState);
     setSelectedDestinationId(destinationId);
-
-    // setDetailsVisible(prevState =>
-    //   prevState ? selectedDestinationId !== destinationId : !prevState
-    // );
   };
 
   useEffect(() => {
@@ -245,7 +241,7 @@ const AdminDestinations = () => {
                           {destination?.averageRating ? (
                             <ReactStars
                               count={5}
-                              value={destination?.averageRating.toFixed(2)}
+                              value={destination.averageRating.toFixed(2)}
                               size={24}
                               isHalf={true}
                               emptyIcon={<IoStarOutline />}
@@ -335,14 +331,14 @@ const AdminDestinations = () => {
                       }`}>
                       <div className={styles.accordionText}>
                         <strong>Name: </strong>
-                        {destination?.name}
+                        {destination.name}
                       </div>
                       <div className={styles.accordionText}>
                         <strong>Average rating: </strong>
                         {destination?.averageRating ? (
                           <ReactStars
                             count={5}
-                            value={destination?.averageRating.toFixed(2)}
+                            value={destination.averageRating.toFixed(2)}
                             size={24}
                             isHalf={true}
                             emptyIcon={<IoStarOutline />}

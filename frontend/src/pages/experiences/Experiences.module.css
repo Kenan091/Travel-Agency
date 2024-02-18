@@ -178,6 +178,10 @@
     align-items: center;
   }
 
+  .reviewForm select {
+    width: 13.5rem;
+  }
+
   .reviewForm textarea {
     font-size: 13.45px;
   }

@@ -191,7 +191,8 @@ const bookingsSlice = createSlice({
       })
       .addCase(deleteBooking.fulfilled, (state, action) => {
         state.isLoading = false;
-        const deletedBookingId = action.payload._id;
+        console.log(action.payload);
+        const deletedBookingId = action.payload;
         state.bookings = state.bookings.filter(b => b._id !== deletedBookingId);
       })
       .addCase(deleteBooking.rejected, (state, action) => {

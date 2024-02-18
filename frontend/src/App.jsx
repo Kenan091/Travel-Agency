@@ -21,6 +21,7 @@ import AdminUsers from './pages/admin-users/AdminUsers';
 import ForgotPassword from './pages/forgot-password/ForgotPassword';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AdminProtectedRoute from './utils/AdminProtectedRoute';
+import ResetPassword from './pages/reset-password/ResetPassword';
 
 function App() {
   const { user } = useSelector(state => state?.auth);
@@ -50,7 +51,7 @@ function App() {
             element={<DestinationDetails />}
           />
           <Route
-            path='/experiences/:id'
+            path='/experiences'
             element={<Experiences />}
           />
           <Route
@@ -68,6 +69,10 @@ function App() {
           <Route
             path='/auth/forgotpassword'
             element={<ForgotPassword />}
+          />
+          <Route
+            path='/auth/resetpassword/:resetToken'
+            element={<ResetPassword />}
           />
 
           {/* User Routes */}

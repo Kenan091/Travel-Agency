@@ -115,6 +115,7 @@ const reviewsSlice = createSlice({
       })
       .addCase(getReview.fulfilled, (state, action) => {
         state.isLoading = false;
+        console.log(action.payload);
         state.review = action.payload;
       })
       .addCase(getReview.rejected, (state, action) => {

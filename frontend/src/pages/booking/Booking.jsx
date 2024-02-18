@@ -4,15 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styles from './Booking.module.css';
 import { getDestination } from '../../redux/destinations/destinationsSlice';
-import { createBooking } from '../../redux/bookings/bookingsSlice';
+import {
+  checkDestinationBooking,
+  createBooking,
+} from '../../redux/bookings/bookingsSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
 import { IoCashSharp, IoPeopleSharp } from 'react-icons/io5';
 import { RiCalendar2Fill } from 'react-icons/ri';
 import DatePicker from '../../components/date-picker/DatePicker';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Booking = () => {
   const { id } = useParams();
@@ -46,6 +47,9 @@ const Booking = () => {
   const isLoadingDestination = useSelector(
     state => state?.destination?.isLoading
   );
+  const bookingMessage = useSelector(state => state?.booking?.message);
+
+  console.log(bookingMessage);
 
   const totalPrice = destination?.price * parseInt(numberOfTravelers);
 
@@ -133,6 +137,14 @@ const Booking = () => {
       return;
     }
 
+    if (new Date(departureDate) >= new Date(returnDate)) {
+      toast.warn('Return date must be after departure date.', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+      return;
+    }
+
     const destinationId = id;
     const bookingData = {
       destinationId,
@@ -145,7 +157,7 @@ const Booking = () => {
     dispatch(createBooking(bookingData));
 
     toast.success(
-      `You have completed the booking process for a trip to ${destination.name}. You will hear from us shortly!`,
+      `You have completed the booking process for a trip to ${destination.name}.`,
       {
         position: 'top-right',
         autoClose: true,
@@ -158,6 +170,26 @@ const Booking = () => {
       }
     );
   };
+
+  useEffect(() => {
+    if (departureDate && returnDate) {
+      dispatch(
+        checkDestinationBooking({
+          destinationId: id,
+          departureDate: departureDate,
+          returnDate: returnDate,
+        })
+      );
+
+      toast.info(bookingMessage);
+    }
+  }, [
+    dispatch,
+    id,
+    bookingFormData.departureDate,
+    bookingFormData.returnDate,
+    bookingMessage,
+  ]);
 
   console.log(returnDate, departureDate, numberOfTravelers);
   console.log(
@@ -200,12 +232,7 @@ const Booking = () => {
                         color='#082831'
                       />
                       <div className={styles.dateInputs}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                          }}>
+                        <div className={styles.datePickerDiv}>
                           <DatePicker
                             onDateChange={date =>
                               handleDateChange(date, 'departureDate')
@@ -215,12 +242,7 @@ const Booking = () => {
                         </div>
                         <span> - </span>
 
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                          }}>
+                        <div className={styles.datePickerDiv}>
                           <DatePicker
                             onDateChange={date =>
                               handleDateChange(date, 'returnDate')

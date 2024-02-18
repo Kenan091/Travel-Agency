@@ -118,13 +118,130 @@ table {
   margin: 0;
 }
 
-.addNewReview {
+.writeReviewDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.writeReviewDiv p {
+  font-size: 20px;
+  color: var(--light-gray);
+}
+
+.writeReviewDiv button {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+  font-weight: bold;
+  width: 160px;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+/* .reviewAction {
   background-color: var(--light-gray);
   color: var(--darker-blue);
   font-weight: bold;
-  padding: 0.5rem 1rem;
+  padding: 0 0.8rem;
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
+
+.modal {
+  display: none;
+  background-color: var(--light-gray);
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 660px;
+  border-radius: 9px;
+  z-index: 101;
+}
+
+.modal.open {
+  display: inline-block;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.title {
+  color: var(--dark-blue);
+  text-transform: uppercase;
+  margin-top: 4rem;
+}
+
+.modalForm {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  gap: 2rem;
+}
+
+.modalForm input,
+.modalForm textarea {
+  background-color: #bbb;
+  font-family: inherit;
+  text-align: center;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  width: 20rem;
+  padding: 11px 10px;
+}
+
+.modalForm .detailedDescription {
+  text-align: left;
+  font-size: 16px;
+  padding-left: 15px;
+  height: 230px;
+  resize: none;
+}
+
+.modalForm .briefDescription {
+  text-align: left;
+  font-size: 16px;
+  padding-left: 15px;
+  height: 150px;
+  resize: none;
+}
+
+.modalForm textarea::placeholder {
+  color: var(--dark-blue);
+}
+
+.modalForm input::placeholder {
+  color: var(--dark-blue);
+}
+
+.modalForm button {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+  font-weight: bold;
+  width: 160px;
+  padding: 10px;
+  border-radius: 20px;
+} */
 
 @media (max-width: 840px) {
   .table {
@@ -168,7 +285,15 @@ table {
     padding: 1rem 0;
   }
 
-  .actionButtons {
+  .writeReviewDiv {
+    margin-bottom: 2rem;
+  }
+
+  .writeReviewDiv p {
+    font-size: 16px;
+  }
+
+  /* .actionButtons {
     display: flex;
     justify-content: center;
     gap: 2rem;
@@ -180,7 +305,7 @@ table {
 
   .actionButton:hover svg {
     transform: scale(1.1);
-  }
+  } */
 }
 
 @media (max-width: 600px) {
@@ -209,6 +334,11 @@ table {
     padding: 2rem;
     border-radius: 9px;
   }
+
+  .writeReviewDiv p {
+    width: 300px;
+    text-align: center;
+  }
 }
 
 @media (max-width: 440px) {
@@ -224,7 +354,23 @@ table {
     padding: 0.5rem;
   }
 
-  .addNewReview {
-    margin-top: 1rem;
+  .writeReviewDiv p {
+    font-size: 14px;
+    width: 300px;
+    text-align: center;
   }
+
+  /* .actionButtons {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  } */
+
+  /* .reviewAction {
+    margin-top: 1rem;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } */
 }

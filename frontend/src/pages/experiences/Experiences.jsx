@@ -13,19 +13,26 @@ import ReactStars from 'react-rating-stars-component';
 import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
 
 const Experiences = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState(() => {
-    const storedFormData = localStorage.getItem('formData');
-    return storedFormData
-      ? JSON.parse(storedFormData)
-      : {
-          destinationId: id,
-          title: '',
-          comment: '',
-          rating: '',
-        };
+  // const [formData, setFormData] = useState(() => {
+  //   const storedFormData = localStorage.getItem('formData');
+  //   return storedFormData
+  //     ? JSON.parse(storedFormData)
+  //     : {
+  //         destinationId: id,
+  //         title: '',
+  //         comment: '',
+  //         rating: '',
+  //       };
+  // });
+  const [formData, setFormData] = useState({
+    destinationId: '',
+    title: '',
+    comment: '',
+    rating: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +40,15 @@ const Experiences = () => {
   const reviews = useSelector(state => state?.review?.reviews);
   const isErrorReviews = useSelector(state => state?.review?.isError);
   const reviewsErrorMessage = useSelector(state => state?.review?.message);
+
+  const { user } = useSelector(state => state?.auth);
+  const isLoadingUser = useSelector(state => state?.auth?.isLoading);
+  const userId = user?.user?._id;
+
+  const bookings = useSelector(state => state?.booking?.bookings);
+  const userBookings =
+    bookings?.filter(booking => booking.user._id === userId) || [];
+  const uniqueDestinationIds = [];
 
   const handleInputChange = e => {
     const value =
@@ -68,19 +84,19 @@ const Experiences = () => {
       toast.success('You successfully added review!');
 
       setFormData({
-        destinationId: id,
+        destinationId: '',
         title: '',
         comment: '',
         rating: '',
       });
 
+      setTimeout(() => {
+        navigate('/auth/me');
+      }, 6000);
+
       setIsSubmitting(false);
     }
   };
-
-  const dispatch = useDispatch();
-  const { user } = useSelector(state => state?.auth);
-  const isLoadingUser = useSelector(state => state?.auth?.isLoading);
 
   const destination = useSelector(state => state?.destination?.destination);
 
@@ -88,12 +104,9 @@ const Experiences = () => {
     state => state?.destination?.isLoading
   );
 
-  const isLoadingReview = useSelector(state => state?.review?.isLoading);
-
   useEffect(() => {
     dispatch(getBookings());
     dispatch(getReviews());
-    dispatch(getDestination(id));
   }, [dispatch]);
 
   useEffect(() => {
@@ -101,6 +114,8 @@ const Experiences = () => {
     localStorage.setItem('formData', JSON.stringify(formData));
     localStorage.setItem('user', JSON.stringify(user));
   }, [formData, user]);
+
+  console.log(formData.destinationId, formData.rating);
 
   return (
     <>
@@ -118,68 +133,89 @@ const Experiences = () => {
                 />
               ) : (
                 <>
-                  <div className={styles.newReview}>
-                    <h2 className={styles.mainTitle}>Add your review</h2>
-                    <form
-                      onSubmit={handleSubmit}
-                      className={styles.reviewForm}>
-                      <input
-                        className={styles.reviewInput}
-                        name='destinationId'
-                        onChange={handleInputChange}
-                        value={destination?.name}
-                        readOnly
-                      />
-                      <input
-                        type='text'
-                        name='title'
-                        onChange={handleInputChange}
-                        placeholder='Enter your title here'
-                        className={styles.reviewInput}
-                        value={formData.title}
-                      />
-                      <textarea
-                        type='text'
-                        name='comment'
-                        onChange={handleInputChange}
-                        placeholder='Enter your comment here'
-                        className={styles.reviewInput}
-                        value={formData.comment}
-                      />
-                      <div className={styles.ratingInput}>
-                        <p>Enter your rating: </p>
-                        <ReactStars
-                          count={5}
-                          size={32}
-                          isHalf={true}
-                          emptyIcon={<IoStarOutline />}
-                          halfIcon={<IoStarHalf />}
-                          fullIcon={<IoStar />}
-                          color='#d8e1ec'
-                          activeColor='#FFD233'
-                          onChange={value =>
-                            setFormData(prevState => ({
-                              ...prevState,
-                              rating: value,
-                            }))
-                          }
+                  {userBookings && userBookings.length > 0 ? (
+                    <div className={styles.newReview}>
+                      <h2 className={styles.mainTitle}>Add your review</h2>
+                      <form
+                        onSubmit={handleSubmit}
+                        className={styles.reviewForm}>
+                        <select
+                          className={styles.reviewInput}
+                          name='destinationId'
+                          onChange={handleInputChange}
+                          value={formData.destinationId}>
+                          <option value=''>Select Destination</option>
+                          {userBookings.map(booked => {
+                            if (
+                              !uniqueDestinationIds.includes(
+                                booked.destination._id
+                              )
+                            ) {
+                              uniqueDestinationIds.push(booked.destination._id);
+                              return (
+                                <option
+                                  key={booked._id}
+                                  value={booked.destination._id}>
+                                  {booked.destination.name}
+                                </option>
+                              );
+                            }
+                            return null;
+                          })}
+                        </select>
+                        <input
+                          type='text'
+                          name='title'
+                          onChange={handleInputChange}
+                          placeholder='Enter your title here'
+                          className={styles.reviewInput}
+                          value={formData.title}
                         />
-                      </div>
-                      <button
-                        type='submit'
-                        disabled={isSubmitting}
-                        className={styles.submitButton}>
-                        {isSubmitting ? (
-                          <Spinner
-                            width={24}
-                            height={24}
+                        <textarea
+                          type='text'
+                          name='comment'
+                          onChange={handleInputChange}
+                          placeholder='Enter your comment here'
+                          className={styles.reviewInput}
+                          value={formData.comment}
+                        />
+                        <div className={styles.ratingInput}>
+                          <p>Enter your rating: </p>
+                          <ReactStars
+                            count={5}
+                            size={32}
+                            isHalf={true}
+                            emptyIcon={<IoStarOutline />}
+                            halfIcon={<IoStarHalf />}
+                            fullIcon={<IoStar />}
+                            color='#d8e1ec'
+                            activeColor='#FFD233'
+                            onChange={value =>
+                              setFormData(prevState => ({
+                                ...prevState,
+                                rating: value,
+                              }))
+                            }
                           />
-                        ) : (
-                          'Submit'
-                        )}
-                      </button>
-                    </form>
-                  </div>
+                        </div>
+                        <button
+                          type='submit'
+                          disabled={isSubmitting}
+                          className={styles.submitButton}>
+                          {isSubmitting ? (
+                            <Spinner
+                              width={24}
+                              height={24}
+                            />
+                          ) : (
+                            'Submit'
+                          )}
+                        </button>
+                      </form>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'none' }}></div>
+                  )}
                 </>
               )}
             </>
@@ -188,9 +224,7 @@ const Experiences = () => {
           )}
         </div>
       </div>
-      {/* <div className={styles.footerDiv}> */}
       <Footer />
-      {/* </div> */}
     </>
   );
 };

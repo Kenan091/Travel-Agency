@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Carousel.module.css';
 // import truncateDescription from '../../helpers/useTruncateDescription';
-import { IoArrowBack, IoArrowForward, IoStar } from 'react-icons/io5';
+import {
+  IoArrowBack,
+  IoArrowForward,
+  IoStar,
+  IoStarHalf,
+  IoStarOutline,
+} from 'react-icons/io5';
 import { RiCoinsFill } from 'react-icons/ri';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa6';
+import ReactStars from 'react-rating-stars-component';
 
 export const Carousel = ({ items }) => {
   const [currentItem, setCurrentItem] = useState(0);
@@ -105,16 +112,18 @@ export const Carousel = ({ items }) => {
                     <h3 className={styles.destinationName}>
                       {item?.destination?.name}
                     </h3>
-                    {/* <h3 className={styles.title}>{item.title}</h3> */}
                     <div className={styles.rating}>
-                      {Array.from({ length: item.rating }, (_, i) => (
-                        <span key={i}>
-                          <IoStar
-                            color='#FFD233'
-                            size={20}
-                          />
-                        </span>
-                      ))}
+                      <ReactStars
+                        count={5}
+                        value={item?.rating?.toFixed(2)}
+                        size={24}
+                        isHalf={true}
+                        emptyIcon={<IoStarOutline />}
+                        halfIcon={<IoStarHalf />}
+                        fullIcon={<IoStar />}
+                        activeColor='#FFD233'
+                        edit={false}
+                      />
                     </div>
                     <div className={styles.commentParagraph}>
                       <FaQuoteLeft
