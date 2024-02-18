@@ -26,11 +26,6 @@ const ReviewSchema = new mongoose.Schema({
     ref: 'Destination',
     required: true,
   },
-  booking: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Booking',
-    required: true,
-  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
