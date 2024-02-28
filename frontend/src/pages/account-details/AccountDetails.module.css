@@ -244,6 +244,11 @@ table {
 } */
 
 @media (max-width: 840px) {
+  .headerDiv {
+    position: relative;
+    z-index: 1003;
+  }
+
   .table {
     display: none;
   }

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 
 const DatePicker = ({ onDateChange }) => {
   const [selectedDate, setSelectedDate] = useState('');
+  const [warningShown, setWarningShown] = useState(false);
 
   const handleDateChange = e => {
     const selectedDate = e.target.value;
@@ -11,9 +12,12 @@ const DatePicker = ({ onDateChange }) => {
     if (selectedDate >= today) {
       setSelectedDate(selectedDate);
       onDateChange(selectedDate);
-    } else {
-      toast.warn('Please select a date in the future.');
-      console.log('Warning');
+      setWarningShown(false);
+    } else if (!warningShown) {
+      setWarningShown(true);
+      toast.warn('Please select a date in the future.', {
+        onClose: () => setWarningShown(false),
+      });
     }
   };
 

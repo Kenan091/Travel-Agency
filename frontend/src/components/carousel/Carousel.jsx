@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Carousel.module.css';
-// import truncateDescription from '../../helpers/useTruncateDescription';
 import {
   IoArrowBack,
   IoArrowForward,
@@ -51,8 +50,6 @@ export const Carousel = ({ items }) => {
     window.scrollTo(0, 0);
   };
 
-  console.log(items);
-
   return (
     <div className={styles.carousel}>
       {currentItem > 0 && (
@@ -88,7 +85,6 @@ export const Carousel = ({ items }) => {
                     <div className={styles.destinationInfo}>
                       <h3>{item.name}</h3>
                       <p>{item.briefDescription}</p>
-                      {/* <p>{truncateDescription(item.description, 270)}</p> */}
                     </div>
                     <div className={styles.destinationBottomPart}>
                       <div className={styles.price}>
@@ -115,9 +111,9 @@ export const Carousel = ({ items }) => {
                     <div className={styles.rating}>
                       <ReactStars
                         count={5}
-                        value={item?.rating?.toFixed(2)}
+                        value={parseFloat(item?.rating)}
                         size={24}
-                        isHalf={true}
+                        isHalf={false}
                         emptyIcon={<IoStarOutline />}
                         halfIcon={<IoStarHalf />}
                         fullIcon={<IoStar />}

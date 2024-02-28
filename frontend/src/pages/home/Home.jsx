@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Home.module.css';
 import { getDestinations } from '../../redux/destinations/destinationsSlice';
 import { getReviews } from '../../redux/reviews/reviewsSlice';
+import { getBookings } from '../../redux/bookings/bookingsSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Carousel from '../../components/carousel/Carousel';
@@ -24,18 +25,313 @@ const Home = () => {
 
   const dispatch = useDispatch();
   const destinations = useSelector(state => state?.destination?.destinations);
-
-  const reviews = useSelector(state => state?.review?.reviews);
   const isLoadingDestinations = useSelector(
     state => state?.destination?.isLoading
   );
-  const isLoadingReviews = useSelector(state => state?.review?.isLoading);
-
+  const isErrorDestinations = useSelector(state => state?.destination?.isError);
+  const destinationsErrorMessage = useSelector(
+    state => state?.destination?.message
+  );
   const popularDestinations = destinations?.filter(
-    destination => destination?.averageRating > 4
+    destination => destination?.isPopular
   );
 
+  const reviews = useSelector(state => state?.review?.reviews);
+  const isLoadingReviews = useSelector(state => state?.review?.isLoading);
+  const isErrorReviews = useSelector(state => state?.review?.isError);
+  const reviewsErrorMessage = useSelector(state => state?.review?.message);
+
   const { user } = useSelector(state => state?.auth);
+  const isErrorUser = useSelector(state => state?.auth?.isError);
+  const userErrorMessage = useSelector(state => state?.auth?.message);
+
+  const bookings = useSelector(state => state?.booking?.bookings);
+  const userBookings = bookings.filter(
+    booking => booking?.user?._id === user?.user?._id
+  );
+
+  const userBookedDestinations = useMemo(() => {
+    if (!user) return [];
+    const bookedDestinations = userBookings.map(booking => booking.destination);
+    return bookedDestinations;
+  }, [user, userBookings]);
+
+  // const recommendedDestinations = useMemo(() => {
+  //   if (!user || !userBookedDestinations?.length || !destinations) return [];
+
+  //   // Extract continents and countries from booked destinations
+  //   const continents = userBookedDestinations?.flatMap(
+  //     destination => destination?.continents
+  //   );
+  //   const countries = userBookedDestinations?.map(destination =>
+  //     destination?.name.split(',')[1]?.trim().split(' ').pop()
+  //   );
+
+  //   // Find recommended destinations by continent
+
+  //   let recommendedByContinent = destinations.filter(destination =>
+  //     destination.continents.some(continent => continents.includes(continent))
+  //   );
+
+  //   // If no recommended destinations by continent, find by country
+
+  //   let recommendedByCountry = [];
+  //   if (!recommendedByContinent.length) {
+  //     recommendedByCountry = destinations.filter(destination =>
+  //       countries.includes(destination.name.split(',').pop()?.trim())
+  //     );
+  //   }
+
+  //   // Exclude destinations that user has already booked
+  //   const filteredRecommended =
+  //     recommendedByContinent.length > 0
+  //       ? recommendedByContinent.filter(
+  //           destination =>
+  //             !userBookedDestinations.some(
+  //               bookedDestination =>
+  //                 bookedDestination.name.split(',')[0]?.trim() ===
+  //                 destination.name.split(',')[0]?.trim()
+  //             )
+  //         )
+  //       : recommendedByCountry.length > 0
+  //       ? recommendedByCountry.filter(
+  //           destination =>
+  //             !userBookedDestinations.some(
+  //               bookedDestination =>
+  //                 bookedDestination.name.split(',')[0]?.trim() ===
+  //                 destination.name.split(',')[0]?.trim()
+  //             )
+  //         )
+  //       : [];
+
+  //   let sortedRecommended = filteredRecommended.sort((a, b) => {
+  //     // If both destinations have the same continent, sort by name
+  //     if (a.continents.some(continent => b.continents.includes(continent))) {
+  //       return a.name.localeCompare(b.name);
+  //     }
+  //     // Otherwise, sort by continent
+  //     const continentA = a.continents[0];
+  //     const continentB = b.continents[0];
+  //     return continentA.localeCompare(continentB);
+  //   });
+
+  //   // If there are no recommendations by continent, sort by country
+  //   if (sortedRecommended.length === 0 && recommendedByCountry.length > 0) {
+  //     sortedRecommended = recommendedByCountry.sort((a, b) => {
+  //       const countryA = a.name.split(',').pop().trim();
+  //       const countryB = b.name.split(',').pop().trim();
+  //       return countryA.localeCompare(countryB);
+  //     });
+  //   }
+
+  //   // If there are recommended destinations, return them, else return popular destinations
+  //   return sortedRecommended.length ? sortedRecommended : [];
+  // }, [user, userBookedDestinations, destinations]);
+
+  // const recommendedDestinations = useMemo(() => {
+  //   if (!user || !userBookedDestinations?.length || !destinations) return [];
+
+  //   // Extract countries from booked destinations
+  //   const bookedCountries = userBookedDestinations?.map(destination =>
+  //     destination.name.split(',').pop()?.trim()
+  //   );
+
+  //   // Find recommended destinations by country
+  //   let recommendedByCountry = destinations.filter(destination =>
+  //     bookedCountries.includes(destination.name.split(',').pop()?.trim())
+  //   );
+
+  //   // If no recommended destinations by country, find by continent
+  //   let recommendedByContinent = [];
+  //   if (!recommendedByCountry.length) {
+  //     const continents = userBookedDestinations?.flatMap(
+  //       destination => destination?.continents
+  //     );
+  //     recommendedByContinent = destinations.filter(destination =>
+  //       destination.continents.some(continent => continents.includes(continent))
+  //     );
+  //   }
+
+  //   // Exclude destinations that user has already booked
+  //   const filteredRecommended =
+  //     recommendedByCountry.length > 0
+  //       ? recommendedByCountry.filter(
+  //           destination =>
+  //             !userBookedDestinations.some(
+  //               bookedDestination =>
+  //                 bookedDestination.name.split(',')[0]?.trim() ===
+  //                 destination.name.split(',')[0]?.trim()
+  //             )
+  //         )
+  //       : recommendedByContinent.length > 0
+  //       ? recommendedByContinent.filter(
+  //           destination =>
+  //             !userBookedDestinations.some(
+  //               bookedDestination =>
+  //                 bookedDestination.name.split(',')[0]?.trim() ===
+  //                 destination.name.split(',')[0]?.trim()
+  //             )
+  //         )
+  //       : [];
+
+  //   let sortedRecommended = filteredRecommended.sort((a, b) => {
+  //     // Sort by country first
+  //     const countryA = a.name.split(',').pop()?.trim();
+  //     const countryB = b.name.split(',').pop()?.trim();
+  //     const countryComparison = countryA.localeCompare(countryB);
+
+  //     // If countries are the same, sort by continent
+  //     if (countryComparison === 0) {
+  //       const continentA = a.continents[0];
+  //       const continentB = b.continents[0];
+  //       return continentA.localeCompare(continentB);
+  //     }
+
+  //     return countryComparison;
+  //   });
+
+  //   // If there are no recommendations, return empty array
+  //   return sortedRecommended;
+  // }, [user, userBookedDestinations, destinations]);
+
+  // const recommendedDestinations = useMemo(() => {
+  //   if (!user || !userBookedDestinations?.length || !destinations) return [];
+
+  //   // Extract countries from booked destinations
+  //   const bookedCountries = userBookedDestinations?.map(destination =>
+  //     destination.name.split(',').pop()?.trim()
+  //   );
+
+  //   console.log('Booked countries: ', bookedCountries);
+
+  //   // Find recommended destinations by country, excluding booked ones
+  //   const recommendedByCountry = destinations.filter(destination => {
+  //     const country = destination.name.split(',').pop()?.trim();
+  //     return (
+  //       bookedCountries.includes(country) &&
+  //       !userBookedDestinations.some(booked => {
+  //         const bookedCountry = booked.name.split(',').pop()?.trim();
+  //         return bookedCountry === country;
+  //       })
+  //     );
+  //   });
+
+  //   console.log('Recommended by countries: ', recommendedByCountry);
+
+  //   // If no recommendations by country, find by continent, excluding booked ones
+  //   const recommendedByContinent = [];
+  //   const continents = userBookedDestinations?.flatMap(
+  //     destination => destination?.continents
+  //   );
+
+  //   console.log('Continents: ', continents);
+
+  //   recommendedByContinent.push(
+  //     ...destinations.filter(destination => {
+  //       return (
+  //         destination.continents.some(continent =>
+  //           continents.includes(continent)
+  //         ) &&
+  //         !userBookedDestinations.some(booked => {
+  //           const bookedCountry = booked.name.split(',').pop()?.trim();
+  //           return bookedCountry === destination.name.split(',').pop()?.trim();
+  //         })
+  //       );
+  //     })
+  //   );
+
+  //   console.log('Recommended by continent: ', recommendedByContinent);
+
+  //   // Sort recommendations according to your preferences
+  //   const sortedByCountry = recommendedByCountry.sort((a, b) => {
+  //     // Sort by country first
+  //     const countryA = a.name.split(',').pop()?.trim();
+  //     const countryB = b.name.split(',').pop()?.trim();
+  //     return countryA.localeCompare(countryB);
+  //   });
+
+  //   console.log('Sorted by country: ', sortedByCountry);
+
+  //   const sortedByContinent = recommendedByContinent.sort((a, b) => {
+  //     const continentA = a.continents[0];
+  //     const continentB = b.continents[0];
+  //     return continentA.localeCompare(continentB);
+  //   });
+
+  //   console.log('Sorted by continent: ', sortedByContinent);
+
+  //   // Return recommendations, prioritizing country and excluding booked destinations
+  //   return recommendedByCountry.length ? sortedByCountry : sortedByContinent;
+  // }, [user, userBookedDestinations, destinations]);
+
+  const recommendedDestinations = useMemo(() => {
+    if (!user || !userBookedDestinations?.length || !destinations) return [];
+
+    // Extract countries from booked destinations
+    const bookedCountries = userBookedDestinations?.map(destination =>
+      destination.name.split(',').pop()?.trim()
+    );
+
+    // Find recommended destinations by country, excluding booked ones
+    const recommendedByCountry = destinations.filter(destination => {
+      const country = destination.name.split(',').pop()?.trim();
+      return (
+        bookedCountries.includes(country) &&
+        !userBookedDestinations.some(booked => {
+          const bookedCountry = booked.name.split(',').pop()?.trim();
+          return bookedCountry === country;
+        })
+      );
+    });
+    console.log('Recommended by country: ', recommendedByCountry);
+
+    // If there are recommendations by country, sort them
+    if (recommendedByCountry.length) {
+      recommendedByCountry.sort((a, b) => {
+        const countryA = a.name.split(',').pop()?.trim();
+        const countryB = b.name.split(',').pop()?.trim();
+        return countryA.localeCompare(countryB);
+      });
+    }
+
+    console.log('Sorted recommended by country: ', recommendedByCountry);
+    // Find recommended destinations by continent, excluding booked ones
+    const recommendedByContinent = [];
+    const continents = userBookedDestinations?.flatMap(
+      destination => destination?.continents
+    );
+
+    recommendedByContinent.push(
+      ...destinations.filter(destination => {
+        return (
+          destination.continents.some(continent =>
+            continents.includes(continent)
+          ) &&
+          !userBookedDestinations.some(booked => {
+            const bookedCountry = booked.name.split(',').pop()?.trim();
+            return bookedCountry === destination.name.split(',').pop()?.trim();
+          })
+        );
+      })
+    );
+
+    // If there are recommendations by continent, sort them by country
+    if (recommendedByContinent.length) {
+      recommendedByContinent.sort((a, b) => {
+        const countryA = a.name.split(',').pop()?.trim();
+        const countryB = b.name.split(',').pop()?.trim();
+        return countryA.localeCompare(countryB);
+      });
+    }
+
+    // Return recommendations, prioritizing country and excluding booked destinations
+    return recommendedByCountry.length
+      ? recommendedByCountry
+      : recommendedByContinent;
+  }, [user, userBookedDestinations, destinations]);
+
+  // console.log(userBookedDestinations);
+  // console.log(recommendedDestinations);
 
   const handleSearchButtonClick = () => {
     if (!selectedDestination) {
@@ -97,13 +393,33 @@ const Home = () => {
   useEffect(() => {
     dispatch(getDestinations());
     dispatch(getReviews());
+    dispatch(getBookings());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isErrorUser) {
+      toast.error(userErrorMessage);
+    }
+
+    if (isErrorDestinations) {
+      toast.error(destinationsErrorMessage);
+    }
+
+    if (isErrorReviews) {
+      toast.error(reviewsErrorMessage);
+    }
+  }, [
+    isErrorUser,
+    isErrorDestinations,
+    isErrorReviews,
+    userErrorMessage,
+    destinationsErrorMessage,
+    reviewsErrorMessage,
+  ]);
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
-
-  console.log(user);
 
   return (
     <div className={styles.wrapper}>
@@ -272,9 +588,7 @@ const Home = () => {
             </div>
           </section>
 
-          {/* {user ? (
-            <div style={{ padding: 25 }}></div>
-          ) : ( */}
+          {/* {!user && ( */}
           <div className={styles.aboutUsContainer}>
             <h2 className={styles.mainTitle}>About us</h2>
             <p className={styles.text}>
@@ -291,10 +605,24 @@ const Home = () => {
           </div>
           {/* )} */}
         </div>
-        {popularDestinations && popularDestinations.length > 0 && (
-          <div className={styles.popularDestinationsContainer}>
-            {popularDestinations && (
-              <div className={styles.popularDestinations}>
+        {recommendedDestinations?.length > 0 ? (
+          <div className={styles.additionalDestinationsContainer}>
+            <div className={styles.additionalDestinations}>
+              <h2 className={styles.mainTitle}>Recommended for you</h2>
+              {isLoadingDestinations ? (
+                <Spinner
+                  width={64}
+                  height={64}
+                />
+              ) : (
+                <Carousel items={recommendedDestinations} />
+              )}
+            </div>
+          </div>
+        ) : (
+          popularDestinations.length > 0 && (
+            <div className={styles.additionalDestinationsContainer}>
+              <div className={styles.additionalDestinations}>
                 <h2 className={styles.mainTitle}>Popular Destinations</h2>
                 {isLoadingDestinations ? (
                   <Spinner
@@ -305,21 +633,23 @@ const Home = () => {
                   <Carousel items={popularDestinations} />
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          )
         )}
         <div className={styles.experiencesContainer}>
-          <h2 className={styles.mainTitle}>Experiences</h2>
-          <h3 className={styles.title}>Hear from fellow travellers! </h3>
-          {isLoadingReviews ? (
-            <Spinner
-              width={64}
-              height={64}
-            />
-          ) : reviews && reviews.length > 0 ? (
-            <Carousel items={reviews} />
-          ) : (
-            <p className={styles.dataParagraph}>No reviews available.</p>
+          {reviews?.length > 0 && (
+            <>
+              <h2 className={styles.mainTitle}>Experiences</h2>
+              <h3 className={styles.title}>Hear from fellow travellers! </h3>
+              {isLoadingReviews ? (
+                <Spinner
+                  width={64}
+                  height={64}
+                />
+              ) : (
+                <Carousel items={reviews} />
+              )}
+            </>
           )}
         </div>
       </div>

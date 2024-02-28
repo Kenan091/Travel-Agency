@@ -6,7 +6,6 @@ const ProtectedRoute = ({ children }) => {
   const { user } = useSelector(state => state?.auth);
 
   const userRole = user?.user?.role;
-  // const userRole = user?.responseData?.user?.role;
 
   return userRole === 'registeredUser' ? (
     children

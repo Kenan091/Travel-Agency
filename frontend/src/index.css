@@ -100,5 +100,10 @@ button:focus-visible {
 } */
 
 .Toastify__toast-container {
-  width: 10;
+  width: 400px;
+}
+
+.Toastify__toast {
+  width: 300px;
+  font-size: 12px;
 }

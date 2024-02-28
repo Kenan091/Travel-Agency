@@ -37,7 +37,6 @@ export const getMeFromAPI = async token => {
   };
 
   const response = await axios.post(`${API_URL}/auth/me`, config);
-  console.log(response);
   return response.data;
 };
 

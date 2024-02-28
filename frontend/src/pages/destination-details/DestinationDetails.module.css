@@ -122,9 +122,39 @@
   background-color: var(--light-green);
   color: var(--darker-blue);
   font-size: 1rem;
+  font-weight: bold;
   padding: 10px 35px;
   border: medium solid var(--darker-blue);
   border-radius: 20px;
+}
+
+.reviewsDiv {
+  align-self: center;
+  color: var(--light-gray);
+  height: 100%;
+  width: 708px;
+  margin: 3rem 0;
+  padding: 0 20px;
+  border: 1px solid var(--light-gray);
+  border-radius: 5px;
+}
+
+.reviewsDiv h2 {
+  font-size: 28px;
+  margin: 0;
+  padding: 20px 0;
+}
+
+.reviewsDiv ul {
+  color: var(--light-gray);
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.scrollable {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 @media (max-width: 1440px) {
@@ -156,9 +186,18 @@
   .description {
     margin-top: 0;
   }
+
+  .reviewsDiv {
+    margin: 1rem 0;
+  }
 }
 
 @media (max-width: 800px) {
+  .headerDiv {
+    position: relative;
+    z-index: 1003;
+  }
+
   .mainContent {
     width: 100%;
   }
@@ -193,11 +232,41 @@
     font-size: 13px;
     padding: 7px 25px;
   }
+
+  .reviewsDiv {
+    width: 500px;
+    padding: 0 20px;
+    margin-bottom: 3rem;
+  }
 }
 
 @media (max-width: 650px) {
+  .subcontainer {
+    padding: 0;
+  }
+
   .mainContent {
     width: 100%;
+  }
+
+  .content {
+    align-items: center;
+  }
+
+  .topPart {
+    align-items: center;
+    width: 416px;
+  }
+
+  .name {
+    font-size: 20px;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .averageRating {
+    font-size: 13px;
+    margin: 0;
   }
 
   .leftSide {
@@ -221,11 +290,35 @@
     font-size: 10px;
     width: 416px;
   }
+
+  .reviewsDiv {
+    width: 400px;
+  }
+
+  .reviewsDiv h2 {
+    font-size: 24px;
+  }
 }
 
 @media (max-width: 500px) {
   .mainContent {
     width: 100%;
+  }
+
+  .topPart {
+    align-items: center;
+    width: 340px;
+  }
+
+  .name {
+    font-size: 18px;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .averageRating {
+    font-size: 11px;
+    margin: 0;
   }
 
   .leftSide {
@@ -246,8 +339,8 @@
   }
 
   .description {
-    font-size: 8px;
-    width: 325.4px;
+    font-size: 9px;
+    width: 325.6px;
   }
 
   .price {
@@ -258,19 +351,32 @@
     font-size: 11px;
     padding: 4px 17px;
   }
+
+  .reviewsDiv {
+    width: 300px;
+  }
+
+  .reviewsDiv h2 {
+    font-size: 24px;
+  }
 }
 
 @media (max-width: 400px) {
-  .name {
-    font-size: 20px;
-  }
-
   .mainContent {
     width: 100%;
   }
 
   .mainPart {
     gap: 1rem;
+    align-items: center;
+  }
+
+  .topPart {
+    flex-direction: column;
+  }
+
+  .name {
+    font-size: 20px;
   }
 
   .leftSide {
@@ -287,11 +393,38 @@
   }
 
   .rightSide {
-    width: 256px;
+    width: 276px;
+    padding: 0;
+  }
+
+  .descriptionContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .description {
-    font-size: 9px;
+    font-size: 10px;
     width: 256px;
+  }
+
+  .reviewsDiv {
+    width: 250px;
+    padding: 0 10px;
+  }
+
+  .reviewsDiv h2 {
+    font-size: 20px;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 322px) {
+  .content {
+    margin: 0;
+  }
+
+  .topPart {
+    width: 310px;
   }
 }

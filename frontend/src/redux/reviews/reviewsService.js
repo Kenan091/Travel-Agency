@@ -36,16 +36,28 @@ export const addReviewToAPI = async (reviewData, token) => {
   return response.data.data;
 };
 
-export const updateReviewFromAPI = async ({ reviewId, updatedData }) => {
+export const updateReviewFromAPI = async (reviewId, updatedData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const response = await axios.put(
     `${API_URL}/reviews/${reviewId}`,
-    updatedData
+    updatedData,
+    config
   );
   return response.data.data;
 };
 
-export const deleteReviewFromAPI = async reviewId => {
-  const response = await axios.delete(`${API_URL}/reviews/${reviewId}`);
+export const deleteReviewFromAPI = async (reviewId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(`${API_URL}/reviews/${reviewId}`, config);
   return response.data.data;
 };
 

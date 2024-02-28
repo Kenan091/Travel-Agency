@@ -24,6 +24,16 @@ import {
   IoTrash,
 } from 'react-icons/io5';
 
+const initialFormData = {
+  name: '',
+  briefDescription: '',
+  detailedDescription: '',
+  imageURL: '',
+  price: '',
+  isPopular: false,
+  continents: [],
+};
+
 const AdminDestinations = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,13 +41,9 @@ const AdminDestinations = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editDestinationId, setEditDestinationId] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
-  const [formData, setFormData] = useState({
-    name: '',
-    briefDescription: '',
-    detailedDescription: '',
-    imageURL: '',
-    price: '',
-  });
+  const [formData, setFormData] = useState(initialFormData);
+  const [isNewDestination, setIsNewDestination] = useState(false);
+
   const [selectedDestinationId, setSelectedDestinationId] = useState(null);
   const [detailsVisible, setDetailsVisible] = useState(false);
 
@@ -50,9 +56,7 @@ const AdminDestinations = () => {
   const isLoadingDestinations = useSelector(
     state => state?.destination?.isLoading
   );
-
   const isErrorDestinations = useSelector(state => state?.destination?.isError);
-
   const destinationsErrorMessage = useSelector(
     state => state?.destination?.message
   );
@@ -66,24 +70,7 @@ const AdminDestinations = () => {
 
   const numberOfPages = Math.ceil(destinations?.length / recordsPerPage);
 
-  console.log(destinations);
-
-  console.log(`Details visible: ${detailsVisible}`);
-
-  useEffect(() => {
-    if (destination) {
-      setFormData({
-        name: destination?.name || '',
-        briefDescription: destination?.briefDescription || '',
-        detailedDescription: destination?.detailedDescription || '',
-        imageURL: destination?.imageURL || '',
-        price: destination?.price || '',
-      });
-    }
-  }, [destination]);
-
   const onOpenModal = (title, id = null) => {
-    console.log(id);
     setModalTitle(title);
     setModalOpen(true);
     setEditDestinationId(id);
@@ -95,37 +82,168 @@ const AdminDestinations = () => {
   const onCloseModal = () => {
     setModalOpen(false);
     setEditDestinationId(null);
+    setFormData(initialFormData);
   };
 
   const onAdd = () => {
-    setFormData({
-      name: '',
-      description: '',
-      imageURL: '',
-      price: '',
-    });
+    setIsNewDestination(true);
+    setFormData(initialFormData);
     onOpenModal('Add New Destination');
   };
 
   const onEdit = destinationId => {
+    setIsNewDestination(false);
     onOpenModal('Edit Destination', destinationId);
-    setFormData({
-      name: destination?.name || '',
-      briefDescription: destination?.briefDescription || '',
-      detailedDescription: destination?.detailedDescription || '',
-      imageURL: destination?.imageURL || '',
-      price: destination?.price || '',
-    });
+    const selectedDestination = destinations.find(
+      dest => dest._id === destinationId
+    );
+    if (selectedDestination) {
+      setFormData({
+        name: selectedDestination.name || '',
+        briefDescription: selectedDestination.briefDescription || '',
+        detailedDescription: selectedDestination.detailedDescription || '',
+        imageURL: selectedDestination.imageURL || '',
+        price: selectedDestination.price || '',
+        isPopular: selectedDestination.isPopular || false,
+        continents: selectedDestination.continents || [],
+      });
+    }
   };
 
   const onDelete = destinationId => {
-    console.log('Ready for deleting');
     dispatch(deleteDestination(destinationId));
   };
 
   const handleInputChange = e => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    const { name, value, type, checked } = e.target;
+
+    let filteredValue;
+
+    const allowedKeys = new Set([
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'Backspace',
+      'Delete',
+      'End',
+      'Control',
+      'Meta',
+      'c',
+      'v',
+      'x',
+      'a',
+    ]);
+
+    if (name === 'continents') {
+      filteredValue = value
+        .split('')
+        .filter(char => {
+          return char.match(/^[a-zA-Z,\s]$/) || allowedKeys.has(char);
+        })
+        .join('');
+    } else if (name === 'name') {
+      filteredValue = value.replace(/[^a-zA-ZčćđšžČĆĐŠŽ, ]/g, '');
+    } else {
+      filteredValue = value;
+    }
+
+    const newValue = type === 'checkbox' ? checked : filteredValue;
+
+    setFormData(prevData => ({ ...prevData, [name]: newValue }));
+  };
+
+  const validateForm = () => {
+    const cityCountryRegex =
+      /^[A-ZčćđšžČĆĐŠŽ][a-zčćđšžA-Z]*(?:\s[A-ZčćđšžČĆĐŠŽ][a-zčćđšžA-Z]*)*,\s*[A-ZčćđšžČĆĐŠŽ][a-zčćđšžA-Z]*(?:\s[A-ZčćđšžČĆĐŠŽ][a-zčćđšžA-Z]*)*$/;
+
+    if (!cityCountryRegex.test(formData.name)) {
+      toast.warn('Please enter name  in the format "City, Country".', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+      return false;
+    }
+
+    const continentsWhitelist = [
+      'North America',
+      'South America',
+      'Europe',
+      'Asia',
+      'Africa',
+      'Australia',
+      'Antarctica',
+    ];
+
+    function isValidContinent(continent) {
+      return continentsWhitelist.includes(continent.trim());
+    }
+
+    const validateContinents = continentsString => {
+      if (typeof continentsString !== 'string') {
+        console.error('Invalid format for continents data. Expected string.');
+        return false;
+      }
+
+      const continents = continentsString
+        ?.split(',')
+        .map(continent => continent.trim());
+      return continents.every(isValidContinent);
+    };
+
+    if (!validateContinents(formData.continents)) {
+      toast.warn(
+        `Please enter valid continents from the list. \n ${continentsWhitelist.map(
+          continent => `\n${continent}`
+        )}`,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+        }
+      );
+      return false;
+    }
+
+    if (!formData.imageURL) {
+      toast.warn('Please enter image URL.', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+      return false;
+    }
+
+    const priceRegex = /^\d+(\.\d{1,2})?$/;
+    if (!priceRegex.test(formData.price)) {
+      toast.warn('Please enter a valid price.', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+      return false;
+    }
+
+    if (!formData.briefDescription) {
+      toast.warn(
+        'Please enter brief description with less than 350 characters.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+        }
+      );
+      return false;
+    }
+
+    if (!formData.detailedDescription) {
+      toast.warn(
+        'Please enter detailed description with less than 2000 characters.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+        }
+      );
+      return false;
+    }
+
+    return true;
   };
 
   const saveDestination = e => {
@@ -140,14 +258,8 @@ const AdminDestinations = () => {
       );
       onCloseModal();
     } else {
-      if (
-        formData.name === '' ||
-        formData.imageURL === '' ||
-        formData.briefDescription === '' ||
-        formData.detailedDescription === '' ||
-        formData.price === ''
-      ) {
-        toast.error('Each field must be entered!');
+      if (!validateForm()) {
+        return;
       } else {
         dispatch(addDestination(formData));
         if (isErrorDestinations) {
@@ -167,16 +279,25 @@ const AdminDestinations = () => {
 
   useEffect(() => {
     dispatch(getDestinations());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isErrorDestinations) {
       toast.error(destinationsErrorMessage);
     }
-  }, [dispatch]);
+  }, [isErrorDestinations, destinationsErrorMessage]);
+
+  useEffect(() => {
+    if (!destination && isNewDestination) {
+      setFormData(initialFormData);
+    }
+  }, [destination, initialFormData, isNewDestination]);
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
 
-  console.log(user);
+  console.log(formData);
 
   return (
     <>
@@ -192,9 +313,9 @@ const AdminDestinations = () => {
               <tr className={styles.tableHeadRow}>
                 <th className={styles.tableCell}>Image</th>
                 <th className={styles.tableCell}>Name</th>
-                {/* <th className={styles.tableCell}>Date created</th> */}
                 <th className={styles.tableCell}>Average rating</th>
                 <th className={styles.tableCell}>Description</th>
+                <th className={styles.tableCell}>Popular</th>
                 <th className={styles.tableCell}>
                   <div
                     className={styles.addNewButton}
@@ -212,7 +333,7 @@ const AdminDestinations = () => {
               <>
                 {isLoadingDestinations ? (
                   <tr>
-                    <td colSpan='5'>
+                    <td colSpan='6'>
                       <Spinner
                         width={64}
                         height={64}
@@ -234,16 +355,13 @@ const AdminDestinations = () => {
                         <td className={styles.tableDataCell}>
                           {destination.name}
                         </td>
-                        {/* <td className={styles.tableDataCell}>
-                          {getRegularDate(destination.createdAt)}
-                        </td> */}
                         <td className={styles.tableDataCell}>
                           {destination?.averageRating ? (
                             <ReactStars
                               count={5}
-                              value={destination.averageRating.toFixed(2)}
+                              value={destination.averageRating}
                               size={24}
-                              isHalf={true}
+                              isHalf={false}
                               emptyIcon={<IoStarOutline />}
                               halfIcon={<IoStarHalf />}
                               fullIcon={<IoStar />}
@@ -251,12 +369,29 @@ const AdminDestinations = () => {
                               edit={false}
                             />
                           ) : (
-                            // ? destination.averageRating.toFixed(2)
                             'Not rated'
                           )}
                         </td>
                         <td className={styles.tableDataCell}>
                           {destination.briefDescription}
+                        </td>
+                        <td className={styles.tableDataCell}>
+                          <input
+                            type='checkbox'
+                            checked={destination.isPopular}
+                            onChange={() => {
+                              const updatedDestination = {
+                                ...destination,
+                                isPopular: !destination.isPopular,
+                              };
+                              dispatch(
+                                updateDestination({
+                                  destinationId: destination._id,
+                                  updatedData: updatedDestination,
+                                })
+                              );
+                            }}
+                          />
                         </td>
                         <td className={styles.tableDataCell}>
                           <div>
@@ -338,9 +473,9 @@ const AdminDestinations = () => {
                         {destination?.averageRating ? (
                           <ReactStars
                             count={5}
-                            value={destination.averageRating.toFixed(2)}
+                            value={parseFloat(destination.averageRating)}
                             size={24}
-                            isHalf={true}
+                            isHalf={false}
                             emptyIcon={<IoStarOutline />}
                             halfIcon={<IoStarHalf />}
                             fullIcon={<IoStar />}
@@ -354,6 +489,25 @@ const AdminDestinations = () => {
                       <div className={styles.accordionText}>
                         <strong>Description: </strong>
                         {destination.briefDescription}
+                      </div>
+                      <div className={styles.accordionText}>
+                        <strong>Popular: </strong>
+                        <input
+                          type='checkbox'
+                          checked={destination.isPopular}
+                          onChange={() => {
+                            const updatedDestination = {
+                              ...destination,
+                              isPopular: !destination.isPopular,
+                            };
+                            dispatch(
+                              updateDestination({
+                                destinationId: destination._id,
+                                updatedData: updatedDestination,
+                              })
+                            );
+                          }}
+                        />
                       </div>
                       <div className={styles.actionButtons}>
                         <div
@@ -397,46 +551,177 @@ const AdminDestinations = () => {
                   />
                 </span>
                 <h2 className={styles.title}>{modalTitle}</h2>
-                <form
-                  className={styles.modalForm}
-                  onSubmit={saveDestination}>
-                  <input
-                    type='text'
-                    name='name'
-                    onChange={handleInputChange}
-                    placeholder='City, Country'
-                    value={formData.name}
-                  />
-                  <input
-                    type='text'
-                    name='imageURL'
-                    onChange={handleInputChange}
-                    placeholder='Image URL '
-                    value={formData.imageURL}
-                  />
-                  <input
-                    type='text'
-                    name='price'
-                    onChange={handleInputChange}
-                    placeholder='Price'
-                    value={formData.price}
-                  />
-                  <textarea
-                    name='briefDescription'
-                    onChange={handleInputChange}
-                    placeholder='Brief description'
-                    value={formData.briefDescription}
-                    className={styles.briefDescription}
-                  />
-                  <textarea
-                    name='detailedDescription'
-                    onChange={handleInputChange}
-                    placeholder='Detailed description'
-                    value={formData.detailedDescription}
-                    className={styles.detailedDescription}
-                  />
-                  <button type='submit'>Save</button>
-                </form>
+                {isNewDestination ? (
+                  <form
+                    className={styles.modalForm}
+                    onSubmit={saveDestination}>
+                    <input
+                      type='text'
+                      name='name'
+                      onChange={handleInputChange}
+                      placeholder='City, Country'
+                    />
+
+                    <input
+                      type='text'
+                      name='continents'
+                      onChange={handleInputChange}
+                      placeholder='Continents (separated by commas)'
+                    />
+                    <input
+                      type='text'
+                      name='imageURL'
+                      onChange={handleInputChange}
+                      placeholder='Image URL '
+                    />
+                    <input
+                      type='text'
+                      name='price'
+                      onChange={handleInputChange}
+                      onKeyDown={event => {
+                        const allowedKeys = [
+                          'Backspace',
+                          'Delete',
+                          'Tab',
+                          'Escape',
+                          'ArrowLeft',
+                          'ArrowRight',
+                          'Home',
+                          'End',
+                        ];
+
+                        if (event.key === ' ') {
+                          event.preventDefault();
+                          return;
+                        }
+
+                        if (
+                          (event.ctrlKey || event.metaKey) &&
+                          ['x', 'c', 'v', 'a'].includes(event.key.toLowerCase())
+                        ) {
+                          return;
+                        }
+
+                        if (
+                          event.altKey ||
+                          (event.altGraphKey && event.key.length === 1)
+                        ) {
+                          event.preventDefault();
+                          return;
+                        }
+
+                        if (
+                          !allowedKeys.includes(event.key) &&
+                          isNaN(Number(event.key))
+                        ) {
+                          event.preventDefault();
+                        }
+                      }}
+                      placeholder='Price'
+                    />
+                    <textarea
+                      name='briefDescription'
+                      onChange={handleInputChange}
+                      placeholder='Brief description'
+                      className={styles.briefDescription}
+                    />
+                    <textarea
+                      name='detailedDescription'
+                      onChange={handleInputChange}
+                      placeholder='Detailed description'
+                      className={styles.detailedDescription}
+                    />
+                    <button type='submit'>Save</button>
+                  </form>
+                ) : (
+                  <form
+                    className={styles.modalForm}
+                    onSubmit={saveDestination}>
+                    <input
+                      type='text'
+                      name='name'
+                      onChange={handleInputChange}
+                      placeholder='City, Country'
+                      value={formData.name}
+                    />
+
+                    <input
+                      type='text'
+                      name='continents'
+                      onChange={handleInputChange}
+                      placeholder='Continents (separated by commas)'
+                      value={formData.continents}
+                    />
+                    <input
+                      type='text'
+                      name='imageURL'
+                      onChange={handleInputChange}
+                      placeholder='Image URL '
+                      value={formData.imageURL}
+                    />
+                    <input
+                      type='text'
+                      name='price'
+                      onChange={handleInputChange}
+                      onKeyDown={event => {
+                        const allowedKeys = [
+                          'Backspace',
+                          'Delete',
+                          'Tab',
+                          'Escape',
+                          'ArrowLeft',
+                          'ArrowRight',
+                          'Home',
+                          'End',
+                        ];
+
+                        if (event.key === ' ') {
+                          event.preventDefault();
+                          return;
+                        }
+
+                        if (
+                          (event.ctrlKey || event.metaKey) &&
+                          ['x', 'c', 'v', 'a'].includes(event.key.toLowerCase())
+                        ) {
+                          return;
+                        }
+
+                        if (
+                          event.altKey ||
+                          (event.altGraphKey && event.key.length === 1)
+                        ) {
+                          event.preventDefault();
+                          return;
+                        }
+
+                        if (
+                          !allowedKeys.includes(event.key) &&
+                          isNaN(Number(event.key))
+                        ) {
+                          event.preventDefault();
+                        }
+                      }}
+                      placeholder='Price'
+                      value={formData.price}
+                    />
+                    <textarea
+                      name='briefDescription'
+                      onChange={handleInputChange}
+                      placeholder='Brief description'
+                      value={formData.briefDescription}
+                      className={styles.briefDescription}
+                    />
+                    <textarea
+                      name='detailedDescription'
+                      onChange={handleInputChange}
+                      placeholder='Detailed description'
+                      value={formData.detailedDescription}
+                      className={styles.detailedDescription}
+                    />
+                    <button type='submit'>Save</button>
+                  </form>
+                )}
               </div>
             </div>
           )}

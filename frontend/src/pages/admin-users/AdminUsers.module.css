@@ -99,7 +99,7 @@ table {
   display: none;
 }
 
-@media (max-width: 870px) {
+@media (max-width: 990px) {
   .table {
     display: none;
   }
@@ -166,7 +166,16 @@ table {
   }
 }
 
-@media (min-width: 432px) and (max-width: 575px) {
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 30px;
+  }
+  .users {
+    width: 500px;
+  }
+}
+
+@media (max-width: 600px) {
   .mainTitle {
     font-size: 28px;
   }
@@ -175,7 +184,7 @@ table {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 460px) {
   .mainTitle {
     font-size: 25px;
   }

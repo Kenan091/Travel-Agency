@@ -5,11 +5,11 @@ import styles from './DestinationDetails.module.css';
 import { getDestination } from '../../redux/destinations/destinationsSlice';
 import { getReviews } from '../../redux/reviews/reviewsSlice';
 import Header from '../../components/header/Header';
-import Footer from '../../components/footer/Footer';
+import Review from '../../components/review/Review';
 import Spinner from '../../components/spinner/Spinner';
-import Carousel from '../../components/carousel/Carousel';
-import { RiCoinsFill } from 'react-icons/ri';
+import Footer from '../../components/footer/Footer';
 import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
+import { RiCoinsFill } from 'react-icons/ri';
 import ReactStars from 'react-rating-stars-component';
 
 const DestinationDetails = () => {
@@ -17,11 +17,6 @@ const DestinationDetails = () => {
 
   const dispatch = useDispatch();
   const { id } = useParams();
-
-  useEffect(() => {
-    dispatch(getDestination(id));
-    dispatch(getReviews(id));
-  }, [dispatch, id]);
 
   const destination = useSelector(state => state?.destination?.destination);
   const isLoadingDestination = useSelector(
@@ -31,9 +26,7 @@ const DestinationDetails = () => {
   const reviews = useSelector(state => state?.review?.reviews);
   const isLoadingReviews = useSelector(state => state?.review?.isLoading);
 
-  const destinationReviews = reviews?.filter(
-    review => review?.destination?._id === destination?._id
-  );
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const handleNavigateToBookings = id => {
     navigate(`/bookings/${id}`);
@@ -42,19 +35,27 @@ const DestinationDetails = () => {
 
   useEffect(() => {
     localStorage.setItem('destination', JSON.stringify(destination));
+
+    return () => {
+      localStorage.removeItem('destination'); // Delete item on unmount
+    };
   }, [destination]);
 
-  console.log(reviews);
+  useEffect(() => {
+    dispatch(getDestination(id));
+    dispatch(getReviews(id));
+  }, [dispatch, id]);
 
-  console.log(destination);
 
   return (
     <>
       <div style={{ backgroundColor: '#082831' }}>
-        <Header />
+        <div className={styles.headerDiv}>
+          <Header />
+        </div>
         <div className={styles.container}>
           <div className={styles.subcontainer}>
-            {isLoadingDestination || isLoadingReviews ? (
+            {isLoadingDestination ? (
               <Spinner
                 width={64}
                 height={64}
@@ -64,25 +65,25 @@ const DestinationDetails = () => {
                 <div className={styles.content}>
                   <div className={styles.topPart}>
                     <h1 className={styles.name}>{destination?.name}</h1>
-                    {destinationReviews.length > 0 && (
+                    {reviews?.length > 0 && (
                       <>
                         {destination?.averageRating ? (
                           <div className={styles.averageRating}>
                             <ReactStars
                               count={5}
-                              value={destination?.averageRating?.toFixed(2)}
-                              size={24}
-                              isHalf={true}
+                              value={parseFloat(destination?.averageRating)}
+                              size={window.innerWidth < 500 ? 20 : 24}
+                              isHalf={false}
                               emptyIcon={<IoStarOutline />}
                               halfIcon={<IoStarHalf />}
                               fullIcon={<IoStar />}
                               activeColor='#FFD233'
                               edit={false}
                             />
-                            {destinationReviews.length === 1 ? (
-                              <span>{`(${destinationReviews.length} review)`}</span>
+                            {reviews?.length === 1 ? (
+                              <span>{`(${reviews?.length} review)`}</span>
                             ) : (
-                              <span>{`(${destinationReviews.length} reviews)`}</span>
+                              <span>{`(${reviews?.length} reviews)`}</span>
                             )}
                           </div>
                         ) : (
@@ -110,7 +111,7 @@ const DestinationDetails = () => {
                         <div className={styles.price}>
                           <RiCoinsFill
                             size={32}
-                            color='rgb(255, 210, 51'
+                            color='rgb(255, 210, 51)'
                           />
                           <span>{destination.price} /per person</span>
                         </div>
@@ -125,14 +126,43 @@ const DestinationDetails = () => {
                     </div>
                   </div>
                 </div>
+                {isLoadingReviews ? (
+                  <Spinner
+                    width={64}
+                    height={64}
+                  />
+                ) : (
+                  <>
+                    {reviews && reviews?.length > 0 && (
+                      <div className={styles.reviewsDiv}>
+                        {reviews.length > 1 ? (
+                          <h2>Reviews ({`${reviews?.length} reviews`})</h2>
+                        ) : (
+                          <h2>Reviews ({`${reviews?.length} review`})</h2>
+                        )}
+                        <ul
+                          className={`${
+                            reviews?.length > 4 ? styles.scrollable : ''
+                          }`}>
+                          {reviews?.map(review => {
+                            return (
+                              <Review
+                                key={review._id}
+                                review={review ? review : null}
+                                user={user ? user : null}
+                              />
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             ) : (
               <p style={{ textAlign: 'center' }}>
                 There is no destination with id: {id}
               </p>
-            )}
-            {destinationReviews && destinationReviews.length > 0 && (
-              <Carousel items={destinationReviews} />
             )}
           </div>
         </div>

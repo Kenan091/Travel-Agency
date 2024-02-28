@@ -36,6 +36,11 @@
   cursor: default;
 }
 
+.pageLink:focus {
+  background-color: var(--dark-blue);
+  color: var(--light-gray);
+}
+
 @media (max-width: 430px) {
   .pageLink {
     padding: 10px;

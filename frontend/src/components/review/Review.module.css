@@ -1,0 +1,184 @@
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --darker-blue: #061e25;
+  --dark-blue: #082831;
+  --light-green: #83ab55;
+  --light-gray: #d8e1ec;
+  --light-blue: #11576f;
+}
+
+.review {
+  width: 100%;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.review:not(:last-child) {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid #274448;
+}
+
+.userInfo {
+  list-style: none;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 0;
+}
+
+.creationDate {
+  font-size: 12px;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.comment {
+  margin-left: 2.5rem;
+  font-size: 16px;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0 0 10px;
+  gap: 1rem;
+}
+
+.buttonsContainer .actionButton:first-child {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.buttonsContainer .actionButton:last-child {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.editingPreview {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.editingPreview > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.editingPreview .comment {
+  font-size: 16px;
+  background-color: var(--darker-blue);
+  color: var(--light-gray);
+  min-width: max-content;
+  min-height: max-content;
+  margin-left: 2.4rem;
+  outline: none;
+  border: none;
+}
+
+.editingPreview > div > div {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.editingPreview .editButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+.editingPreview button {
+  font-weight: bold;
+  width: 60px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.saveButton {
+  background-color: var(--light-green);
+}
+
+.cancelButton {
+  color: var(--darker-blue);
+}
+
+@media (max-width: 650px) {
+  .review {
+    padding: 10px 0;
+  }
+
+  .userName {
+    font-size: 12px;
+  }
+
+  .creationDate {
+    font-size: 10px;
+  }
+
+  .comment {
+    font-size: 14px;
+  }
+
+  .buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .buttonsContainer .actionButton:first-child {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .buttonsContainer .actionButton:last-child {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .editingPreview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .editingPreview > div {
+    margin-left: 0;
+  }
+
+  .editingPreview .comment {
+    font-size: 14px;
+  }
+
+  .editingPreview button {
+    font-size: 11px;
+    font-weight: bold;
+    width: 48px;
+    height: 32px;
+    border-radius: 20px;
+  }
+}

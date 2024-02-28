@@ -7,29 +7,19 @@ import { toast } from 'react-toastify';
 import Header from '../../components/header/Header';
 import Spinner from '../../components/spinner/Spinner';
 import Footer from '../../components/footer/Footer';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getDestination } from '../../redux/destinations/destinationsSlice';
+import { useNavigate } from 'react-router-dom';
 import ReactStars from 'react-rating-stars-component';
 import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
+import getRegularDate from '../../helpers/useGetDate';
+import CustomSelect from '../../components/custom-select/CustomSelect';
 
 const Experiences = () => {
-  // const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const [formData, setFormData] = useState(() => {
-  //   const storedFormData = localStorage.getItem('formData');
-  //   return storedFormData
-  //     ? JSON.parse(storedFormData)
-  //     : {
-  //         destinationId: id,
-  //         title: '',
-  //         comment: '',
-  //         rating: '',
-  //       };
-  // });
   const [formData, setFormData] = useState({
     destinationId: '',
+    bookingId: '',
     title: '',
     comment: '',
     rating: '',
@@ -43,18 +33,23 @@ const Experiences = () => {
 
   const { user } = useSelector(state => state?.auth);
   const isLoadingUser = useSelector(state => state?.auth?.isLoading);
+  const isErrorUser = useSelector(state => state?.auth?.isError);
+  const userErrorMessage = useSelector(state => state?.auth?.message);
   const userId = user?.user?._id;
 
   const bookings = useSelector(state => state?.booking?.bookings);
+  const isErrorBookings = useSelector(state => state?.booking?.isError);
+  const bookingsErrorMessage = useSelector(state => state?.booking?.message);
   const userBookings =
     bookings?.filter(booking => booking.user._id === userId) || [];
-  const uniqueDestinationIds = [];
 
-  const handleInputChange = e => {
+  const handleInputChange = (e, bookingId) => {
     const value =
       e.target.name === 'rating' ? parseFloat(e.target.value) : e.target.value;
     setFormData({
       ...formData,
+      destinationId: formData.destinationId,
+      bookingId: bookingId || formData.bookingId || '',
       [e.target.name]: value,
     });
   };
@@ -62,7 +57,12 @@ const Experiences = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!formData.title || !formData.comment || !formData.rating) {
+    if (
+      !formData.title ||
+      !formData.comment ||
+      !formData.rating ||
+      !formData.bookingId
+    ) {
       toast.warn('Each field needs to be entered!');
       return;
     }
@@ -85,6 +85,7 @@ const Experiences = () => {
 
       setFormData({
         destinationId: '',
+        bookingId: '',
         title: '',
         comment: '',
         rating: '',
@@ -98,11 +99,18 @@ const Experiences = () => {
     }
   };
 
-  const destination = useSelector(state => state?.destination?.destination);
+  // const destination = useSelector(state => state?.destination?.destination);
 
   const isLoadingDestination = useSelector(
     state => state?.destination?.isLoading
   );
+
+  const options = userBookings.map(booked => ({
+    value: `${booked.destination._id} ${booked._id}`,
+    label: `${booked.destination.name} \n ${getRegularDate(
+      booked.departureDate
+    )} - ${getRegularDate(booked.returnDate)}`,
+  }));
 
   useEffect(() => {
     dispatch(getBookings());
@@ -110,12 +118,29 @@ const Experiences = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    if (isErrorUser) {
+      toast.error(userErrorMessage);
+    }
+
+    if (isErrorReviews) {
+      toast.error(reviewsErrorMessage);
+    }
+
+    if (isErrorBookings) {
+      toast.error(bookingsErrorMessage);
+    }
+  }, [
+    isErrorReviews,
+    isErrorBookings,
+    reviewsErrorMessage,
+    bookingsErrorMessage,
+  ]);
+
+  useEffect(() => {
     localStorage.setItem('reviews', JSON.stringify(reviews));
     localStorage.setItem('formData', JSON.stringify(formData));
     localStorage.setItem('user', JSON.stringify(user));
   }, [formData, user]);
-
-  console.log(formData.destinationId, formData.rating);
 
   return (
     <>
@@ -139,30 +164,23 @@ const Experiences = () => {
                       <form
                         onSubmit={handleSubmit}
                         className={styles.reviewForm}>
-                        <select
-                          className={styles.reviewInput}
-                          name='destinationId'
-                          onChange={handleInputChange}
-                          value={formData.destinationId}>
-                          <option value=''>Select Destination</option>
-                          {userBookings.map(booked => {
-                            if (
-                              !uniqueDestinationIds.includes(
-                                booked.destination._id
-                              )
-                            ) {
-                              uniqueDestinationIds.push(booked.destination._id);
-                              return (
-                                <option
-                                  key={booked._id}
-                                  value={booked.destination._id}>
-                                  {booked.destination.name}
-                                </option>
-                              );
-                            }
-                            return null;
-                          })}
-                        </select>
+                        <CustomSelect
+                          options={[{ value: '', label: 'Select' }, ...options]}
+                          value={`${formData.destinationId} ${formData.bookingId}`}
+                          onChange={value => {
+                            const [destinationId, bookingId] = value.split(' ');
+                            handleInputChange(
+                              {
+                                target: {
+                                  name: 'destinationId',
+                                  value: destinationId,
+                                },
+                              },
+                              bookingId
+                            );
+                          }}
+                          optionHeight='50px'
+                        />
                         <input
                           type='text'
                           name='title'
@@ -184,7 +202,7 @@ const Experiences = () => {
                           <ReactStars
                             count={5}
                             size={32}
-                            isHalf={true}
+                            isHalf={false}
                             emptyIcon={<IoStarOutline />}
                             halfIcon={<IoStarHalf />}
                             fullIcon={<IoStar />}

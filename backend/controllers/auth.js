@@ -18,9 +18,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     role,
   });
 
-  // user.validate(function (err) {
-  //   console.log(err.errors['password'].message);
-  // });
   try {
     await user.validate();
   } catch (err) {
@@ -128,9 +125,6 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   const resetUrl = `${req.protocol}://localhost:5173/auth/resetpassword/${resetToken}`;
-  // const resetUrl = `${req.protocol}://${req.get(
-  //   'host'
-  // )}/auth/resetpassword/${resetToken}`;
 
   const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please click on link: \n\n ${resetUrl}`;
 
@@ -202,12 +196,6 @@ const sendTokenResponse = (user, statusCode, res) => {
   }
 
   const userObject = user.toObject();
-
-  const responseData = {
-    success: true,
-    token,
-    // user: userObject,
-  };
 
   res
     .status(statusCode)

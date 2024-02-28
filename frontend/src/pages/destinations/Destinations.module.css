@@ -378,3 +378,40 @@
     color: var(--light-gray);
   }
 }
+
+@media (max-width: 360px) {
+  .destinationsContainer .mainTitle {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .destinations {
+    padding: 0;
+  }
+
+  .destinationInfo {
+    text-align: center;
+  }
+
+  .destinationInfo h3 {
+    width: 220px;
+    text-align: center;
+    margin-bottom: 0;
+  }
+
+  .destinationCard {
+    width: 240px;
+  }
+
+  .destinationCard img {
+    width: 240px;
+    height: 160px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 40px 10px rgba(0, 0, 0, 0.1);
+    align-self: center;
+  }
+
+  .destinationBottomPart {
+    margin-top: 2.2rem;
+  }
+}

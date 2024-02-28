@@ -8,7 +8,7 @@ import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
 import { IoTrash } from 'react-icons/io5';
 import Pagination from '../../components/pagination/Pagination';
-import getRegularDate from '../../helpers/useGetRegularDate';
+import getRegularDate from '../../helpers/useGetDate';
 
 const AdminUsers = () => {
   const dispatch = useDispatch();
@@ -35,16 +35,17 @@ const AdminUsers = () => {
 
   const onDelete = userId => {
     dispatch(deleteUser(userId));
-    console.log('Deleted', userId);
   };
 
   useEffect(() => {
     dispatch(getUsers());
+  }, [dispatch]);
 
+  useEffect(() => {
     if (isError) {
       toast.error(message);
     }
-  }, [dispatch, isError, message]);
+  }, [isError, message]);
 
   return (
     <>

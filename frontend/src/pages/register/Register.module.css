@@ -76,6 +76,7 @@
   background-color: var(--light-green);
   color: var(--dark-blue);
   font-size: 1rem;
+  font-weight: bold;
   width: 200px;
   padding: 0.75rem 0;
   border: 2px solid var(--light-green);
@@ -90,6 +91,24 @@
 
   .form input {
     width: 200px;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .text {
+    font-size: 0.85rem;
+  }
+
+  .text span {
+    font-size: 0.85rem;
+  }
+
+  .submitButton {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 322px) {
+  .title {
+    margin-bottom: 0;
   }
 }

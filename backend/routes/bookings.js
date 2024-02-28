@@ -21,7 +21,7 @@ router
     advancedResults(Booking, [
       {
         path: 'destination',
-        select: 'name briefDescription imageURL price availability',
+        select: 'name continents briefDescription imageURL price isPopular ',
       },
       { path: 'user', select: 'name email' },
     ]),

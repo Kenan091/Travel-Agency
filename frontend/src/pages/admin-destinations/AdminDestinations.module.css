@@ -24,7 +24,7 @@ table {
   justify-content: center;
   align-items: center;
   padding-top: 5rem;
-  min-height: 100vh;
+  min-height: 140vh;
 }
 
 .mainTitle {
@@ -147,9 +147,9 @@ table {
   left: 50%;
   transform: translateX(-50%);
   width: 600px;
-  height: 970px;
+  height: 1040px;
   border-radius: 9px;
-  z-index: 101;
+  z-index: 10200;
 }
 
 .modal.open {
@@ -236,6 +236,10 @@ table {
   .headerDiv {
     position: relative;
     z-index: 1002;
+  }
+
+  .container {
+    min-height: 152vh;
   }
 
   .table {
@@ -350,7 +354,17 @@ table {
 
 @media (max-width: 659px) {
   .destinations {
-    width: 300px;
+    width: 400px;
+  }
+
+  .accordionItem {
+    height: 500px;
+  }
+
+  .showDetails .accordionContent {
+    justify-content: center;
+    text-align: center;
+    height: 500px;
   }
 
   .accordionContent {
@@ -362,6 +376,14 @@ table {
   .accordionContent .accordionText {
     display: flex;
     flex-direction: column;
+  }
+
+  .accordionContent .accordionText:first-child {
+    font-size: 24px;
+  }
+
+  .accordionContent .accordionText:nth-child(3) {
+    font-size: 12px;
   }
 }
 
@@ -377,7 +399,7 @@ table {
   .accordionItem {
     position: relative;
     border-bottom: 2px solid #ccc;
-    height: 500px;
+    height: 520px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -476,13 +498,11 @@ table {
 
   .modal {
     width: 300px;
-    height: 920px;
+    height: 960px;
   }
 
   .title {
-    color: var(--dark-blue);
-    text-transform: uppercase;
-    margin-top: 4rem;
+    font-size: 20px;
   }
 
   .modalForm {
@@ -491,12 +511,12 @@ table {
 
   .modalForm input {
     font-size: 12px;
-    width: 16rem;
+    width: 13rem;
   }
 
   .modalForm textarea {
     font-size: 12px;
-    width: 15.7rem;
+    width: 12.7rem;
   }
 
   .modalForm .detailedDescription {

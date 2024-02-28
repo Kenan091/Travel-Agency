@@ -9,6 +9,13 @@ const DestinationSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, "Name can't have more than 100 characters"],
   },
+  continents: {
+    type: [String],
+    required: [
+      true,
+      'Please add one or more continents where tne destination is located',
+    ],
+  },
   slug: String,
   briefDescription: {
     type: String,
@@ -31,15 +38,12 @@ const DestinationSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add a price'],
   },
-  // availability: {
-  //   type: Boolean,
-  //   required: [true, 'Please add an availability'],
-  // },
   averageRating: {
     type: Number,
     min: [1, 'Rating must be at least 1'],
     max: [5, 'Rating cannot be more than 5'],
   },
+  isPopular: Boolean,
   reservations: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,7 @@
 const asyncHandler = require('../middleware/async');
 const Booking = require('../models/Booking');
 const Destination = require('../models/Destination');
+const Review = require('../models/Review');
 const ErrorResponse = require('../utils/errorResponse');
 // @desc Get all bookings
 // @route GET /bookings
@@ -93,42 +94,6 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: reservation });
 });
 
-// @desc Check if destination is available for selected dates
-// @route POST /bookings/check/:destinationId
-// @access Private
-
-// exports.checkDestinationBooking = asyncHandler(async (req, res, next) => {
-//   req.body.destination = req.params.destinationId;
-
-//   const destination = await Destination.findById(req.params.destinationId);
-
-//   if (!destination) {
-//     return next(
-//       new ErrorResponse(
-//         `Destination with the id of ${req.params.destinationId} not found`
-//       ),
-//       404
-//     );
-//   }
-
-//   const reservationsWithinRange = await Booking.find({
-//     destination: destination._id,
-//     returnDate: { $lt: req.body.departureDate },
-//     departureDate: { $gt: req.body.returnDate },
-//     numberOfTravelers: req.body.numberOfTravelers,
-//   });
-
-//   if (reservationsWithinRange.length >= 50) {
-//     return res.status(200).json({
-//       message: 'Reservation limit for this destination has been reached',
-//     });
-//   } else {
-//     console.log(reservationsWithinRange);
-//     return res.status(200).json({
-//       message: `You have ${50 - reservationsWithinRange.length} seats left`,
-//     });
-//   }
-// });
 exports.checkDestinationBooking = asyncHandler(async (req, res, next) => {
   req.body.destination = req.params.destinationId;
 
@@ -241,43 +206,25 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Delete associated review
+  await Review.deleteOne({ booking: req.params.id });
+
+  // Remove booking from destination reservations
   destination.reservations = destination.reservations.filter(
     reservationId => reservationId.toString() !== booking._id.toString()
   );
 
+  // Update average rating
+  const reviews = await Review.find({ destination: destination._id });
+  const totalReviews = reviews.length;
+  const totalRating = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+  destination.averageRating =
+    totalReviews > 0 ? totalRating / totalReviews : undefined;
+
   await destination.save();
 
-  await booking.deleteOne();
+  // Delete booking
+  await Booking.findByIdAndDelete(req.params.id);
 
   res.status(200).json({ success: true, data: { id: booking._id } });
 });
-
-// // Function to check destination availability
-// async function checkAvailability(destination, arrivalDate, departureDate) {
-//   // Check if any booked dates within the specified range
-//   const bookedDatesInRange = await Booking.find({
-//     destination: destination._id,
-//     arrivalDate: { $lt: departureDate },
-//     departureDate: { $gt: arrivalDate },
-//   });
-
-//   // Check if the number of reservations within the range exceeds the limit
-//   if (destination.totalReservations + bookedDatesInRange.length >= 50) {
-//     return false;
-//   }
-
-//   return true;
-// }
-
-// // Function to update destination availability
-// async function updateDestinationAvailability(
-//   destination,
-//   arrivalDate,
-//   departureDate
-// ) {
-//   await Destination.findByIdAndUpdate(destination._id, {
-//     $addToSet: {
-//       unavailableDates: { $gte: arrivalDate, $lte: departureDate },
-//     },
-//   });
-// }

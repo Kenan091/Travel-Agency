@@ -136,7 +136,7 @@ const bookingsSlice = createSlice({
       })
       .addCase(getBooking.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.booking = action.payload.booking;
+        state.booking = action.payload;
       })
       .addCase(getBooking.rejected, (state, action) => {
         state.isLoading = false;
@@ -174,7 +174,7 @@ const bookingsSlice = createSlice({
       .addCase(updateBooking.fulfilled, (state, action) => {
         state.isLoading = false;
         const updatedBooking = action.payload;
-        const index = state.bookings.findIndex(
+        const index = state?.bookings?.findIndex(
           b => b._id === updatedBooking._id
         );
         if (index !== -1) {
@@ -191,9 +191,10 @@ const bookingsSlice = createSlice({
       })
       .addCase(deleteBooking.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload);
         const deletedBookingId = action.payload;
-        state.bookings = state.bookings.filter(b => b._id !== deletedBookingId);
+        state.bookings = state?.bookings?.filter(
+          b => b._id !== deletedBookingId
+        );
       })
       .addCase(deleteBooking.rejected, (state, action) => {
         state.isLoading = false;

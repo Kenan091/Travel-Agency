@@ -120,9 +120,22 @@ table {
   display: none;
 }
 
+.noBookings {
+  font-size: 1.5rem;
+  background-color: var(--light-gray);
+  color: var(--darker-blue);
+  padding: 2rem;
+  border-radius: 9px;
+}
+
 @media (max-width: 1221px) {
   .headerDiv {
     width: 100%;
+  }
+
+  .noBookings {
+    width: 600px;
+    font-size: 22px;
   }
 }
 
@@ -195,7 +208,25 @@ table {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 740px) {
+  .bookings {
+    width: 500px;
+  }
+
+  .noBookings {
+    width: 350px;
+    font-size: 18px;
+    text-align: justify;
+  }
+}
+
+@media (max-width: 548px) {
+  .bookings {
+    width: 400px;
+  }
+}
+
+@media (max-width: 431px) {
   .mainTitle {
     font-size: 25px;
   }
@@ -215,5 +246,18 @@ table {
 
   .actionButtons {
     padding: 1rem 0;
+  }
+
+  .noBookings {
+    width: 300px;
+    font-size: 15px;
+    padding: 1rem;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 362px) {
+  .noBookings {
+    width: 250px;
   }
 }

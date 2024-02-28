@@ -82,6 +82,7 @@ button {
   background-color: var(--dark-blue);
   color: var(--light-green);
   font-size: 14px;
+  font-weight: bold;
   padding: 10px 35px;
   border: 2px solid var(--light-green);
   border-radius: 20px;
@@ -92,6 +93,7 @@ button {
   background-color: var(--light-green);
   color: var(--dark-blue);
   font-size: 14px;
+  font-weight: bold;
   padding: 10px 35px;
   border: 2px solid var(--light-green);
   border-radius: 20px;

@@ -10,6 +10,7 @@ const ReviewSchema = new mongoose.Schema({
   comment: {
     type: String,
     required: [true, 'Please add a comment'],
+    maxlength: [500, "Comment can't have more than 500 characters"],
   },
   rating: {
     type: Number,
@@ -31,9 +32,14 @@ const ReviewSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  booking: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Booking',
+    required: true,
+  },
 });
 
-ReviewSchema.index({ destination: 1, user: 1 }, { unique: true });
+ReviewSchema.index({ booking: 1 }, { unique: true });
 
 ReviewSchema.statics.getAverageRating = async function (destinationId) {
   const obj = await this.aggregate([
@@ -58,10 +64,38 @@ ReviewSchema.statics.getAverageRating = async function (destinationId) {
 };
 
 ReviewSchema.post('save', async function () {
+  console.log('Review saved, updating average rating...');
   await this.constructor.getAverageRating(this.destination);
 });
 
-ReviewSchema.pre('deleteOne', async function () {
+// Pre-remove hook
+ReviewSchema.pre('remove', async function (next) {
+  console.log('Review about to be removed, updating average rating...');
+  try {
+    // Update average rating by removing the rating of this review
+    const destinationId = this.destination;
+    const reviewRating = this.rating;
+
+    const destination = await this.model('Destination').findById(destinationId);
+    if (!destination) {
+      throw new Error(`Destination with ID ${destinationId} not found`);
+    }
+
+    // Update the totalRating and count
+    destination.totalRating -= reviewRating;
+    destination.ratingCount--;
+
+    await destination.save();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Post-remove hook
+ReviewSchema.post('remove', async function () {
+  console.log('Review removed, average rating updated.');
+  // After removal, you might want to recalculate the average rating
   await this.constructor.getAverageRating(this.destination);
 });
 

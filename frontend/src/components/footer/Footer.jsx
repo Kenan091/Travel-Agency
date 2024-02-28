@@ -12,10 +12,6 @@ const Footer = () => {
         src='../images/logoFooter.png'
         alt='Travelist logo without text'
       />
-      {/* <ul className={styles.footerLinks}>
-        <li>Privacy policy</li>
-        <li>Terms of service</li>
-      </ul> */}
     </div>
   );
 };

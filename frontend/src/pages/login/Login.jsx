@@ -20,7 +20,6 @@ const Login = () => {
   const { user, isError } = useSelector((state) => state?.auth);
   const message = useSelector((state) => state?.auth?.message);
 
-  // const userRole = user?.responseData?.user?.role;
   const userRole = user?.user?.role;
 
   useEffect(() => {

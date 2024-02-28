@@ -23,20 +23,31 @@ const ForgotPassword = () => {
       if (isError) {
         toast.error(message);
       } else {
-        toast.info(`Email sent to ${email}. Check your inbox for reset url!`);
+        toast.info(
+          "An email with instructions to reset your password has been sent to the provided email address. Please check your inbox. If you don't see the email within a few minutes, please check your spam folder."
+        );
       }
     }
   };
 
-  console.log(email);
-
   return (
     <div className={styles.container}>
-      <div className={styles.backButton}>
-        <Link to='/auth/login'>
-          <IoArrowBack
-            size={32}
-            color='#d8e1ec'
+      <div className={styles.topPart}>
+        <div className={styles.backButton}>
+          <Link to='/auth/login'>
+            <IoArrowBack
+              size={32}
+              color='#d8e1ec'
+            />
+          </Link>
+        </div>
+        <Link
+          to='/'
+          className={styles.logoContainer}>
+          <img
+            src='../images/logo.png'
+            alt='Travelist logo'
+            className={styles.logo}
           />
         </Link>
       </div>

@@ -107,6 +107,10 @@ table {
   border-bottom: 2px solid var(--light-gray);
 }
 
+.accordionContainer {
+  display: none;
+}
+
 .noFeedback {
   font-size: 1.5rem;
   background-color: var(--light-gray);
@@ -115,13 +119,82 @@ table {
   border-radius: 9px;
 }
 
+@media (max-width: 1370px) {
+  .noFeedback {
+    width: 800px;
+  }
+}
+
 @media (max-width: 1024px) {
   .mainTitle {
     font-size: 35px;
   }
 
+  .headerDiv {
+    position: relative;
+    z-index: 1003;
+  }
+
+  .table {
+    display: none;
+  }
+
   .feedbacks {
     width: 600px;
+  }
+
+  .tableDataCell {
+    background-color: transparent;
+  }
+
+  .accordionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: normal;
+  }
+
+  .accordionItem {
+    background-color: rgba(8, 40, 49, 0.63);
+    padding: 2rem 1rem;
+    border-bottom: 2px solid #ccc;
+  }
+
+  .accordionItem:last-child {
+    border-bottom: none;
+  }
+
+  .accordionContent {
+    position: relative;
+    color: var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    padding: 10px;
+  }
+
+  .accordionContent .accordionText:nth-child(3) {
+    text-align: justify;
+  }
+
+  .accordionContent .accordionText {
+    color: var(--light-gray);
+    padding: 1rem 0;
+  }
+
+  .actionButtons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .actionButton {
+    cursor: pointer;
+  }
+
+  .actionButton:hover svg {
+    transform: scale(1.1);
   }
 
   .noFeedback {
@@ -135,6 +208,10 @@ table {
     font-size: 30px;
   }
 
+  .feedbacks {
+    width: 500px;
+  }
+
   .noFeedback {
     width: 350px;
     font-size: 18px;
@@ -142,9 +219,32 @@ table {
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 548px) {
+  .feedbacks {
+    width: 400px;
+  }
+}
+
+@media (max-width: 468px) {
   .mainTitle {
     font-size: 25px;
+  }
+
+  .feedbacks {
+    width: 340px;
+  }
+
+  .accordionItem {
+    padding: 1rem;
+  }
+
+  .accordionText {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .actionButtons {
+    padding: 1rem 0;
   }
 
   .noFeedback {
@@ -152,5 +252,15 @@ table {
     font-size: 15px;
     padding: 1rem;
     margin-top: 0;
+  }
+}
+
+@media (max-width: 390px) {
+  .feedbacks {
+    width: 252px;
+  }
+
+  .noFeedback {
+    width: 250px;
   }
 }

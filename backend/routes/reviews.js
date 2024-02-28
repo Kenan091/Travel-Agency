@@ -20,7 +20,7 @@ router
     advancedResults(Review, [
       {
         path: 'destination',
-        select: 'name briefDescription imageURL price availability',
+        select: 'name briefDescription imageURL price',
       },
       { path: 'user', select: 'name email' },
     ]),
@@ -30,7 +30,7 @@ router
 router
   .route('/:id')
   .get(getReview)
-  .put(updateReview)
+  .put(protect, authorize('registeredUser', 'admin'), updateReview)
   .delete(protect, authorize('registeredUser', 'admin'), deleteReview);
 
 module.exports = router;

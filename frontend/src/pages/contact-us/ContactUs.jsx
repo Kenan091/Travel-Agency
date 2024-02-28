@@ -20,7 +20,6 @@ const ContactUs = () => {
   const form = useRef();
 
   const dispatch = useDispatch();
-  // const feedbackList = useSelector(selectFeedbackList);
 
   const [feedbackData, setFeedbackData] = useState({
     user_name: '',
@@ -28,31 +27,6 @@ const ContactUs = () => {
     user_phoneNumber: '',
     message: '',
   });
-
-  // const sendEmail = e => {
-  //   e.preventDefault();
-
-  //   emailjs
-  //     .sendForm(
-  //       'service_3lzma29',
-  //       'template_80r34fh',
-  //       form.current,
-  //       '6Hyj3d8cOnafn4BSu'
-  //     )
-  //     .then(
-  //       result => {
-  //         console.log(result.text);
-  //         toast.success(
-  //           "Your message has been successfully sent! We'll get back to you shortly"
-  //         );
-  //         e.target.reset();
-  //       },
-  //       error => {
-  //         console.log(error.text);
-  //         toast.error(error.text);
-  //       }
-  //     );
-  // };
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -82,14 +56,12 @@ const ContactUs = () => {
       )
       .then(
         result => {
-          console.log(result.text);
           toast.success(
             "Your message has been successfully sent! We'll get back to you shortly"
           );
           e.target.reset();
         },
         error => {
-          console.log(error.text);
           toast.error(error.text);
         }
       );

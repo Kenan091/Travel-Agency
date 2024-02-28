@@ -8,7 +8,7 @@ import {
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
-import getRegularDate from '../../helpers/useGetRegularDate';
+import getRegularDate from '../../helpers/useGetDate';
 import Pagination from '../../components/pagination/Pagination';
 import { IoTrash } from 'react-icons/io5';
 
@@ -29,11 +29,7 @@ const AdminFeedback = () => {
 
   const numberOfPages = Math.ceil(feedbacks?.length / recordsPerPage);
 
-  console.log(isLoadingFeedbacks);
-  console.log(feedbacks);
-
   const onDelete = feedbackId => {
-    console.log('Ready for deleting', feedbackId);
     dispatch(deleteFeedback(feedbackId));
   };
 
@@ -107,6 +103,51 @@ const AdminFeedback = () => {
                 </>
               </tbody>
             </table>
+            <div className={styles.accordionContainer}>
+              {isLoadingFeedbacks ? (
+                <Spinner
+                  width={64}
+                  height={64}
+                />
+              ) : (
+                <>
+                  {currentRecords?.map(feedback => (
+                    <div
+                      key={feedback?._id}
+                      className={styles.accordionItem}>
+                      <div className={styles.accordionContent}>
+                        <div className={styles.accordionText}>
+                          <strong>Name: </strong>
+                          {feedback?.user_name}
+                        </div>
+                        <div className={styles.accordionText}>
+                          <strong>Date created: </strong>
+                          {getRegularDate(feedback?.createdAt)}
+                        </div>
+                        <div className={styles.accordionText}>
+                          <strong>Email: </strong>
+                          {feedback?.user_email}
+                        </div>
+                        <div className={styles.accordionText}>
+                          <strong>Message: </strong>
+                          {feedback?.message}
+                        </div>
+                        <div className={styles.actionButtons}>
+                          <div
+                            className={styles.actionButton}
+                            onClick={() => onDelete(feedback?._id)}>
+                            <IoTrash
+                              size={28}
+                              color='#ff1e1e'
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
             <Pagination
               numberOfPages={numberOfPages}
               currentPage={currentPage}

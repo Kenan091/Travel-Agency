@@ -17,10 +17,6 @@ const FeedbackSchema = new mongoose.Schema({
   user_phoneNumber: {
     type: String,
     required: [true, 'Please add a phone number'],
-    // match: [
-    //   /^\+(?:[0-9]●?){6,14}[0-9]$/,
-    //   'Please add a valid phone number starting with a + sign',
-    // ],
   },
   message: {
     type: String,

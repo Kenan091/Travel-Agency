@@ -25,8 +25,6 @@ const Booking = () => {
     numberOfTravelers: '',
   });
 
-  console.log(bookingFormData.returnDate, bookingFormData.departureDate);
-
   const [paymentFormData, setPaymentFormData] = useState({
     cardHolderFullName: '',
     cardNumber: '',
@@ -48,8 +46,6 @@ const Booking = () => {
     state => state?.destination?.isLoading
   );
   const bookingMessage = useSelector(state => state?.booking?.message);
-
-  console.log(bookingMessage);
 
   const totalPrice = destination?.price * parseInt(numberOfTravelers);
 
@@ -162,7 +158,6 @@ const Booking = () => {
         position: 'top-right',
         autoClose: true,
         onClose: () => {
-          console.log('Toast closed');
           setTimeout(() => {
             navigate('/');
           }, 1000);
@@ -180,24 +175,14 @@ const Booking = () => {
           returnDate: returnDate,
         })
       );
+    }
+  }, [dispatch, id, bookingFormData.departureDate, bookingFormData.returnDate]);
 
+  useEffect(() => {
+    if (bookingMessage !== '') {
       toast.info(bookingMessage);
     }
-  }, [
-    dispatch,
-    id,
-    bookingFormData.departureDate,
-    bookingFormData.returnDate,
-    bookingMessage,
-  ]);
-
-  console.log(returnDate, departureDate, numberOfTravelers);
-  console.log(
-    cardHolderFullName,
-    cardNumber,
-    cardVerificationValue,
-    cardExpirationDate
-  );
+  }, [bookingMessage, departureDate, returnDate]);
 
   return (
     <>
@@ -261,9 +246,7 @@ const Booking = () => {
                         type='text'
                         name='numberOfTravelers'
                         onChange={e => {
-                          let value = e.target.value;
-
-                          value = value.replace(/[^0-9]/g, '');
+                          const value = e.target.value.replace(/[^0-9]/g, '');
 
                           if (value !== '' && parseInt(value, 10) > 0) {
                             setBookingFormData(prevData => ({
@@ -276,6 +259,41 @@ const Booking = () => {
                               numberOfTravelers: '',
                             }));
                           }
+                        }}
+                        onKeyDown={e => {
+                          const isCtrlPressed = e.ctrlKey || e.metaKey; // For Mac Command key
+
+                          // Allow Ctrl+C (copy), Ctrl+V (paste), Ctrl+X (cut), Ctrl+A (select all)
+                          if (
+                            isCtrlPressed &&
+                            ['c', 'v', 'x', 'a'].includes(e.key.toLowerCase())
+                          ) {
+                            return;
+                          }
+
+                          if (
+                            e.altKey ||
+                            (e.altGraphKey && e.key.length === 1)
+                          ) {
+                            e.preventDefault();
+                            return;
+                          }
+
+                          // Allow digits, Backspace, Delete, Arrow keys, and Tab
+                          if (
+                            /[0-9\b]|ArrowLeft|ArrowRight|Backspace|Delete|Tab/.test(
+                              e.key
+                            ) ||
+                            // Allow Ctrl+ combinations
+                            (isCtrlPressed &&
+                              ['c', 'v', 'x', 'a'].includes(
+                                e.key.toLowerCase()
+                              ))
+                          ) {
+                            return;
+                          }
+
+                          e.preventDefault(); // Prevent the default action for other keys
                         }}
                         placeholder='1'
                       />
@@ -298,14 +316,90 @@ const Booking = () => {
                       type='text'
                       name='cardHolderFullName'
                       placeholder='Cardholder Name and Surname'
-                      onChange={e => handleInputChange(e)}
+                      // onChange={e => handleInputChange(e)}
+                      onChange={e => {
+                        let value = e.target.value.replace(
+                          /[^a-zA-ZčćžšđČĆŽŠĐ\s]/g,
+                          ''
+                        ); // Remove any non-letter characters except space and Bosnian letters
+
+                        // Prevent space as the first character
+                        if (value.startsWith(' ')) {
+                          value = value.trimStart();
+                        }
+
+                        // Ensure only one space after each word
+                        value = value.replace(/\s+/g, ' ');
+
+                        // Capitalize the first letter of each word
+                        value = value.replace(/\b\w/g, char =>
+                          char.toUpperCase()
+                        );
+
+                        setPaymentFormData(prevData => ({
+                          ...prevData,
+                          cardHolderFullName: value,
+                        }));
+                      }}
+                      onKeyDown={e => {
+                        const isCtrlPressed = e.ctrlKey || e.metaKey;
+
+                        // Allow Ctrl+C (copy), Ctrl+V (paste), Ctrl+X (cut), Ctrl+A (select all)
+                        if (
+                          isCtrlPressed &&
+                          ['c', 'v', 'x', 'a'].includes(e.key.toLowerCase())
+                        ) {
+                          return;
+                        }
+
+                        // Allow letters, Backspace, Arrow keys, and Tab
+                        if (
+                          /[a-zA-ZčćžšđČĆŽŠĐ\s\b]|ArrowLeft|ArrowRight|Delete|Tab/.test(
+                            e.key
+                          ) ||
+                          // Allow Ctrl+ combinations
+                          (isCtrlPressed &&
+                            ['c', 'v', 'x', 'a'].includes(e.key.toLowerCase()))
+                        ) {
+                          return;
+                        }
+
+                        e.preventDefault(); // Prevent the default action for other keys
+                      }}
                       value={cardHolderFullName}
                     />
                     <input
                       type='text'
                       name='cardNumber'
-                      placeholder='Card Number'
+                      placeholder='Card Number (16 digits)'
                       onChange={e => handleInputChange(e)}
+                      onKeyDown={e => {
+                        const isCtrlPressed = e.ctrlKey || e.metaKey;
+
+                        if (
+                          isCtrlPressed &&
+                          ['c', 'v', 'x', 'a'].includes(e.key.toLowerCase())
+                        ) {
+                          return;
+                        }
+
+                        if (e.altKey || (e.altGraphKey && e.key.length === 1)) {
+                          e.preventDefault();
+                          return;
+                        }
+
+                        if (
+                          /[0-9\b]|ArrowLeft|ArrowRight|Backspace|Delete|Tab/.test(
+                            e.key
+                          ) ||
+                          (isCtrlPressed &&
+                            ['c', 'v', 'x', 'a'].includes(e.key.toLowerCase()))
+                        ) {
+                          return;
+                        }
+
+                        e.preventDefault();
+                      }}
                       value={cardNumber}
                       maxLength={16}
                     />
@@ -315,6 +409,38 @@ const Booking = () => {
                         name='cardVerificationValue'
                         placeholder='CVV'
                         onChange={e => handleInputChange(e)}
+                        onKeyDown={e => {
+                          const isCtrlPressed = e.ctrlKey || e.metaKey;
+
+                          if (
+                            isCtrlPressed &&
+                            ['c', 'v', 'x', 'a'].includes(e.key.toLowerCase())
+                          ) {
+                            return;
+                          }
+
+                          if (
+                            e.altKey ||
+                            (e.altGraphKey && e.key.length === 1)
+                          ) {
+                            e.preventDefault();
+                            return;
+                          }
+
+                          if (
+                            /[0-9\b]|ArrowLeft|ArrowRight|Backspace|Delete|Tab/.test(
+                              e.key
+                            ) ||
+                            (isCtrlPressed &&
+                              ['c', 'v', 'x', 'a'].includes(
+                                e.key.toLowerCase()
+                              ))
+                          ) {
+                            return;
+                          }
+
+                          e.preventDefault();
+                        }}
                         value={cardVerificationValue}
                         maxLength={3}
                       />

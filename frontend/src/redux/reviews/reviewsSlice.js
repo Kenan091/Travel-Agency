@@ -59,7 +59,13 @@ export const updateReview = createAsyncThunk(
   'reviews/updateReview',
   async ({ reviewId, updatedData }, thunkAPI) => {
     try {
-      return await reviewsService.updateReviewFromAPI(reviewId, updatedData);
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await reviewsService.updateReviewFromAPI(
+        reviewId,
+        updatedData,
+        token
+      );
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -75,7 +81,9 @@ export const deleteReview = createAsyncThunk(
   'reviews/deleteReview',
   async (reviewId, thunkAPI) => {
     try {
-      return await reviewsService.deleteReviewFromAPI(reviewId);
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await reviewsService.deleteReviewFromAPI(reviewId, token);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -115,7 +123,6 @@ const reviewsSlice = createSlice({
       })
       .addCase(getReview.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload);
         state.review = action.payload;
       })
       .addCase(getReview.rejected, (state, action) => {
@@ -140,12 +147,14 @@ const reviewsSlice = createSlice({
       })
       .addCase(updateReview.fulfilled, (state, action) => {
         state.isLoading = false;
-        const updatedReview = action.payload.data;
-        const index = state?.reviews?.findIndex(
-          r => r._id === updatedReview._id
-        );
+        const updatedReview = action.payload;
+        const index = state.reviews.findIndex(r => r._id === updatedReview._id);
         if (index !== -1) {
-          state.reviews[index] = updatedReview;
+          state.reviews = [
+            ...state.reviews.slice(0, index), // elements before the updated review
+            updatedReview, // updated review
+            ...state.reviews.slice(index + 1), // elements after the updated review
+          ];
         }
       })
       .addCase(updateReview.rejected, (state, action) => {
@@ -158,8 +167,7 @@ const reviewsSlice = createSlice({
       })
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.isLoading = false;
-        const deletedReviewId = action.payload.data._id;
-        state.reviews = state?.reviews?.filter(r => r._id !== deletedReviewId);
+        state.reviews = action.payload.reviews;
       })
       .addCase(deleteReview.rejected, (state, action) => {
         state.isLoading = false;

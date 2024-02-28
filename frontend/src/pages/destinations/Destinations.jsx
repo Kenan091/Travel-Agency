@@ -28,9 +28,12 @@ const Destinations = () => {
     state => state?.destination?.isLoading
   );
 
+  const isError = useSelector(state => state?.destination?.isError);
+  const message = useSelector(state => state?.destination?.message);
+
   const handleSearchButtonClick = () => {
     if (!selectedDestination) {
-      toast.error('Please enter your desired destination.');
+      toast.warn('Please enter your desired destination.');
       return;
     }
 
@@ -125,8 +128,6 @@ const Destinations = () => {
       ? Math.ceil(filteredDestinations?.length / recordsPerPage)
       : Math.ceil(sortedDestinations?.length / recordsPerPage);
 
-  console.log(filteredDestinations);
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 780) {
@@ -148,6 +149,12 @@ const Destinations = () => {
   useEffect(() => {
     dispatch(getDestinations());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+  }, [isError, message]);
 
   return (
     <>

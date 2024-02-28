@@ -1,0 +1,70 @@
+:root {
+  --darker-blue: #061e25;
+  --dark-blue: #082831;
+  --light-blue: #11576f;
+  --light-green: #83ab55;
+  --light-gray: #d8e1ec;
+}
+
+.customSelect {
+  position: relative;
+  width: 21.5rem;
+}
+
+.selectedOption {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  height: 50px;
+  background-color: var(--light-gray);
+  border: 2px solid var(--dark-blue);
+  text-align: center;
+  border-radius: 5px;
+  white-space: pre-wrap;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background-color: var(--light-gray);
+  max-height: 200px;
+  overflow-y: auto;
+  border: 2px solid var(--dark-blue);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  z-index: 200;
+}
+
+.option {
+  padding: 8px;
+  cursor: pointer;
+  white-space: pre-wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.option:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 587px) {
+  .customSelect {
+    position: relative;
+    width: 16.4rem;
+    font-size: 0.93rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .customSelect {
+    width: 13.5rem;
+    font-size: 13px;
+  }
+}
