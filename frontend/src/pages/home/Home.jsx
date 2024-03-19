@@ -56,214 +56,6 @@ const Home = () => {
     return bookedDestinations;
   }, [user, userBookings]);
 
-  // const recommendedDestinations = useMemo(() => {
-  //   if (!user || !userBookedDestinations?.length || !destinations) return [];
-
-  //   // Extract continents and countries from booked destinations
-  //   const continents = userBookedDestinations?.flatMap(
-  //     destination => destination?.continents
-  //   );
-  //   const countries = userBookedDestinations?.map(destination =>
-  //     destination?.name.split(',')[1]?.trim().split(' ').pop()
-  //   );
-
-  //   // Find recommended destinations by continent
-
-  //   let recommendedByContinent = destinations.filter(destination =>
-  //     destination.continents.some(continent => continents.includes(continent))
-  //   );
-
-  //   // If no recommended destinations by continent, find by country
-
-  //   let recommendedByCountry = [];
-  //   if (!recommendedByContinent.length) {
-  //     recommendedByCountry = destinations.filter(destination =>
-  //       countries.includes(destination.name.split(',').pop()?.trim())
-  //     );
-  //   }
-
-  //   // Exclude destinations that user has already booked
-  //   const filteredRecommended =
-  //     recommendedByContinent.length > 0
-  //       ? recommendedByContinent.filter(
-  //           destination =>
-  //             !userBookedDestinations.some(
-  //               bookedDestination =>
-  //                 bookedDestination.name.split(',')[0]?.trim() ===
-  //                 destination.name.split(',')[0]?.trim()
-  //             )
-  //         )
-  //       : recommendedByCountry.length > 0
-  //       ? recommendedByCountry.filter(
-  //           destination =>
-  //             !userBookedDestinations.some(
-  //               bookedDestination =>
-  //                 bookedDestination.name.split(',')[0]?.trim() ===
-  //                 destination.name.split(',')[0]?.trim()
-  //             )
-  //         )
-  //       : [];
-
-  //   let sortedRecommended = filteredRecommended.sort((a, b) => {
-  //     // If both destinations have the same continent, sort by name
-  //     if (a.continents.some(continent => b.continents.includes(continent))) {
-  //       return a.name.localeCompare(b.name);
-  //     }
-  //     // Otherwise, sort by continent
-  //     const continentA = a.continents[0];
-  //     const continentB = b.continents[0];
-  //     return continentA.localeCompare(continentB);
-  //   });
-
-  //   // If there are no recommendations by continent, sort by country
-  //   if (sortedRecommended.length === 0 && recommendedByCountry.length > 0) {
-  //     sortedRecommended = recommendedByCountry.sort((a, b) => {
-  //       const countryA = a.name.split(',').pop().trim();
-  //       const countryB = b.name.split(',').pop().trim();
-  //       return countryA.localeCompare(countryB);
-  //     });
-  //   }
-
-  //   // If there are recommended destinations, return them, else return popular destinations
-  //   return sortedRecommended.length ? sortedRecommended : [];
-  // }, [user, userBookedDestinations, destinations]);
-
-  // const recommendedDestinations = useMemo(() => {
-  //   if (!user || !userBookedDestinations?.length || !destinations) return [];
-
-  //   // Extract countries from booked destinations
-  //   const bookedCountries = userBookedDestinations?.map(destination =>
-  //     destination.name.split(',').pop()?.trim()
-  //   );
-
-  //   // Find recommended destinations by country
-  //   let recommendedByCountry = destinations.filter(destination =>
-  //     bookedCountries.includes(destination.name.split(',').pop()?.trim())
-  //   );
-
-  //   // If no recommended destinations by country, find by continent
-  //   let recommendedByContinent = [];
-  //   if (!recommendedByCountry.length) {
-  //     const continents = userBookedDestinations?.flatMap(
-  //       destination => destination?.continents
-  //     );
-  //     recommendedByContinent = destinations.filter(destination =>
-  //       destination.continents.some(continent => continents.includes(continent))
-  //     );
-  //   }
-
-  //   // Exclude destinations that user has already booked
-  //   const filteredRecommended =
-  //     recommendedByCountry.length > 0
-  //       ? recommendedByCountry.filter(
-  //           destination =>
-  //             !userBookedDestinations.some(
-  //               bookedDestination =>
-  //                 bookedDestination.name.split(',')[0]?.trim() ===
-  //                 destination.name.split(',')[0]?.trim()
-  //             )
-  //         )
-  //       : recommendedByContinent.length > 0
-  //       ? recommendedByContinent.filter(
-  //           destination =>
-  //             !userBookedDestinations.some(
-  //               bookedDestination =>
-  //                 bookedDestination.name.split(',')[0]?.trim() ===
-  //                 destination.name.split(',')[0]?.trim()
-  //             )
-  //         )
-  //       : [];
-
-  //   let sortedRecommended = filteredRecommended.sort((a, b) => {
-  //     // Sort by country first
-  //     const countryA = a.name.split(',').pop()?.trim();
-  //     const countryB = b.name.split(',').pop()?.trim();
-  //     const countryComparison = countryA.localeCompare(countryB);
-
-  //     // If countries are the same, sort by continent
-  //     if (countryComparison === 0) {
-  //       const continentA = a.continents[0];
-  //       const continentB = b.continents[0];
-  //       return continentA.localeCompare(continentB);
-  //     }
-
-  //     return countryComparison;
-  //   });
-
-  //   // If there are no recommendations, return empty array
-  //   return sortedRecommended;
-  // }, [user, userBookedDestinations, destinations]);
-
-  // const recommendedDestinations = useMemo(() => {
-  //   if (!user || !userBookedDestinations?.length || !destinations) return [];
-
-  //   // Extract countries from booked destinations
-  //   const bookedCountries = userBookedDestinations?.map(destination =>
-  //     destination.name.split(',').pop()?.trim()
-  //   );
-
-  //   console.log('Booked countries: ', bookedCountries);
-
-  //   // Find recommended destinations by country, excluding booked ones
-  //   const recommendedByCountry = destinations.filter(destination => {
-  //     const country = destination.name.split(',').pop()?.trim();
-  //     return (
-  //       bookedCountries.includes(country) &&
-  //       !userBookedDestinations.some(booked => {
-  //         const bookedCountry = booked.name.split(',').pop()?.trim();
-  //         return bookedCountry === country;
-  //       })
-  //     );
-  //   });
-
-  //   console.log('Recommended by countries: ', recommendedByCountry);
-
-  //   // If no recommendations by country, find by continent, excluding booked ones
-  //   const recommendedByContinent = [];
-  //   const continents = userBookedDestinations?.flatMap(
-  //     destination => destination?.continents
-  //   );
-
-  //   console.log('Continents: ', continents);
-
-  //   recommendedByContinent.push(
-  //     ...destinations.filter(destination => {
-  //       return (
-  //         destination.continents.some(continent =>
-  //           continents.includes(continent)
-  //         ) &&
-  //         !userBookedDestinations.some(booked => {
-  //           const bookedCountry = booked.name.split(',').pop()?.trim();
-  //           return bookedCountry === destination.name.split(',').pop()?.trim();
-  //         })
-  //       );
-  //     })
-  //   );
-
-  //   console.log('Recommended by continent: ', recommendedByContinent);
-
-  //   // Sort recommendations according to your preferences
-  //   const sortedByCountry = recommendedByCountry.sort((a, b) => {
-  //     // Sort by country first
-  //     const countryA = a.name.split(',').pop()?.trim();
-  //     const countryB = b.name.split(',').pop()?.trim();
-  //     return countryA.localeCompare(countryB);
-  //   });
-
-  //   console.log('Sorted by country: ', sortedByCountry);
-
-  //   const sortedByContinent = recommendedByContinent.sort((a, b) => {
-  //     const continentA = a.continents[0];
-  //     const continentB = b.continents[0];
-  //     return continentA.localeCompare(continentB);
-  //   });
-
-  //   console.log('Sorted by continent: ', sortedByContinent);
-
-  //   // Return recommendations, prioritizing country and excluding booked destinations
-  //   return recommendedByCountry.length ? sortedByCountry : sortedByContinent;
-  // }, [user, userBookedDestinations, destinations]);
-
   const recommendedDestinations = useMemo(() => {
     if (!user || !userBookedDestinations?.length || !destinations) return [];
 
@@ -273,28 +65,37 @@ const Home = () => {
     );
 
     // Find recommended destinations by country, excluding booked ones
+
     const recommendedByCountry = destinations.filter(destination => {
-      const country = destination.name.split(',').pop()?.trim();
-      return (
-        bookedCountries.includes(country) &&
-        !userBookedDestinations.some(booked => {
-          const bookedCountry = booked.name.split(',').pop()?.trim();
-          return bookedCountry === country;
-        })
-      );
+      const country = destination?.name.split(',').pop()?.trim();
+      const city = destination?.name.split(',').shift()?.trim();
+
+      // Check if the country of the destination is in booked countries
+      if (!bookedCountries.includes(country)) {
+        return false; // If not, exclude it from recommendations
+      }
+
+      // Check if the city of the destination is already booked
+      const isBooked = userBookedDestinations.some(booked => {
+        const bookedCountry = booked.name.split(',').pop()?.trim();
+        const bookedCity = booked.name.split(',').shift()?.trim();
+        return bookedCountry === country && bookedCity === city;
+      });
+
+      return !isBooked; // Exclude if city is already booked, include if not
     });
-    console.log('Recommended by country: ', recommendedByCountry);
+
 
     // If there are recommendations by country, sort them
     if (recommendedByCountry.length) {
       recommendedByCountry.sort((a, b) => {
-        const countryA = a.name.split(',').pop()?.trim();
-        const countryB = b.name.split(',').pop()?.trim();
-        return countryA.localeCompare(countryB);
+        const cityA = a.name.split(',').shift()?.trim();
+        const cityB = b.name.split(',').shift()?.trim();
+
+        return cityA.localeCompare(cityB);
       });
     }
 
-    console.log('Sorted recommended by country: ', recommendedByCountry);
     // Find recommended destinations by continent, excluding booked ones
     const recommendedByContinent = [];
     const continents = userBookedDestinations?.flatMap(
@@ -320,18 +121,17 @@ const Home = () => {
       recommendedByContinent.sort((a, b) => {
         const countryA = a.name.split(',').pop()?.trim();
         const countryB = b.name.split(',').pop()?.trim();
+
         return countryA.localeCompare(countryB);
       });
     }
+
 
     // Return recommendations, prioritizing country and excluding booked destinations
     return recommendedByCountry.length
       ? recommendedByCountry
       : recommendedByContinent;
   }, [user, userBookedDestinations, destinations]);
-
-  // console.log(userBookedDestinations);
-  // console.log(recommendedDestinations);
 
   const handleSearchButtonClick = () => {
     if (!selectedDestination) {
@@ -587,8 +387,6 @@ const Home = () => {
               </div>
             </div>
           </section>
-
-          {/* {!user && ( */}
           <div className={styles.aboutUsContainer}>
             <h2 className={styles.mainTitle}>About us</h2>
             <p className={styles.text}>
@@ -603,7 +401,6 @@ const Home = () => {
               the details so you can sit back, relax, and enjoy your travels.
             </p>
           </div>
-          {/* )} */}
         </div>
         {recommendedDestinations?.length > 0 ? (
           <div className={styles.additionalDestinationsContainer}>

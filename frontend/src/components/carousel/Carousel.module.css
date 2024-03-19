@@ -187,18 +187,49 @@ button {
 }
 
 .review .leftQuote {
-  top: 5%;
-  left: 7%;
+  top: 0;
+  left: 0;
 }
 
 .review .rightQuote {
-  bottom: 5%;
-  right: 7%;
+  bottom: 0;
+  right: 0;
 }
 
-.review .commentParagraph p {
-  font-size: 15px;
-  width: 236px;
+.commentText {
+  cursor: pointer;
+}
+
+.commentText p {
+  font-size: 12px;
+  width: 150px;
+}
+
+.modal {
+  position: absolute;
+  background-color: rgba(131, 171, 85, 0.9);
+  width: 300px;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  width: fit-content;
+}
+
+.modalContent p {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: justify;
+}
+
+.closeModal {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  cursor: pointer;
 }
 
 @media (max-width: 550px) {
@@ -268,7 +299,7 @@ button {
     flex-direction: column;
     align-items: center;
     width: 250px;
-    height: 300px;
+    height: 320px;
     border: 2px solid var(--light-green);
     border-radius: 9px;
   }
@@ -289,22 +320,12 @@ button {
     gap: 5px;
   }
 
-  .review p {
+  .commentText p {
     font-size: 12px;
     text-align: center;
     color: var(--light-gray);
     padding: 1rem 0;
     margin: 0 2rem;
-  }
-
-  .review .leftQuote {
-    top: 5%;
-    left: 12%;
-  }
-
-  .review .rightQuote {
-    bottom: 5%;
-    right: 12%;
   }
 }
 
@@ -345,20 +366,5 @@ button {
   .destinationButton {
     font-size: 11px;
     padding: 0.4rem 1rem;
-  }
-
-  .review .commentParagraph p {
-    font-size: 13px;
-    width: 150px;
-  }
-
-  .review .leftQuote {
-    top: 0;
-    left: 0;
-  }
-
-  .review .rightQuote {
-    bottom: 0;
-    right: 0;
   }
 }

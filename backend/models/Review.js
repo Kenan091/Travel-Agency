@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Destination = require('../models/Destination');
 
 const ReviewSchema = new mongoose.Schema({
   title: {
@@ -68,15 +69,21 @@ ReviewSchema.post('save', async function () {
   await this.constructor.getAverageRating(this.destination);
 });
 
-// Pre-remove hook
-ReviewSchema.pre('remove', async function (next) {
+ReviewSchema.pre('findOneAndDelete', async function (next) {
   console.log('Review about to be removed, updating average rating...');
   try {
-    // Update average rating by removing the rating of this review
-    const destinationId = this.destination;
-    const reviewRating = this.rating;
+    const review = await this.model.findOne(this.getQuery());
+    if (!review) {
+      throw new Error('Review not found');
+    }
 
-    const destination = await this.model('Destination').findById(destinationId);
+    const destinationId = review.destination;
+    const reviewRating = review.rating;
+
+    console.log('Destination id:', destinationId);
+    console.log('Review rating:', reviewRating);
+
+    const destination = await Destination.findById(destinationId);
     if (!destination) {
       throw new Error(`Destination with ID ${destinationId} not found`);
     }
@@ -88,15 +95,16 @@ ReviewSchema.pre('remove', async function (next) {
     await destination.save();
     next();
   } catch (error) {
+    console.error('Error updating average rating:', error);
     next(error);
   }
 });
 
-// Post-remove hook
-ReviewSchema.post('remove', async function () {
+ReviewSchema.post('findOneAndDelete', async function (doc, next) {
   console.log('Review removed, average rating updated.');
   // After removal, you might want to recalculate the average rating
-  await this.constructor.getAverageRating(this.destination);
+  await doc.constructor.getAverageRating(doc.destination);
+  next();
 });
 
 module.exports = mongoose.model('Review', ReviewSchema);

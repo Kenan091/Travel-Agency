@@ -46,7 +46,7 @@
 }
 
 .comment {
-  margin-left: 2.5rem;
+  margin-left: 2.7rem;
   font-size: 16px;
 }
 
@@ -87,11 +87,16 @@
   font-size: 16px;
   background-color: var(--darker-blue);
   color: var(--light-gray);
-  min-width: max-content;
+  min-width: fit-content;
   min-height: max-content;
+  width: 100%;
   margin-left: 2.4rem;
   outline: none;
   border: none;
+}
+
+.editingPreview input {
+  width: 100%;
 }
 
 .editingPreview > div > div {

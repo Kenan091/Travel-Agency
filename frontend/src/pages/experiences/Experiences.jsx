@@ -10,8 +10,8 @@ import Footer from '../../components/footer/Footer';
 import { useNavigate } from 'react-router-dom';
 import ReactStars from 'react-rating-stars-component';
 import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
-import getRegularDate from '../../helpers/useGetDate';
-import CustomSelect from '../../components/custom-select/CustomSelect';
+import getRegularDate from '../../helpers/useFormatDate';
+import SelectBox from '../../components/select-box/SelectBox';
 
 const Experiences = () => {
   const navigate = useNavigate();
@@ -164,7 +164,7 @@ const Experiences = () => {
                       <form
                         onSubmit={handleSubmit}
                         className={styles.reviewForm}>
-                        <CustomSelect
+                        <SelectBox
                           options={[{ value: '', label: 'Select' }, ...options]}
                           value={`${formData.destinationId} ${formData.bookingId}`}
                           onChange={value => {

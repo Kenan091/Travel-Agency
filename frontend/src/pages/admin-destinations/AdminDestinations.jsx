@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import styles from './AdminDestinations.module.css';
 import {
   addDestination,
+  clearError,
   deleteDestination,
   getDestination,
   getDestinations,
@@ -83,6 +84,8 @@ const AdminDestinations = () => {
     setModalOpen(false);
     setEditDestinationId(null);
     setFormData(initialFormData);
+
+    dispatch(clearError());
   };
 
   const onAdd = () => {
@@ -221,7 +224,7 @@ const AdminDestinations = () => {
       return false;
     }
 
-    if (!formData.briefDescription) {
+    if (!formData.briefDescription || formData.briefDescription.length > 350) {
       toast.warn(
         'Please enter brief description with less than 350 characters.',
         {
@@ -232,7 +235,10 @@ const AdminDestinations = () => {
       return false;
     }
 
-    if (!formData.detailedDescription) {
+    if (
+      !formData.detailedDescription ||
+      formData.detailedDescription.length > 2000
+    ) {
       toast.warn(
         'Please enter detailed description with less than 2000 characters.',
         {
@@ -246,7 +252,7 @@ const AdminDestinations = () => {
     return true;
   };
 
-  const saveDestination = e => {
+  const saveDestination = async e => {
     e.preventDefault();
 
     if (editDestinationId) {
@@ -261,13 +267,13 @@ const AdminDestinations = () => {
       if (!validateForm()) {
         return;
       } else {
-        dispatch(addDestination(formData));
-        if (isErrorDestinations) {
-          toast.error(destinationsErrorMessage);
-        } else {
+        await dispatch(addDestination(formData));
+        if (!isErrorDestinations) {
           toast.success('Destination added');
+          onCloseModal();
+        } else {
+          toast.error(destinationsErrorMessage || 'Failed to add destination');
         }
-        onCloseModal();
       }
     }
   };
@@ -296,8 +302,6 @@ const AdminDestinations = () => {
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
-
-  console.log(formData);
 
   return (
     <>

@@ -4,6 +4,7 @@ import styles from './Carousel.module.css';
 import {
   IoArrowBack,
   IoArrowForward,
+  IoClose,
   IoStar,
   IoStarHalf,
   IoStarOutline,
@@ -11,11 +12,24 @@ import {
 import { RiCoinsFill } from 'react-icons/ri';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa6';
 import ReactStars from 'react-rating-stars-component';
+import truncateText from '../../helpers/useTruncateText';
 
 export const Carousel = ({ items }) => {
   const [currentItem, setCurrentItem] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
   let itemsArray = Array.isArray(items) ? items : Object.values(items);
+
+  const [showModal, setShowModal] = useState([]);
+
+  useEffect(() => {
+    setShowModal(Array(items.length).fill(false));
+  }, [items]);
+
+  const toggleModal = index => {
+    const newShowModal = [...showModal];
+    newShowModal[index] = !newShowModal[index];
+    setShowModal(newShowModal);
+  };
 
   const navigate = useNavigate();
 
@@ -50,6 +64,8 @@ export const Carousel = ({ items }) => {
     window.scrollTo(0, 0);
   };
 
+  console.log(showModal);
+
   return (
     <div className={styles.carousel}>
       {currentItem > 0 && (
@@ -70,7 +86,7 @@ export const Carousel = ({ items }) => {
         <div className={styles.carouselContent}>
           {itemsArray
             .slice(currentItem, currentItem + itemsPerPage)
-            .map(item => (
+            .map((item, index) => (
               <div
                 key={item._id}
                 className={styles.carouselItem}>
@@ -126,12 +142,31 @@ export const Carousel = ({ items }) => {
                         color='#83ab55'
                         className={styles.leftQuote}
                       />
-                      <p>{item.comment}</p>
+                      <div
+                        className={styles.commentText}
+                        onClick={() => toggleModal(index)}>
+                        <p>{truncateText(item?.comment, 120)}</p>
+                      </div>
                       <FaQuoteRight
                         color='#83ab55'
                         className={styles.rightQuote}
                       />
                     </div>
+                    {showModal[index] && (
+                      <div className={styles.modal}>
+                        <div className={styles.modalContent}>
+                          <span
+                            className={styles.closeModal}
+                            onClick={() => toggleModal(index)}>
+                            <IoClose
+                              size={24}
+                              color='red'
+                            />
+                          </span>
+                          <p>{item?.comment}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

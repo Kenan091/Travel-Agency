@@ -52,6 +52,29 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 // @route POST /destinations/:destinationId/reviews
 // @access Private
 
+// exports.addReview = asyncHandler(async (req, res, next) => {
+//   req.body.destination = req.params.destinationId;
+//   req.body.user = req.user.id;
+//   req.body.booking = req.body.bookingId;
+
+//   const destination = await Destination.findById(req.params.destinationId);
+
+//   if (!destination) {
+//     return next(
+//       new ErrorResponse(
+//         `Destination with the id of ${req.params.destinationId} not found`,
+//         404
+//       )
+//     );
+//   }
+
+//   const review = await Review.create(req.body);
+
+//   res.status(201).json({
+//     success: true,
+//     data: review,
+//   });
+// });
 exports.addReview = asyncHandler(async (req, res, next) => {
   req.body.destination = req.params.destinationId;
   req.body.user = req.user.id;
@@ -68,13 +91,23 @@ exports.addReview = asyncHandler(async (req, res, next) => {
     );
   }
 
-  console.log(req.body);
-
   const review = await Review.create(req.body);
+
+  // Recalculate average rating
+  const reviews = await Review.find({ destination: destination._id });
+  const totalReviews = reviews.length;
+  const totalRating = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+  destination.averageRating =
+    totalReviews > 0 ? totalRating / totalReviews : undefined;
+
+  await destination.save();
 
   res.status(201).json({
     success: true,
-    data: review,
+    data: {
+      review,
+      averageRating: destination.averageRating,
+    },
   });
 });
 
@@ -147,7 +180,7 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
   }
 
   // Delete review
-  await Review.findByIdAndDelete(req.params.id);
+  await Review.findOneAndDelete({ _id: review._id });
 
   // Recalculate average rating
   const reviews = await Review.find({ destination: destination._id });
@@ -166,6 +199,10 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: { id: review._id, reviews: reviews },
+    data: {
+      id: review._id,
+      reviews: reviews,
+      averageRating: destination.averageRating,
+    },
   });
 });

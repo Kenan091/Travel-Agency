@@ -6,7 +6,7 @@ import Header from '../../components/header/Header';
 import Spinner from '../../components/spinner/Spinner';
 import Pagination from '../../components/pagination/Pagination';
 import Footer from '../../components/footer/Footer';
-import getRegularDate from '../../helpers/useGetDate';
+import getRegularDate from '../../helpers/useFormatDate';
 import { IoTrash } from 'react-icons/io5';
 
 const AdminBookings = () => {

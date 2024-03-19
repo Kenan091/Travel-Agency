@@ -8,7 +8,7 @@ import {
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
-import getRegularDate from '../../helpers/useGetDate';
+import getRegularDate from '../../helpers/useFormatDate';
 import Pagination from '../../components/pagination/Pagination';
 import { IoTrash } from 'react-icons/io5';
 

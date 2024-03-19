@@ -116,7 +116,11 @@ const bookingsSlice = createSlice({
     isError: false,
     message: '',
   },
-  reducers: {},
+  reducers: {
+    clearMessage: state => {
+      state.message = '';
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getBookings.pending, state => {
@@ -203,5 +207,7 @@ const bookingsSlice = createSlice({
       });
   },
 });
+
+export const { clearMessage } = bookingsSlice.actions;
 
 export default bookingsSlice.reducer;

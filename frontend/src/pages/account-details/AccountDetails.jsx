@@ -5,7 +5,7 @@ import styles from './AccountDetails.module.css';
 import { getBookings } from '../../redux/bookings/bookingsSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
-import getRegularDate from '../../helpers/useGetDate';
+import getRegularDate from '../../helpers/useFormatDate';
 import Spinner from '../../components/spinner/Spinner';
 import Pagination from '../../components/pagination/Pagination';
 import { useNavigate } from 'react-router-dom';

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styles from './CustomSelect.module.css';
+import styles from './SelectBox.module.css';
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
 
-const CustomSelect = ({ options, value, onChange, optionHeight }) => {
+const SelectBox = ({ options, value, onChange, optionHeight }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -20,7 +20,7 @@ const CustomSelect = ({ options, value, onChange, optionHeight }) => {
   };
 
   return (
-    <div className={styles.customSelect}>
+    <div className={styles.selectBox}>
       <div
         className={styles.selectedOption}
         onClick={toggleDropdown}>
@@ -29,13 +29,13 @@ const CustomSelect = ({ options, value, onChange, optionHeight }) => {
           <TiArrowSortedUp
             size={24}
             color='#082831'
-            style={{ position: 'absolute', top: 22, right: 10 }}
+            className={styles.arrowIcon}
           />
         ) : (
           <TiArrowSortedDown
             size={24}
             color='#082831'
-            style={{ position: 'absolute', top: 22, right: 10 }}
+            className={styles.arrowIcon}
           />
         )}
       </div>
@@ -56,4 +56,4 @@ const CustomSelect = ({ options, value, onChange, optionHeight }) => {
   );
 };
 
-export default CustomSelect;
+export default SelectBox;

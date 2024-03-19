@@ -99,6 +99,7 @@ const reviewsSlice = createSlice({
   initialState: {
     reviews: [],
     review: null,
+    averageRatingForDestination: 0,
     isLoading: false,
     isError: false,
     message: '',
@@ -111,7 +112,9 @@ const reviewsSlice = createSlice({
       })
       .addCase(getReviews.fulfilled, (state, action) => {
         state.isLoading = false;
+        console.log(action.payload);
         state.reviews = action.payload;
+        state.averageRatingForDestination = 0;
       })
       .addCase(getReviews.rejected, (state, action) => {
         state.isLoading = false;
@@ -135,7 +138,8 @@ const reviewsSlice = createSlice({
       })
       .addCase(addReview.fulfilled, (state, action) => {
         state.isLoading = false;
-        state?.reviews?.push(action.payload);
+        state?.reviews?.push(action.payload.review);
+        state.averageRatingForDestination = action.payload.averageRating;
       })
       .addCase(addReview.rejected, (state, action) => {
         state.isLoading = false;
@@ -167,7 +171,9 @@ const reviewsSlice = createSlice({
       })
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.isLoading = false;
+        console.log(action.payload);
         state.reviews = action.payload.reviews;
+        state.averageRatingForDestination = action.payload.averageRating;
       })
       .addCase(deleteReview.rejected, (state, action) => {
         state.isLoading = false;

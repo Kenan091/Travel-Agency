@@ -100,7 +100,12 @@ const destinationsSlice = createSlice({
     isError: false,
     message: '',
   },
-  reducers: {},
+  reducers: {
+    clearError: state => {
+      state.isError = false;
+      state.message = '';
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getDestinations.pending, state => {
@@ -174,5 +179,7 @@ const destinationsSlice = createSlice({
       });
   },
 });
+
+export const { clearError } = destinationsSlice.actions;
 
 export default destinationsSlice.reducer;

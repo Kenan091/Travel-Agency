@@ -8,7 +8,7 @@ import Footer from '../../components/footer/Footer';
 import Spinner from '../../components/spinner/Spinner';
 import { IoTrash } from 'react-icons/io5';
 import Pagination from '../../components/pagination/Pagination';
-import getRegularDate from '../../helpers/useGetDate';
+import getRegularDate from '../../helpers/useFormatDate';
 
 const AdminUsers = () => {
   const dispatch = useDispatch();
@@ -59,7 +59,6 @@ const AdminUsers = () => {
           <table className={styles.table}>
             <thead>
               <tr className={styles.tableHeadRow}>
-                <th className={styles.tableCell}>User ID</th>
                 <th className={styles.tableCell}>Full Name</th>
                 <th className={styles.tableCell}>Registration Date</th>
                 <th className={styles.tableCell}>Email Address</th>
@@ -69,7 +68,7 @@ const AdminUsers = () => {
             <tbody>
               {isLoadingUsers ? (
                 <tr>
-                  <td colSpan='5'>
+                  <td colSpan='4'>
                     <Spinner
                       width={64}
                       height={64}
@@ -82,7 +81,6 @@ const AdminUsers = () => {
                     <tr
                       className={styles.tableDataRow}
                       key={user._id}>
-                      <td className={styles.tableDataCell}>{user._id}</td>
                       <td className={styles.tableDataCell}>{user.name}</td>
                       <td className={styles.tableDataCell}>
                         {getRegularDate(user.createdAt)}
@@ -117,10 +115,6 @@ const AdminUsers = () => {
                     key={user._id}
                     className={styles.accordionItem}>
                     <div className={styles.accordionContent}>
-                      <div className={styles.accordionText}>
-                        <strong>User ID: </strong>
-                        {user?._id}
-                      </div>
                       <div className={styles.accordionText}>
                         <strong>Full name: </strong>
                         {user?.name}

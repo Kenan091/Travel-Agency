@@ -23,20 +23,20 @@
   border-bottom-right-radius: 9px;
 }
 
-.pageLink {
+.pagination .pageLink {
   background-color: var(--light-gray);
   color: var(--dark-blue);
   padding: 15px;
   border-radius: 20px;
 }
 
-.pageLink:disabled {
+.pagination .pageLink:disabled {
   background-color: grey;
   color: var(--dark-blue);
   cursor: default;
 }
 
-.pageLink:focus {
+.pagination .pageLink.active {
   background-color: var(--dark-blue);
   color: var(--light-gray);
 }

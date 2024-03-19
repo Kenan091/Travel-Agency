@@ -30,23 +30,4 @@ const BookingSchema = new mongoose.Schema({
   },
 });
 
-// BookingSchema.pre('remove', async function (next) {
-//   // Remove associated reviews when a booking is deleted
-//   await mongoose.model('Review').deleteMany({ booking: this._id });
-//   next();
-// });
-// BookingSchema.pre('remove', async function (next) {
-//   try {
-//     console.log(`Removing reviews associated with booking: ${this._id}`);
-//     const result = await mongoose
-//       .model('Review')
-//       .deleteMany({ booking: this._id });
-//     console.log(`${result.deletedCount} reviews deleted.`);
-//     next();
-//   } catch (err) {
-//     console.error(err);
-//     next(err);
-//   }
-// });
-
 module.exports = mongoose.model('Booking', BookingSchema);

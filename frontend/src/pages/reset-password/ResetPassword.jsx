@@ -7,8 +7,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
 
 const ResetPassword = () => {
-  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const dispatch = useDispatch();
+  const resetToken = new URL(window.location.href).pathname.split(
+    'resetpassword/'
+  )[1];
+
   const navigate = useNavigate();
 
   const isError = useSelector(state => state?.auth?.isError);
@@ -17,14 +21,15 @@ const ResetPassword = () => {
   const handleResetPassword = e => {
     e.preventDefault();
 
-    if (password === '') {
+    if (newPassword === '') {
       toast.warn('You need to enter your new password!');
     } else {
-      dispatch(resetPassword(password));
+      dispatch(resetPassword({ resetToken, newPassword }));
       if (isError) {
         toast.error(message);
       } else {
         toast.info(`Password reset completed. Login with your new password!`);
+        setTimeout(() => navigate('/auth/login'), 2000);
       }
     }
   };
@@ -59,7 +64,7 @@ const ResetPassword = () => {
           <input
             type='password'
             placeholder='Enter new password'
-            onChange={e => setPassword(e.target.value)}
+            onChange={e => setNewPassword(e.target.value)}
           />
           <button type='submit'>Send</button>
         </form>

@@ -7,6 +7,7 @@ import { getDestination } from '../../redux/destinations/destinationsSlice';
 import {
   checkDestinationBooking,
   createBooking,
+  clearMessage,
 } from '../../redux/bookings/bookingsSlice';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -182,6 +183,8 @@ const Booking = () => {
     if (bookingMessage !== '') {
       toast.info(bookingMessage);
     }
+
+    dispatch(clearMessage());
   }, [bookingMessage, departureDate, returnDate]);
 
   return (
@@ -219,6 +222,7 @@ const Booking = () => {
                       <div className={styles.dateInputs}>
                         <div className={styles.datePickerDiv}>
                           <DatePicker
+                            selectedDate={departureDate}
                             onDateChange={date =>
                               handleDateChange(date, 'departureDate')
                             }
@@ -229,6 +233,7 @@ const Booking = () => {
 
                         <div className={styles.datePickerDiv}>
                           <DatePicker
+                            selectedDate={returnDate}
                             onDateChange={date =>
                               handleDateChange(date, 'returnDate')
                             }

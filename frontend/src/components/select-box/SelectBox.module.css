@@ -6,7 +6,7 @@
   --light-gray: #d8e1ec;
 }
 
-.customSelect {
+.selectBox {
   position: relative;
   width: 21.5rem;
 }
@@ -24,6 +24,12 @@
   text-align: center;
   border-radius: 5px;
   white-space: pre-wrap;
+}
+
+.arrowIcon {
+  position: absolute;
+  top: 22px;
+  right: 10px;
 }
 
 .dropdown {
@@ -55,7 +61,7 @@
 }
 
 @media (max-width: 587px) {
-  .customSelect {
+  .selectBox {
     position: relative;
     width: 16.4rem;
     font-size: 0.93rem;
@@ -63,7 +69,7 @@
 }
 
 @media (max-width: 450px) {
-  .customSelect {
+  .selectBox {
     width: 13.5rem;
     font-size: 13px;
   }

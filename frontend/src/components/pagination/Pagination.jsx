@@ -33,11 +33,12 @@ const Pagination = ({ numberOfPages, currentPage, setCurrentPage }) => {
         {pageNumbers.map(pageNumber => (
           <li
             key={pageNumber}
-            className={`${styles.pageItem} ${
-              currentPage == pageNumber ? 'active' : ''
-            } `}>
+            className={styles.pageItem}>
             <button
-              className={styles.pageLink}
+              // className={styles.pageLink}
+              className={`${styles.pageLink} ${
+                currentPage == pageNumber ? 'active' : ''
+              }`}
               onClick={() => setCurrentPage(pageNumber)}>
               {pageNumber}
             </button>

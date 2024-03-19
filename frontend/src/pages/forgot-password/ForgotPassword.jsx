@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import styles from './ForgotPassword.module.css';
@@ -26,9 +26,16 @@ const ForgotPassword = () => {
         toast.info(
           "An email with instructions to reset your password has been sent to the provided email address. Please check your inbox. If you don't see the email within a few minutes, please check your spam folder."
         );
+        setEmail('');
       }
     }
   };
+
+  useEffect(() => {
+    if (!isError && message) {
+      setEmail('');
+    }
+  }, [isError, message]);
 
   return (
     <div className={styles.container}>
@@ -69,6 +76,7 @@ const ForgotPassword = () => {
               placeholder='Enter your email'
               autoComplete='off'
               onChange={e => setEmail(e.target.value)}
+              value={email}
             />
             <button type='submit'>Send</button>
           </form>

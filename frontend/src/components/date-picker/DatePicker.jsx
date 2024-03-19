@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-const DatePicker = ({ onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState('');
+const DatePicker = ({ onDateChange, selectedDate: initialSelectedDate }) => {
+  const [selectedDate, setSelectedDate] = useState(initialSelectedDate || '');
   const [warningShown, setWarningShown] = useState(false);
+
+  useEffect(() => {
+    setSelectedDate(initialSelectedDate || '');
+  }, [initialSelectedDate]);
 
   const handleDateChange = e => {
     const selectedDate = e.target.value;

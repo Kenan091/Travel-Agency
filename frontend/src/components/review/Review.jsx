@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import styles from './Review.module.css';
 import { IoPencil, IoPerson, IoTrash } from 'react-icons/io5';
-import getRegularDate, { formatDate } from '../../helpers/useGetDate';
+import getRegularDate, { formatDate } from '../../helpers/useFormatDate';
 import Spinner from '../spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReview, updateReview } from '../../redux/reviews/reviewsSlice';
 
-const Review = ({ review, user }) => {
+const Review = ({ review, user, onDeleteReview }) => {
   const dispatch = useDispatch();
 
   const reviews = useSelector(state => state?.review?.reviews);
@@ -38,14 +38,14 @@ const Review = ({ review, user }) => {
 
   const handleDeleteReview = useCallback(
     reviewId => {
-      dispatch(deleteReview(reviewId));
+      onDeleteReview(reviewId);
     },
     [dispatch]
   );
 
   return (
     <>
-      {!review || !user ? (
+      {!review ? (
         <Spinner
           width={64}
           height={64}

@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './DestinationDetails.module.css';
 import { getDestination } from '../../redux/destinations/destinationsSlice';
-import { getReviews } from '../../redux/reviews/reviewsSlice';
+import { deleteReview, getReviews } from '../../redux/reviews/reviewsSlice';
 import Header from '../../components/header/Header';
 import Review from '../../components/review/Review';
 import Spinner from '../../components/spinner/Spinner';
@@ -14,17 +14,31 @@ import ReactStars from 'react-rating-stars-component';
 
 const DestinationDetails = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const { id } = useParams();
 
   const destination = useSelector(state => state?.destination?.destination);
+  const averageRatingFromDestination = useSelector(
+    state => state?.destination?.destination?.averageRating
+  );
   const isLoadingDestination = useSelector(
     state => state?.destination?.isLoading
   );
 
+  const averageRatingFromReviews = useSelector(
+    state => state?.review?.averageRatingForDestination
+  );
   const reviews = useSelector(state => state?.review?.reviews);
   const isLoadingReviews = useSelector(state => state?.review?.isLoading);
+
+  const averageRating =
+    averageRatingFromReviews !== 0
+      ? averageRatingFromReviews
+      : averageRatingFromDestination;
+
+  console.log('Reviews', averageRatingFromReviews);
+  console.log('Destination', averageRatingFromDestination);
+  console.log('Final', averageRating);
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -33,11 +47,18 @@ const DestinationDetails = () => {
     window.scrollTo(0, 0);
   };
 
+  const handleDeleteReview = useCallback(
+    reviewId => {
+      dispatch(deleteReview(reviewId));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     localStorage.setItem('destination', JSON.stringify(destination));
 
     return () => {
-      localStorage.removeItem('destination'); // Delete item on unmount
+      localStorage.removeItem('destination');
     };
   }, [destination]);
 
@@ -45,7 +66,6 @@ const DestinationDetails = () => {
     dispatch(getDestination(id));
     dispatch(getReviews(id));
   }, [dispatch, id]);
-
 
   return (
     <>
@@ -67,11 +87,12 @@ const DestinationDetails = () => {
                     <h1 className={styles.name}>{destination?.name}</h1>
                     {reviews?.length > 0 && (
                       <>
-                        {destination?.averageRating ? (
+                        {averageRating ? (
                           <div className={styles.averageRating}>
                             <ReactStars
+                              key={averageRating}
                               count={5}
-                              value={parseFloat(destination?.averageRating)}
+                              value={averageRating}
                               size={window.innerWidth < 500 ? 20 : 24}
                               isHalf={false}
                               emptyIcon={<IoStarOutline />}
@@ -150,6 +171,7 @@ const DestinationDetails = () => {
                                 key={review._id}
                                 review={review ? review : null}
                                 user={user ? user : null}
+                                onDeleteReview={handleDeleteReview}
                               />
                             );
                           })}

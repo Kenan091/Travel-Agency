@@ -113,12 +113,6 @@ function App() {
               />
             }
           />
-
-          {/* Redirect to Home if none of the routes match */}
-          {/* <Route
-            path='*'
-            element={<Navigate to='/' />}
-          /> */}
         </Routes>
       </Router>
     </>
