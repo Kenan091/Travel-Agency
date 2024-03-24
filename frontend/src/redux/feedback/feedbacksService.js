@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000';
+// const API_URL = 'http://localhost:5000';
+const API_URL = 'https://travel-agency-0n8l.onrender.com';
 
 export const getFeedbacksFromAPI = async () => {
   const response = await axios.get(`${API_URL}/feedbacks`);

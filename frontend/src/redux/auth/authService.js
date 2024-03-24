@@ -1,5 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:5000/auth';
+// const API_URL = 'http://localhost:5000/auth';
+const API_URL = 'https://travel-agency-0n8l.onrender.com/auth';
 
 // Async function for user registration
 export const register = async userData => {

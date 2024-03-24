@@ -22,7 +22,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://travelist09.netlify.app'],
+    origin: 'https://travelist09.netlify.app',
   })
 );
 
