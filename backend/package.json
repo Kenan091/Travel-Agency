@@ -2,10 +2,10 @@
   "name": "travel-agency-app",
   "version": "1.0.0",
   "description": "",
-  "main": "api/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production && node api/server",
-    "dev": "nodemon api/server"
+    "start": "SET NODE_ENV=production && node server",
+    "dev": "nodemon server"
   },
   "author": "Kenan Ekinović",
   "license": "ISC",
