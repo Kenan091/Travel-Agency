@@ -36,10 +36,6 @@ const DestinationDetails = () => {
       ? averageRatingFromReviews
       : averageRatingFromDestination;
 
-  console.log('Reviews', averageRatingFromReviews);
-  console.log('Destination', averageRatingFromDestination);
-  console.log('Final', averageRating);
-
   const user = JSON.parse(localStorage.getItem('user'));
 
   const handleNavigateToBookings = id => {

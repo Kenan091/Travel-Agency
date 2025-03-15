@@ -64,8 +64,6 @@ export const Carousel = ({ items }) => {
     window.scrollTo(0, 0);
   };
 
-  console.log(showModal);
-
   return (
     <div className={styles.carousel}>
       {currentItem > 0 && (
